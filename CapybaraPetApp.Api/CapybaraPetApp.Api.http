@@ -1,0 +1,6 @@
+@CapybaraPetApp.Api_HostAddress = http://localhost:5068
+
+GET {{CapybaraPetApp.Api_HostAddress}}/
+Accept: application/json
+
+###
