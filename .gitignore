@@ -230,3 +230,6 @@ temp/
 
 # Rider settings
 .idea/
+
+# Ignore FileContextIndex files
+FileContextIndex*
