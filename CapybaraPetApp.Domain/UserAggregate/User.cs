@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 
-namespace CapybaraPetApp.Domain.Entities;
+namespace CapybaraPetApp.Domain.UserAggregate;
 
 public class User
 {

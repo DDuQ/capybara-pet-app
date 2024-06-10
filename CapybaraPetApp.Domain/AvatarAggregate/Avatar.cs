@@ -3,7 +3,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Domain.AvatarAggregate;
 
-public class Avatar
+public class Avatar 
 {
     private readonly List<Guid> _interactionIds = [];
     private readonly AvatarStats _stats = AvatarStats.Empty();
