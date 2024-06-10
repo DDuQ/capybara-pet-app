@@ -2,7 +2,7 @@
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 
-namespace CapybaraPetApp.Domain.Common;
+namespace CapybaraPetApp.Domain.Common.Mappings;
 
 public static class ItemInteractionMapping
 {
