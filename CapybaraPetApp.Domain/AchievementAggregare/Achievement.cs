@@ -1,9 +1,25 @@
-﻿namespace CapybaraPetApp.Domain.AchievementAggregare;
+﻿using CapybaraPetApp.Domain.Common;
 
-public class Achievement(Guid id, AchievementType achievementType, DateTime dateAchieved, Guid userId)
+namespace CapybaraPetApp.Domain.AchievementAggregare;
+
+public class Achievement : AggregateRoot
 {
-    public Guid Id { get; set; } = id;
-    public AchievementType AchievementType { get; set; } = achievementType;
-    public DateTime DateAchieved { get; set; } = dateAchieved;
-    public Guid UserId { get; set; } = userId;
+    public Achievement(
+        Guid id,
+        AchievementType achievementType,
+        DateTime dateAchieved,
+        Guid userId) : base(id)
+    {
+        AchievementType = achievementType;
+        DateAchieved = dateAchieved;
+        UserId = userId;
+    }
+
+    private Achievement()
+    {
+    }
+
+    public AchievementType AchievementType { get; set; }
+    public DateTime DateAchieved { get; set; }
+    public Guid UserId { get; set; }
 }

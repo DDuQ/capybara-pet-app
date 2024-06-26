@@ -1,9 +1,18 @@
-﻿namespace CapybaraPetApp.Domain.InteractionAggregate;
+﻿using CapybaraPetApp.Domain.Common;
 
-public class Interaction(InteractionDetail interactionDetail, Guid avatarId)
+namespace CapybaraPetApp.Domain.InteractionAggregate;
+
+public class Interaction : AggregateRoot
 {
-    public Guid Id { get; set; } = new Guid();
-    public InteractionDetail InteractionDetail { get; set; } = interactionDetail;
+    public Interaction(InteractionDetail interactionDetail, Guid avatarId)
+    {
+        InteractionDetail = interactionDetail;
+        AvatarId = avatarId;
+    }
+
+    private Interaction() { }
+
+    public InteractionDetail InteractionDetail { get; set; } 
     public DateTime Timestamp { get; set; } = DateTime.Now;
-    public Guid AvatarId { get; set; } = avatarId;
+    public Guid AvatarId { get; set; }
 }

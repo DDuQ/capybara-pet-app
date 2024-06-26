@@ -1,21 +1,21 @@
-﻿namespace CapybaraPetApp.Domain.Common
+﻿namespace CapybaraPetApp.Domain.Common;
+
+public abstract class AggregateRoot : Entity
 {
-    public abstract class AggregateRoot : Entity
+    protected AggregateRoot(Guid id) : base(id)
     {
-        protected AggregateRoot(Guid id) : base(id)
-        {
-        }
+    }
 
-        protected AggregateRoot() { }
+    protected AggregateRoot()
+    { }
 
-        protected readonly List<IDomainEvent> _domainEvents = new();
+    protected readonly List<IDomainEvent> _domainEvents = [];
 
-        public List<IDomainEvent> PopDomainEvents()
-        {
-            var copy = _domainEvents.ToList();
-            _domainEvents.Clear();
+    public List<IDomainEvent> PopDomainEvents()
+    {
+        var copy = _domainEvents.ToList();
+        _domainEvents.Clear();
 
-            return copy;
-        }
+        return copy;
     }
 }

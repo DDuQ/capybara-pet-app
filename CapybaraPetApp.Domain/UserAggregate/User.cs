@@ -1,19 +1,21 @@
-﻿using ErrorOr;
+﻿using CapybaraPetApp.Domain.Common;
+using ErrorOr;
 
 namespace CapybaraPetApp.Domain.UserAggregate;
 
-public class User
+public class User : AggregateRoot
 {
-    private readonly List<Guid> _avatarIds = [];
+    private readonly List<Guid> _CapybaraIds = [];
     private readonly List<Guid> _achievementsIds = [];
     private readonly List<Guid> _ItemIds = [];
-    public Guid Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
+    public string Username { get; set; } = null!;
+    public string Email { get; set; } = null!;
     private readonly string _passwordHash = null!;
-    public IReadOnlyCollection<Guid> AvatarIds => _avatarIds;
+    public IReadOnlyCollection<Guid> CapybaraIds => _CapybaraIds;
     public IReadOnlyCollection<Guid> AchievementIds => _achievementsIds;
     public IReadOnlyCollection<Guid> Items => _ItemIds;
+
+    private User() { }
 
     public ErrorOr<Success> AddAchievement(Guid achievementId)
     {
@@ -26,14 +28,14 @@ public class User
         return Result.Success;
     }
 
-    public ErrorOr<Success> AddAvatar(Guid avatarId)
+    public ErrorOr<Success> AddCapybara(Guid capybaraId)
     {
-        if (_avatarIds.Contains(avatarId))
+        if (_CapybaraIds.Contains(capybaraId))
         {
             return Error.Conflict(description: "Avatar already added to User.");
         }
 
-        _avatarIds.Add(avatarId);
+        _CapybaraIds.Add(capybaraId);
         return Result.Success;
     }
 

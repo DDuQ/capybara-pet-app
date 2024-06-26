@@ -1,14 +1,23 @@
-﻿using ErrorOr;
+﻿using CapybaraPetApp.Domain.Common;
+using ErrorOr;
 
 namespace CapybaraPetApp.Domain.ItemAggregate;
 
-public class Item(string name, ItemDetail itemDetail, Guid userId)
+public class Item : AggregateRoot
 {
-    public Guid Id { get; set; } = new Guid();
-    public Guid UserId { get; set; } = userId;
-    public string Name { get; set; } = name;
+    public Guid UserId { get; set; }
+    public string Name { get; set; }
     public int Amount { get; set; }
-    public ItemDetail ItemDetail { get; set; } = itemDetail;
+    public ItemDetail ItemDetail { get; set; }
+
+    public Item(string name, ItemDetail itemDetail, Guid userId)
+    {
+        UserId = userId;
+        Name = name;
+        ItemDetail = itemDetail;
+    }
+
+    private Item() { }
 
     public ErrorOr<Success> UseItem(int amount)
     {
