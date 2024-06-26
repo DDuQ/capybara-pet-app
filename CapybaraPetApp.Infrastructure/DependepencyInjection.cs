@@ -1,16 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using CapybaraPetApp.Infrastructure.Configurations;
+﻿using CapybaraPetApp.Application.Common;
+using CapybaraPetApp.Infrastructure.Common;
 using CapybaraPetApp.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
-using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Infrastructure.Persistence.Repositories;
-using CapybaraPetApp.Domain.UserAggregate;
-using CapybaraPetApp.Domain.AchievementAggregare;
-using CapybaraPetApp.Domain.AvatarAggregate;
-using CapybaraPetApp.Domain.InteractionAggregate;
-using CapybaraPetApp.Domain.ItemAggregate;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CapybaraPetApp.Infrastructure;
 
@@ -25,19 +19,17 @@ public static class DependepencyInjection
 
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.Configure<MongoDbSettings>(configuration.GetSection(MongoDbSettings.Section));
+        var sqlServerDbSettings = configuration.GetSection(SQLServerDbSettings.Section).Get<SQLServerDbSettings>();
+        services.Configure<SQLServerDbSettings>(configuration.GetSection(SQLServerDbSettings.Section));
 
-        var dbConfigs = new MongoDbSettings();
-        configuration.Bind(MongoDbSettings.Section, dbConfigs);
+        services.AddDbContext<CapybaraPetAppDbContext>(options =>
+        options.UseSqlServer(sqlServerDbSettings!.ConnectionString));
 
-        services.AddDbContext<CapybaraPetAppDbContext>(options => 
-            options.UseMongoDB(dbConfigs.ConnectionString, dbConfigs.DatabaseName));
-
-        services.AddScoped<IRepository<Achievement>, AchievementRepository>();
-        services.AddScoped<IRepository<Avatar>, AvatarRepository>();
-        services.AddScoped<IRepository<Interaction>, InteractionRepository>();
-        services.AddScoped<IRepository<Item>, ItemRepository>();
-        services.AddScoped<IRepository<User>, UserRepository>();
+        services.AddScoped<ICapybaraRepository, CapybaraRepository>();
+        services.AddScoped<IAchievementRepository, AchievementRepository>();
+        services.AddScoped<IInteractionRepository, InteractionRepository>();
+        services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }

@@ -1,5 +1,5 @@
 ﻿using CapybaraPetApp.Domain.AchievementAggregare;
-using CapybaraPetApp.Domain.AvatarAggregate;
+using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.InteractionAggregate;
 using CapybaraPetApp.Domain.ItemAggregate;
@@ -11,15 +11,20 @@ using System.Reflection;
 
 namespace CapybaraPetApp.Infrastructure.Persistence;
 
-public class CapybaraPetAppDbContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : DbContext(options)
+public class CapybaraPetAppDbContext : DbContext
 {
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public DbSet<Avatar> Avatar { get; set; } = null!;
-    public DbSet<User> User { get; set; } = null!;
-    public DbSet<Item> Item { get; set; } = null!;
-    public DbSet<Interaction> Interaction { get; set; } = null!;
-    public DbSet<Achievement> Achievement { get; set; } = null!;
+    public CapybaraPetAppDbContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public DbSet<Capybara> Avatar => Set<Capybara>();
+    public DbSet<User> User => Set<User>();
+    public DbSet<Item> Item => Set<Item>();
+    public DbSet<Interaction> Interaction => Set<Interaction>();
+    public DbSet<Achievement> Achievement => Set<Achievement>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
