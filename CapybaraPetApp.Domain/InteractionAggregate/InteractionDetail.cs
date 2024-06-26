@@ -1,13 +1,21 @@
-﻿using CapybaraPetApp.Domain.Common;
-using ErrorOr;
+﻿using ErrorOr;
 
 namespace CapybaraPetApp.Domain.InteractionAggregate;
 
-public class InteractionDetail(InteractionType interactionType, int quantity) : ValueObject
+public record InteractionDetail
 {
     private const int AnHour = 3600;
-    public InteractionType InteractionType { get; private set; } = interactionType;
-    public int Quantity { get; private set; } = quantity;
+
+    public InteractionDetail(InteractionType interactionType, int quantity)
+    {
+        InteractionType = interactionType;
+        Quantity = quantity;
+    }
+
+    private InteractionDetail() { }
+
+    public InteractionType InteractionType { get; private set; }
+    public int Quantity { get; private set; }
 
     public static ErrorOr<int> ValidateQuantity(InteractionType interactionType, int quantity)
     {
@@ -24,18 +32,21 @@ public class InteractionDetail(InteractionType interactionType, int quantity) : 
                     return InteractionErrors.TooMuchFruit;
                 }
                 break;
+
             case InteractionType.Play:
                 if (InteractionTakesMoreThan(AnHour, quantity))
                 {
                     return InteractionErrors.CannotTakeMoreThanAnHour;
                 }
                 break;
+
             case InteractionType.Clean:
                 if (InteractionTakesMoreThan(AnHour, quantity))
                 {
                     return InteractionErrors.CannotTakeMoreThanAnHour;
                 }
                 break;
+
             default:
                 return InteractionErrors.UnrecognizedInteractionType;
         }
@@ -44,10 +55,4 @@ public class InteractionDetail(InteractionType interactionType, int quantity) : 
     }
 
     private static bool InteractionTakesMoreThan(int frameOfTime, int quantity) => quantity > frameOfTime;
-
-    public override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return InteractionType;
-        yield return Quantity;
-    }
 }

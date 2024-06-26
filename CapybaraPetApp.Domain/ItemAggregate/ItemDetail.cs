@@ -1,21 +1,29 @@
-﻿using CapybaraPetApp.Domain.Common;
-using ErrorOr;
+﻿using ErrorOr;
 
 namespace CapybaraPetApp.Domain.ItemAggregate;
 
-public class ItemDetail(ItemType itemType, int quantity, int bonusEffect = 1) : ValueObject
+public record ItemDetail
 {
-    public ItemType ItemType { get; set; } = itemType;
-    public int BonusEffect { get; set; } = bonusEffect;
-    public int Quantity { get; set; } = quantity;
+    public ItemDetail(ItemType itemType, int quantity, int bonusEffect = 1)
+    {
+        ItemType = itemType;
+        BonusEffect = bonusEffect;
+        Quantity = quantity;
+    }
+
+    private ItemDetail() { }
+
+    public ItemType ItemType { get; set; }
+    public int BonusEffect { get; set; }
+    public int Quantity { get; set; }
 
     public static ErrorOr<Success> Validate(int quantity, int bonusEffect)
     {
-        if (quantity > 100) 
+        if (quantity > 100)
         {
             return ItemErrors.QuantityCannotBeGreaterThan100;
         }
-        if (quantity * bonusEffect > 100) 
+        if (quantity * bonusEffect > 100)
         {
             return ItemErrors.QuantityTimesBonusEffectCannotSurpass100;
         }
@@ -24,11 +32,4 @@ public class ItemDetail(ItemType itemType, int quantity, int bonusEffect = 1) : 
     }
 
     internal int CalculatedQuantityPerBonusEffect => BonusEffect * Quantity;
-
-    public override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return ItemType;
-        yield return BonusEffect;
-        yield return Quantity;
-    }
 }

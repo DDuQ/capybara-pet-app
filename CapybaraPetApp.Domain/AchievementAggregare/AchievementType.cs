@@ -1,15 +1,13 @@
-﻿using CapybaraPetApp.Domain.Common;
+﻿namespace CapybaraPetApp.Domain.AchievementAggregare;
 
-namespace CapybaraPetApp.Domain.AchievementAggregare;
-
-public class AchievementType(string name, string description) : ValueObject
+public record AchievementType
 {
-    public string Name { get; set; } = name;
-    public string Description { get; set; } = description;
-
-    public override IEnumerable<object> GetEqualityComponents()
+    public AchievementType(string name, string description)
     {
-        yield return Name;
-        yield return Description;
+        Name = name;
+        Description = description;
     }
+
+    public string Name { get; set; }
+    public string Description { get; set; }
 }

@@ -235,3 +235,5 @@ temp/
 FileContextIndex*
 /.vs
 /CapybaraPetApp/.vs/CapybaraPetApp
+/.containers/database
+/db
