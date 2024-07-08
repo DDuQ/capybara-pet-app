@@ -1,7 +1,7 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregare;
+﻿using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
-using CapybaraPetApp.Domain.InteractionAggregate;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate;
 using CapybaraPetApp.Domain.UserAggregate;
 using CapybaraPetApp.Infrastructure.Middleware;

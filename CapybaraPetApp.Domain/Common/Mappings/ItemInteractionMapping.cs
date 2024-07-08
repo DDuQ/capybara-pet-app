@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.InteractionAggregate;
+﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 

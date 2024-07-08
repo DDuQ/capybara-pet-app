@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregare;
+﻿using CapybaraPetApp.Domain.AchievementAggregate;
 
 namespace CapybaraPetApp.Application.Common;
 

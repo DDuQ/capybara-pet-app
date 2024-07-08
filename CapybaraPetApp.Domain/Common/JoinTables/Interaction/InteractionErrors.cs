@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 
-namespace CapybaraPetApp.Domain.InteractionAggregate;
+namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 
 public static class InteractionErrors
 {

@@ -9,5 +9,6 @@ public interface ICapybaraRepository
     Task<Capybara?> GetByIdAsync(Guid id);
 
     Task UpdateAsync(Capybara entity);
+
     Task<List<Capybara>> GetCapybarasByUserIdAsync(Guid userId);
 }

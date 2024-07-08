@@ -9,4 +9,6 @@ public interface IItemRepository
     Task<Item?> GetByIdAsync(Guid id);
 
     Task UpdateAsync(Item entity);
+
+    Task<bool> ExistsByNameAsync(string name);
 }

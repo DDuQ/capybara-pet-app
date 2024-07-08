@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
@@ -22,5 +21,9 @@
 	  <ProjectReference Include="..\CapybaraPetApp.Application\CapybaraPetApp.Application.csproj" />
 	  <ProjectReference Include="..\CapybaraPetApp.Domain\CapybaraPetApp.Domain.csproj" />
 	</ItemGroup>
-
+	
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+	
 </Project>
