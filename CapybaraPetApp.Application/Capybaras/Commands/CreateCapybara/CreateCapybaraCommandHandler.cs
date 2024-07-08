@@ -32,7 +32,7 @@ public class CreateCapybaraCommandHandler : IRequestHandler<CreateCapybaraComman
 
         await _capybaraRepository.AddAsync(capybara);
 
-        user.AddCapybara(capybara.Id);
+        user.AddCapybara(capybara);
 
         return capybara;
     }

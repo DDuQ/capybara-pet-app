@@ -1,5 +1,7 @@
-﻿namespace CapybaraPetApp.Application.Items.CreateItem;
+﻿using CapybaraPetApp.Domain.ItemAggregate;
+using ErrorOr;
+using MediatR;
 
-public record CreateItemCommand
-{
-}
+namespace CapybaraPetApp.Application.Items.CreateItem;
+
+public record CreateItemCommand(string Name, ItemDetail ItemDetail) : IRequest<ErrorOr<Item>>;
