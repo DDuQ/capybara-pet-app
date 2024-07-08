@@ -4,7 +4,7 @@ namespace CapybaraPetApp.Domain.CapybaraAggregate;
 
 public record CapybaraStats
 {
-    private bool IsAvatarExhausted { get; set; } = false;
+    private bool IsExhausted { get; set; } = false;
     public int Happiness { get; set; }
     public int Health { get; set; }
     public int Energy { get; set; }
@@ -27,14 +27,14 @@ public record CapybaraStats
 
     internal ErrorOr<Success> Play(int amount)
     {
-        if (IsAvatarExhausted)
+        if (IsExhausted)
         {
             return Error.Conflict($"Capy does not have enough energy (currently: {Energy}) to play right now. :c");
         }
 
         Happiness += amount;
         Energy -= amount / 2;
-        IsAvatarExhausted = Energy <= 0;
+        IsExhausted = Energy <= 0;
         return Result.Success;
     }
 

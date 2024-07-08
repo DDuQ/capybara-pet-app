@@ -1,5 +1,5 @@
 ﻿using CapybaraPetApp.Application.Common;
-using CapybaraPetApp.Domain.AchievementAggregare;
+using CapybaraPetApp.Domain.AchievementAggregate;
 
 namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 

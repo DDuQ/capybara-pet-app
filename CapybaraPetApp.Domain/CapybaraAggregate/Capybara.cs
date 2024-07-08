@@ -1,22 +1,22 @@
 ﻿using CapybaraPetApp.Domain.Common;
-using CapybaraPetApp.Domain.InteractionAggregate;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using ErrorOr;
 
 namespace CapybaraPetApp.Domain.CapybaraAggregate;
 
 public class Capybara : AggregateRoot
 {
-    private readonly List<Guid> _interactionIds = [];
+    private readonly List<Interaction> _interactions = new();
     private readonly CapybaraStats _stats = CapybaraStats.Empty();
     public string Name { get; set; } = null!;
     public Guid UserId { get; set; }
-    public IReadOnlyList<Guid> InteractionIds => _interactionIds;
+    public IReadOnlyCollection<Interaction> Interactions => _interactions;
 
     public Capybara(
         string name,
         Guid userId,
         CapybaraStats? stats = null,
-        Guid? id = null) 
+        Guid? id = null)
         : base(id ?? Guid.NewGuid())
     {
         Name = name;
@@ -46,7 +46,7 @@ public class Capybara : AggregateRoot
                 return InteractionErrors.UnrecognizedInteractionType;
         }
 
-        _interactionIds.Add(interaction.Id);
+        _interactions.Add(interaction);
         return Result.Success;
     }
 

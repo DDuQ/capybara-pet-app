@@ -237,3 +237,4 @@ FileContextIndex*
 /CapybaraPetApp/.vs/CapybaraPetApp
 /.containers/database
 /db
+/CapybaraPetApp.Infrastructure/Migrations

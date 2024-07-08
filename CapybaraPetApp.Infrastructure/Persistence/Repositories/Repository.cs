@@ -1,10 +1,9 @@
-﻿using CapybaraPetApp.Application.Common;
-using CapybaraPetApp.Domain.Common;
+﻿using CapybaraPetApp.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
-public class Repository<T> where T : AggregateRoot
+public class Repository<T> where T : Entity
 {
     private readonly CapybaraPetAppDbContext _dbContext;
     private readonly DbSet<T> _dbSet;

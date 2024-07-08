@@ -1,4 +1,4 @@
-﻿namespace CapybaraPetApp.Domain.AchievementAggregare;
+﻿namespace CapybaraPetApp.Domain.AchievementAggregate;
 
 public record AchievementType
 {
