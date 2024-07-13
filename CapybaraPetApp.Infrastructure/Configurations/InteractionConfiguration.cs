@@ -20,6 +20,6 @@ public class InteractionConfiguration : IEntityTypeConfiguration<Interaction>
             .WithMany(capybara => capybara.Interactions)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasKey(interaction => new { interaction.UserId, interaction.CapybaraId });
+        builder.HasKey(interaction => new { interaction.Id, interaction.UserId, interaction.CapybaraId });
     }
 }

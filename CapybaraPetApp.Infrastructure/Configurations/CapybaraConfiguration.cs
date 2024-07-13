@@ -9,5 +9,7 @@ public class CapybaraConfiguration : IEntityTypeConfiguration<Capybara>
     public void Configure(EntityTypeBuilder<Capybara> builder)
     {
         builder.ToTable(nameof(Capybara));
+
+        builder.OwnsOne(c => c.Stats);
     }
 }
