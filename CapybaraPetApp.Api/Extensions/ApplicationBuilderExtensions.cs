@@ -9,7 +9,6 @@ public static class ApplicationBuilderExtensions
     {
         using var scope = app.ApplicationServices.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<CapybaraPetAppDbContext>();
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
     }
 }
