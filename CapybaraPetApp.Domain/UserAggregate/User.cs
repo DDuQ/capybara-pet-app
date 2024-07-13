@@ -3,6 +3,7 @@ using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.JoinTables;
 using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate;
+using CapybaraPetApp.Domain.UserAggregate.Events;
 using ErrorOr;
 
 namespace CapybaraPetApp.Domain.UserAggregate;
@@ -17,11 +18,21 @@ public class User : AggregateRoot
     public string Email { get; set; } = null!;
     private readonly string _passwordHash = null!;
     public IReadOnlyCollection<UserAchievement> UserAchievements => _userAchievements.ToList();
-    public IReadOnlyCollection<Capybara> Capybara => _capybaras.ToList();
+    public IReadOnlyCollection<Capybara> Capybaras => _capybaras.ToList();
     public IReadOnlyCollection<Interaction> Interactions => _interactions.ToList();
     public IReadOnlyCollection<Item> Items => _items.ToList();
 
-    private User() { }
+    public User(
+        string username,
+        string email,
+        Guid? id) : 
+        base(id ?? Guid.NewGuid())
+    {
+        Username = username;
+        Email = email;
+    }
+
+    public User() { }
 
     public ErrorOr<Success> AddUserAchievement(UserAchievement userAchievement)
     {
@@ -38,12 +49,13 @@ public class User : AggregateRoot
 
     public ErrorOr<Success> AddCapybara(Capybara capybara)
     {
-        if (_capybaras.Any(capy => capy.Id == capybara.Id))
+        if (_capybaras.Any(c => c.Id == capybara.Id))
         {
             return Error.Conflict(description: "Avatar already added to User.");
         }
 
         _capybaras.Add(capybara);
+        _domainEvents.Add(new CapybaraAssignedEvent(capybara, Id));
         return Result.Success;
     }
 
@@ -58,15 +70,11 @@ public class User : AggregateRoot
         return Result.Success;
     }
 
-    public ErrorOr<Success> AddInteraction(Interaction interaction)
+    public void AddInteraction(Interaction interaction)
     {
-        if (_interactions.Any(inter => inter.UserId == interaction.UserId) &&
-            _interactions.Any(inter => inter.CapybaraId == interaction.CapybaraId))
-        {
-            return Error.Conflict(description: "Interaction already added to User.");
-        }
-
         _interactions.Add(interaction);
-        return Result.Success;
+        _domainEvents.Add(new InteractionAddedEvent(interaction));
     }
+
+    public bool Owns(Capybara capybara) => _capybaras.Contains(capybara);
 }
