@@ -17,6 +17,8 @@ public class CapybaraRepository : Repository<Capybara>, ICapybaraRepository
     {
         return await _dbContext
             .Set<Capybara>()
-            .Where(capybara => capybara.UserId == userId).ToListAsync();
+            .Where(capybara => capybara.UserId == userId)
+            .Include(capybara => capybara.Interactions)
+            .ToListAsync();
     }
 }
