@@ -17,31 +17,31 @@ public record InteractionDetail
     public InteractionType InteractionType { get; private set; }
     public int Quantity { get; private set; }
 
-    public static ErrorOr<int> ValidateQuantity(InteractionType interactionType, int quantity)
+    public static ErrorOr<Success> IsInteractionDetailValid(InteractionDetail interactionDetail)
     {
-        if (quantity <= 0)
+        if (interactionDetail.Quantity <= 0)
         {
             return InteractionErrors.QuantityCannotBeLessThanOne;
         }
 
-        switch (interactionType)
+        switch (interactionDetail.InteractionType)
         {
             case InteractionType.Feed:
-                if (quantity > 100)
+                if (interactionDetail.Quantity > 100)
                 {
                     return InteractionErrors.TooMuchFruit;
                 }
                 break;
 
             case InteractionType.Play:
-                if (InteractionTakesMoreThan(AnHour, quantity))
+                if (InteractionTakesMoreThan(AnHour, interactionDetail.Quantity))
                 {
                     return InteractionErrors.CannotTakeMoreThanAnHour;
                 }
                 break;
 
             case InteractionType.Clean:
-                if (InteractionTakesMoreThan(AnHour, quantity))
+                if (InteractionTakesMoreThan(AnHour, interactionDetail.Quantity))
                 {
                     return InteractionErrors.CannotTakeMoreThanAnHour;
                 }
@@ -51,7 +51,7 @@ public record InteractionDetail
                 return InteractionErrors.UnrecognizedInteractionType;
         }
 
-        return quantity;
+        return Result.Success;
     }
 
     private static bool InteractionTakesMoreThan(int frameOfTime, int quantity) => quantity > frameOfTime;

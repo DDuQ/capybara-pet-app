@@ -6,11 +6,10 @@ namespace CapybaraPetApp.Domain.ItemAggregate;
 
 public class Item : Entity
 {
-    private List<User> _users { get; set; } = new();
+    private readonly List<User> _users = new();
     public string Name { get; set; }
     public int Amount { get; set; } = 0;
     public ItemDetail ItemDetail { get; set; }
-
     public IReadOnlyCollection<User> Users => _users.ToList();
 
     public Item(

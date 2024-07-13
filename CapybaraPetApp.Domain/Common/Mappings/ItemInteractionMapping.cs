@@ -20,6 +20,6 @@ public static class ItemInteractionMapping
             return interactionType;
         }
 
-        return Error.Conflict("Item type not related to any interaction type.");
+        return Error.Conflict(description: "Item type not related to any interaction type.");
     }
 }

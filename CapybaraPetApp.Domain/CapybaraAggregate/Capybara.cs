@@ -8,19 +8,18 @@ public class Capybara : AggregateRoot
 {
     private readonly List<Interaction> _interactions = new();
     private readonly CapybaraStats _stats = CapybaraStats.Empty();
-    public string Name { get; set; } = null!;
-    public Guid UserId { get; set; }
+    public string Name { get; set; }
+    public Guid? UserId { get; set; }
     public IReadOnlyCollection<Interaction> Interactions => _interactions;
+    public CapybaraStats Stats => _stats;
 
     public Capybara(
         string name,
-        Guid userId,
         CapybaraStats? stats = null,
         Guid? id = null)
         : base(id ?? Guid.NewGuid())
     {
         Name = name;
-        UserId = userId;
         _stats = stats ?? CapybaraStats.Empty();
     }
 
@@ -66,5 +65,21 @@ public class Capybara : AggregateRoot
     {
         _stats.Play(playTimeHours);
         return Result.Success;
+    }
+
+    public ErrorOr<Success> AddUserId(Guid userId)
+    {
+        if (UserId == userId)
+        {
+            return Error.Conflict(description: "Capybara has been already assigned to this user.");
+        }
+
+        UserId = userId;
+        return Result.Success;
+    }
+
+    public void AddInteraction(Interaction interaction)
+    {
+        _interactions.Add(interaction);
     }
 }
