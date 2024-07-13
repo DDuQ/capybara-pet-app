@@ -6,5 +6,5 @@ namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
 public record CreateCapybaraCommand(
     string Name,
-    Guid UserId,
+    Guid? Id,
     CapybaraStats? Stats) : IRequest<ErrorOr<Capybara>>;

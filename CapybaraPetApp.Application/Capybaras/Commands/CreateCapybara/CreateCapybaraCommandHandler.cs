@@ -7,32 +7,33 @@ namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
 public class CreateCapybaraCommandHandler : IRequestHandler<CreateCapybaraCommand, ErrorOr<Capybara>>
 {
-    private readonly IUserRepository _userRepository;
     private readonly ICapybaraRepository _capybaraRepository;
 
-    public CreateCapybaraCommandHandler(IUserRepository userRepository, ICapybaraRepository capybaraRepository)
+    public CreateCapybaraCommandHandler(ICapybaraRepository capybaraRepository)
     {
-        _userRepository = userRepository;
         _capybaraRepository = capybaraRepository;
     }
 
     public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        Capybara? capybara = null;
 
-        if (user is null)
+        if (request.Id is not null)
         {
-            return Error.NotFound("User not found.");
+            capybara = await _capybaraRepository.GetByIdAsync((Guid)request.Id);
         }
 
-        var capybara = new Capybara(
+        if (capybara is not null)
+        {
+            return Error.NotFound(description: "Capybara not found.");
+        }
+
+        capybara = new Capybara(
             request.Name,
-            request.UserId,
-            request.Stats);
+            request.Stats,
+            request.Id);
 
         await _capybaraRepository.AddAsync(capybara);
-
-        user.AddCapybara(capybara);
 
         return capybara;
     }

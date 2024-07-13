@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 
-namespace CapybaraPetApp.Application.Users.Commands.AddItemCommand;
+namespace CapybaraPetApp.Application.Users.Commands.AddItem;
 
 public class AddItemCommandHandler : IRequestHandler<AddItemCommand, ErrorOr<Success>>
 {

@@ -2,7 +2,7 @@
 using ErrorOr;
 using MediatR;
 
-namespace CapybaraPetApp.Application.Users.Commands.AssignCapybara;
+namespace CapybaraPetApp.Application.Users.Commands.AddCapybara;
 
 public class AddCapybaraCommandHandler : IRequestHandler<AddCapybaraCommand, ErrorOr<Success>>
 {
@@ -21,18 +21,20 @@ public class AddCapybaraCommandHandler : IRequestHandler<AddCapybaraCommand, Err
 
         if (user == null)
         {
-            return Error.NotFound("User not found.");
+            return Error.NotFound(description: "User not found.");
         }
 
         var capybara = await _capybaraRepository.GetByIdAsync(request.CapybaraId);
 
         if (capybara == null)
         {
-            return Error.NotFound("Capybara not found.");
+            return Error.NotFound(description: "Capybara not found.");
         }
 
         user.AddCapybara(capybara);
 
+        await _userRepository.UpdateAsync(user);
+        
         return Result.Success;
     }
 }

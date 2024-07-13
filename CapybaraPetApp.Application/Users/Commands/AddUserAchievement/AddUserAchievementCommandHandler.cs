@@ -3,7 +3,7 @@ using CapybaraPetApp.Domain.Common.JoinTables;
 using ErrorOr;
 using MediatR;
 
-namespace CapybaraPetApp.Application.Users.Commands.AddAchievement;
+namespace CapybaraPetApp.Application.Users.Commands.AddUserAchievement;
 
 public class AddUserAchievementCommandHandler : IRequestHandler<AddUserAchievementCommand, ErrorOr<Success>>
 {
@@ -21,7 +21,7 @@ public class AddUserAchievementCommandHandler : IRequestHandler<AddUserAchieveme
     {
         var achievement = await _achievementRepository.GetByIdAsync(request.AchievementId);
 
-        if (achievement is null) 
+        if (achievement is null)
         {
             return Error.NotFound(description: "Achievement does not exists.");
         }
