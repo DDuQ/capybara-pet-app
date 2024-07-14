@@ -1,9 +1,10 @@
 ﻿using CapybaraPetApp.Application.Users.Commands.AddCapybara;
-using CapybaraPetApp.Application.Users.Commands.AddInteraction;
+using CapybaraPetApp.Application.Users.Commands.AddItem;
+using CapybaraPetApp.Application.Users.Commands.AddUserAchievement;
 using CapybaraPetApp.Application.Users.Commands.CreateUser;
+using CapybaraPetApp.Application.Users.Commands.UseItem;
 using CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 using CapybaraPetApp.Application.Users.Queries.GetUser;
-using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,81 @@ public class UsersController : ApiController
     public UsersController(ISender sender)
     {
         _sender = sender;
+    }
+
+    [HttpPost("capybara")]
+    public async Task<IActionResult> AssignCapybara(Guid userId, Guid capybaraId)
+    {
+        var command = new AssignCapybaraCommand(userId, capybaraId);
+
+        var assignCapybaraResult = await _sender.Send(command);
+
+        if (assignCapybaraResult.IsError)
+        {
+            return Problem(assignCapybaraResult.Errors);
+        }
+
+        return Ok(assignCapybaraResult.Value);
+    }
+
+    [HttpPost("use-item")]
+    public async Task<IActionResult> UseItem(Guid userId, Guid capybaraId, Guid itemId, int amount)
+    {
+        var command = new UseItemCommand(userId, capybaraId, itemId, amount);
+
+        var useItemResult = await _sender.Send(command);
+
+        if (useItemResult.IsError)
+        {
+            return Problem(useItemResult.Errors);
+        }
+
+        return Ok(useItemResult.Value);
+    }
+
+    [HttpPost("user-item")]
+    public async Task<IActionResult> AssignItem(Guid userId, Guid itemId)
+    {
+        var command = new AssignItemCommand(userId, itemId);
+
+        var assignItemCommandResult = await _sender.Send(command);
+
+        if (assignItemCommandResult.IsError)
+        {
+            return Problem(assignItemCommandResult.Errors);
+        }
+
+        return Ok(assignItemCommandResult.Value);
+    }
+
+    [HttpPost("user-achievement")]
+    public async Task<IActionResult> AssignUserAchievement(Guid userId, Guid achievementId)
+    {
+        var command = new AssignUserAchievementCommand(userId, achievementId);
+
+        var assignUserAchievementResult = await _sender.Send(command);
+
+        if (assignUserAchievementResult.IsError)
+        {
+            return Problem(assignUserAchievementResult.Errors);
+        }
+
+        return Ok(assignUserAchievementResult.Value);
+    }
+
+    [HttpGet("capybaras")]
+    public async Task<IActionResult> GetCapybarasByUserId(Guid id)
+    {
+        var query = new GetCapybarasQuery(id);
+
+        var getCapybarasResult = await _sender.Send(query);
+
+        if (getCapybarasResult.IsError)
+        {
+            return Problem(getCapybarasResult.Errors);
+        }
+
+        return Ok(getCapybarasResult.Value);
     }
 
     [HttpGet("{id}")]
@@ -41,59 +117,13 @@ public class UsersController : ApiController
                                             createUserRequest.Email,
                                             createUserRequest.Id);
 
-        var result = await _sender.Send(command);
+        var createUserResult = await _sender.Send(command);
 
-        if (result.IsError)
+        if (createUserResult.IsError)
         {
-            return BadRequest(result);
+            return Problem(createUserResult.Errors);
         }
 
-        return Ok(result.Value);
-    }
-
-    [HttpPost("interaction")]
-    public async Task<IActionResult> AddInteraction(InteractionDetail interactionDetail, Guid userId, Guid capybaraId)
-    {
-
-        var command = new AddInteractionCommand(userId, capybaraId, interactionDetail);
-
-        var addInteractionResult = await _sender.Send(command);
-
-        if (addInteractionResult.IsError)
-        {
-            return BadRequest(addInteractionResult.Errors);
-        }
-
-        return Ok(addInteractionResult.Value);
-    }
-
-    [HttpPost("capybara")]
-    public async Task<IActionResult> AddCapybara(Guid userId, Guid capybaraId)
-    {
-        var command = new AddCapybaraCommand(userId, capybaraId);
-
-        var addCapybaraResult = await _sender.Send(command);
-
-        if (addCapybaraResult.IsError)
-        {
-            return BadRequest(addCapybaraResult.Errors);
-        }
-
-        return Ok(addCapybaraResult.Value);
-    }
-
-    [HttpGet("capybaras")]
-    public async Task<IActionResult> GetCapybarasByUserId(Guid id)
-    {
-        var command = new GetCapybarasQuery(id);
-
-        var getCapybarasResult = await _sender.Send(command);
-
-        if (getCapybarasResult.IsError)
-        {
-            return Problem(getCapybarasResult.Errors);
-        }
-
-        return Ok(getCapybarasResult.Value);
+        return Ok(createUserResult.Value);
     }
 }
