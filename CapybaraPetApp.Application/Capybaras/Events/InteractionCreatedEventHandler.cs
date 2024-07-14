@@ -5,19 +5,19 @@ using MediatR;
 
 namespace CapybaraPetApp.Application.Capybaras.Events;
 
-public class InteractionAddedEventHandler : INotificationHandler<InteractionAddedEvent>
+public class InteractionCreatedEventHandler : INotificationHandler<InteractionCreatedEvent>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
-    public InteractionAddedEventHandler(ICapybaraRepository capybaraRepository)
+    public InteractionCreatedEventHandler(ICapybaraRepository capybaraRepository)
     {
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task Handle(InteractionAddedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(InteractionCreatedEvent notification, CancellationToken cancellationToken)
     {
         var capybara = await _capybaraRepository.GetByIdAsync(notification.Interaction.CapybaraId)
-            ?? throw new EventualConsistencyException(InteractionAddedEvent.CapybaraNotFound);
+            ?? throw new EventualConsistencyException(InteractionCreatedEvent.CapybaraNotFound);
 
         capybara.AddInteraction(notification.Interaction);
         capybara.Interact(notification.Interaction);

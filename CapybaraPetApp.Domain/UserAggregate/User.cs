@@ -13,14 +13,14 @@ public class User : AggregateRoot
     public readonly List<UserAchievement> _userAchievements = new();
     public readonly List<Capybara> _capybaras = new();
     public readonly List<Interaction> _interactions = new();
-    public readonly List<Item> _items = new();
+    public readonly List<UserItem> _userItems = new();
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     private readonly string _passwordHash = null!;
     public IReadOnlyCollection<UserAchievement> UserAchievements => _userAchievements.ToList();
     public IReadOnlyCollection<Capybara> Capybaras => _capybaras.ToList();
     public IReadOnlyCollection<Interaction> Interactions => _interactions.ToList();
-    public IReadOnlyCollection<Item> Items => _items.ToList();
+    public IReadOnlyCollection<UserItem> UserItems => _userItems.ToList();
 
     public User(
         string username,
@@ -34,20 +34,20 @@ public class User : AggregateRoot
 
     public User() { }
 
-    public ErrorOr<Success> AddUserAchievement(UserAchievement userAchievement)
+    public ErrorOr<Success> AssignUserAchievement(UserAchievement userAchievement)
     {
         if (_userAchievements.Any(ua => ua.AchievementId == userAchievement.AchievementId) &&
-            _userAchievements.Any(ua => ua.UserId == userAchievement.UserId) &&
-            _userAchievements.Any(ua => ua.CreatedAt == userAchievement.CreatedAt))
+            _userAchievements.Any(ua => ua.UserId == userAchievement.UserId))
         {
-            return Error.Conflict(description: "User achievement already exists.");
+            return Error.Conflict(description: "User achievement has been assigned already.");
         }
 
         _userAchievements.Add(userAchievement);
+        _domainEvents.Add(new UserAchievementAssignedEvent(userAchievement));
         return Result.Success;
     }
 
-    public ErrorOr<Success> AddCapybara(Capybara capybara)
+    public ErrorOr<Success> AssignCapybara(Capybara capybara)
     {
         if (_capybaras.Any(c => c.Id == capybara.Id))
         {
@@ -59,22 +59,24 @@ public class User : AggregateRoot
         return Result.Success;
     }
 
-    public ErrorOr<Success> AddItem(Item item)
+    public ErrorOr<Success> AssignItem(Item item)
     {
-        if (_items.Any(it => it.Id == item.Id))
+        if (_userItems.Exists(it => it.ItemId == item.Id && it.UserId == Id))
         {
-            return Error.Conflict(description: "Item already added to User.");
+            return Error.Conflict(description: "UserItem already added to User.");
         }
 
-        _items.Add(item);
+        var userItem = new UserItem(Id, item.Id);
+        _userItems.Add(userItem);
+        _domainEvents.Add(new ItemAssignedEvent(item, this));
         return Result.Success;
     }
 
     public void AddInteraction(Interaction interaction)
     {
         _interactions.Add(interaction);
-        _domainEvents.Add(new InteractionAddedEvent(interaction));
+        _domainEvents.Add(new InteractionCreatedEvent(interaction));
     }
 
-    public bool Owns(Capybara capybara) => _capybaras.Contains(capybara);
+    public bool OwnsCapybara(Capybara capybara) => _capybaras.Contains(capybara);
 }

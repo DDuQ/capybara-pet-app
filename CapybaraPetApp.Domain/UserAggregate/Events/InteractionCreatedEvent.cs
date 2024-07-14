@@ -5,9 +5,9 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Domain.UserAggregate.Events;
 
-public record InteractionAddedEvent(Interaction Interaction) : IDomainEvent 
+public record InteractionCreatedEvent(Interaction Interaction) : IDomainEvent 
 {
     public static readonly Error CapybaraNotFound = EventualConsistencyError.From(
-        code: $"{nameof(InteractionAddedEvent)}.CapybaraNotFound",
+        code: $"{nameof(InteractionCreatedEvent)}.CapybaraNotFound",
         description: "Capybara not found.");
 }
