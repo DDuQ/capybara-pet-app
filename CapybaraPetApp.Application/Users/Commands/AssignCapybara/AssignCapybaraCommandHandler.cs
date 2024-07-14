@@ -4,18 +4,18 @@ using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.AddCapybara;
 
-public class AddCapybaraCommandHandler : IRequestHandler<AddCapybaraCommand, ErrorOr<Success>>
+public class AssignCapybaraCommandHandler : IRequestHandler<AssignCapybaraCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly ICapybaraRepository _capybaraRepository;
 
-    public AddCapybaraCommandHandler(IUserRepository userRepository, ICapybaraRepository capybaraRepository)
+    public AssignCapybaraCommandHandler(IUserRepository userRepository, ICapybaraRepository capybaraRepository)
     {
         _userRepository = userRepository;
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Success>> Handle(AddCapybaraCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(AssignCapybaraCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId);
 
@@ -31,7 +31,7 @@ public class AddCapybaraCommandHandler : IRequestHandler<AddCapybaraCommand, Err
             return Error.NotFound(description: "Capybara not found.");
         }
 
-        user.AddCapybara(capybara);
+        user.AssignCapybara(capybara);
 
         await _userRepository.UpdateAsync(user);
         

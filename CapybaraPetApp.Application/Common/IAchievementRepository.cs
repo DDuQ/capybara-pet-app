@@ -9,4 +9,6 @@ public interface IAchievementRepository
     Task<Achievement?> GetByIdAsync(Guid id);
 
     Task UpdateAsync(Achievement achievement);
+
+    Task<bool> ExistsByNameAsync(string name);
 }

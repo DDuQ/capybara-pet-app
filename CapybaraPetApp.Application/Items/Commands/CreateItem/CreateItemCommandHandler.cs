@@ -3,7 +3,7 @@ using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 using MediatR;
 
-namespace CapybaraPetApp.Application.Items.CreateItem;
+namespace CapybaraPetApp.Application.Items.Commands.CreateItem;
 
 public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, ErrorOr<Item>>
 {
@@ -24,7 +24,7 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, Error
         var item = new Item(request.Name, request.ItemDetail);
 
         await _itemRepository.AddAsync(item);
-        
+
         return item;
     }
 }

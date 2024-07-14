@@ -5,19 +5,19 @@ using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.AddUserAchievement;
 
-public class AddUserAchievementCommandHandler : IRequestHandler<AddUserAchievementCommand, ErrorOr<Success>>
+public class AssignUserAchievementCommandHandler : IRequestHandler<AssignUserAchievementCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IAchievementRepository _achievementRepository;
 
-    public AddUserAchievementCommandHandler(IUserRepository userRepository, IAchievementRepository achievementRepository)
+    public AssignUserAchievementCommandHandler(IUserRepository userRepository, IAchievementRepository achievementRepository)
     {
         _userRepository = userRepository;
         _achievementRepository = achievementRepository;
     }
 
 
-    public async Task<ErrorOr<Success>> Handle(AddUserAchievementCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(AssignUserAchievementCommand request, CancellationToken cancellationToken)
     {
         var achievement = await _achievementRepository.GetByIdAsync(request.AchievementId);
 
@@ -35,8 +35,7 @@ public class AddUserAchievementCommandHandler : IRequestHandler<AddUserAchieveme
 
         var userAchievement = new UserAchievement(request.UserId, request.AchievementId);
 
-        user.AddUserAchievement(userAchievement);
-        achievement.AddUserAchievement(userAchievement);
+        user.AssignUserAchievement(userAchievement);
 
         return Result.Success;
     }

@@ -4,18 +4,18 @@ using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.AddItem;
 
-public class AddItemCommandHandler : IRequestHandler<AddItemCommand, ErrorOr<Success>>
+public class AssignItemCommandHandler : IRequestHandler<AssignItemCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IItemRepository _itemRepository;
 
-    public AddItemCommandHandler(IUserRepository userRepository, IItemRepository itemRepository)
+    public AssignItemCommandHandler(IUserRepository userRepository, IItemRepository itemRepository)
     {
         _userRepository = userRepository;
         _itemRepository = itemRepository;
     }
 
-    public async Task<ErrorOr<Success>> Handle(AddItemCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(AssignItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _itemRepository.GetByIdAsync(request.ItemId);
 
@@ -31,7 +31,7 @@ public class AddItemCommandHandler : IRequestHandler<AddItemCommand, ErrorOr<Suc
             return Error.NotFound(description: "Item does not exists.");
         }
 
-        user.AddItem(item);
+        user.AssignItem(item);
 
         return Result.Success;
     }

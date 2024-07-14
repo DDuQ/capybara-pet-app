@@ -3,4 +3,4 @@ using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.AddItem;
 
-public record AddItemCommand(Guid ItemId, Guid UserId) : IRequest<ErrorOr<Success>>;
+public record AssignItemCommand(Guid ItemId, Guid UserId) : IRequest<ErrorOr<Success>>;
