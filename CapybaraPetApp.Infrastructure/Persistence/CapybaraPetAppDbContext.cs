@@ -1,6 +1,7 @@
 ﻿using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
+using CapybaraPetApp.Domain.Common.JoinTables;
 using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate;
 using CapybaraPetApp.Domain.UserAggregate;
@@ -20,8 +21,9 @@ public class CapybaraPetAppDbContext : DbContext
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public DbSet<Capybara> Avatar => Set<Capybara>();
+    public DbSet<Capybara> Capybara => Set<Capybara>();
     public DbSet<User> User => Set<User>();
+    public DbSet<UserItem> UserItem => Set<UserItem>();
     public DbSet<Item> Item => Set<Item>();
     public DbSet<Interaction> Interaction => Set<Interaction>();
     public DbSet<Achievement> Achievement => Set<Achievement>();

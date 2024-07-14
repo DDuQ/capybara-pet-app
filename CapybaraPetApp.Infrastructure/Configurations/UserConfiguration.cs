@@ -11,13 +11,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.ToTable(nameof(User));
 
-        builder.Property(u => u.Username).IsRequired().HasMaxLength(50);
+        builder.Property(user => user.Username).IsRequired().HasMaxLength(50);
         
-        builder.Property(u => u.Email).IsRequired().HasMaxLength(100);
-
-        builder.HasMany(user => user.Items)
-            .WithMany(item => item.Users)
-            .UsingEntity("User_Item");
+        builder.Property(user => user.Email).IsRequired().HasMaxLength(100);
 
         builder.HasMany(user => user.Capybaras)
             .WithOne()

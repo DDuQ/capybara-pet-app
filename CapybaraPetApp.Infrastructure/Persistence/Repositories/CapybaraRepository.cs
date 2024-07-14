@@ -6,17 +6,16 @@ namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
 public class CapybaraRepository : Repository<Capybara>, ICapybaraRepository
 {
-    private readonly CapybaraPetAppDbContext _dbContext;
+    private readonly DbSet<Capybara> _capybara;
 
     public CapybaraRepository(CapybaraPetAppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
+        _capybara = dbContext.Capybara;
     }
 
     public async Task<List<Capybara>> GetCapybarasByUserIdAsync(Guid userId)
     {
-        return await _dbContext
-            .Set<Capybara>()
+        return await _capybara
             .Where(capybara => capybara.UserId == userId)
             .Include(capybara => capybara.Interactions)
             .ToListAsync();

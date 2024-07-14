@@ -6,25 +6,25 @@ namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
 public class UserRepository : Repository<User>, IUserRepository
 {
-    private readonly CapybaraPetAppDbContext _dbContext;
+    private readonly DbSet<User> _user;
 
     public UserRepository(CapybaraPetAppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
+        _user = dbContext.User;
     }
 
     public async Task<bool> ExistsByEmail(string email)
     {
-        return await _dbContext.User.AnyAsync(x => x.Email == email);
+        return await _user.AnyAsync(x => x.Email == email);
     }
 
     public async Task<List<User>> GetAllAsync()
     {
-        return await _dbContext.User
-                           .Include(u => u.UserAchievements)
-                           .Include(u => u.Capybaras)
-                           .Include(u => u.Interactions)
-                           .Include(u => u.Items)
-                           .ToListAsync();
+        return await _user
+            .Include(u => u.UserAchievements)
+            .Include(u => u.Capybaras)
+            .Include(u => u.Interactions)
+            .Include(u => u.UserItems)
+            .ToListAsync();
     }
 }

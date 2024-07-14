@@ -28,6 +28,7 @@ public static class DependepencyInjection
         services.AddScoped<ICapybaraRepository, CapybaraRepository>();
         services.AddScoped<IAchievementRepository, AchievementRepository>();
         services.AddScoped<IItemRepository, ItemRepository>();
+        services.AddScoped<IUserItemRepository, UserItemRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
