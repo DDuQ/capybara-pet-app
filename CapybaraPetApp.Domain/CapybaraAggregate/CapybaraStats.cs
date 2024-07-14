@@ -16,6 +16,7 @@ public record CapybaraStats
         Energy = energy;
     }
 
+    //TODO: Update Happiness, Health, Energy logic.
     private CapybaraStats() { }
 
     internal ErrorOr<Success> Feed(int amount)

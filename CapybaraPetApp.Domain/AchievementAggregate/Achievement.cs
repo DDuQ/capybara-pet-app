@@ -11,20 +11,17 @@ public class Achievement : AggregateRoot
     public AchievementType AchievementType { get; set; }
     public IReadOnlyCollection<UserAchievement> UserAchievements => _userAchievements.ToList();
 
-    public Achievement(
-        AchievementType achievementType,
-        Guid? id) : base(id ?? Guid.NewGuid())
+    public Achievement(AchievementType achievementType) : base(Guid.NewGuid())
     {
         AchievementType = achievementType;
     }
 
     private Achievement() { }
 
-    public ErrorOr<Success> AddUserAchievement(UserAchievement userAchievement)
+    public ErrorOr<Success> AssignUserAchievement(UserAchievement userAchievement)
     {
         if (_userAchievements.Any(ua => ua.AchievementId == userAchievement.AchievementId) &&
-            _userAchievements.Any(ua => ua.UserId == userAchievement.UserId) &&
-            _userAchievements.Any(ua => ua.CreatedAt == userAchievement.CreatedAt))
+            _userAchievements.Any(ua => ua.UserId == userAchievement.UserId))
         {
             return Error.Conflict(description: "User achievement already exists.");
         }
