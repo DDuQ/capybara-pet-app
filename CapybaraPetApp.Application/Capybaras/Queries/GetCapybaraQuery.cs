@@ -1,7 +1,7 @@
-﻿using CapybaraPetApp.Domain.CapybaraAggregate;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Capybaras.Queries;
 
-public record GetCapybaraQuery(Guid CapybaraId) : IRequest<ErrorOr<Capybara>>;
+public record GetCapybaraQuery(Guid CapybaraId) : IQuery<ErrorOr<Capybara>>;

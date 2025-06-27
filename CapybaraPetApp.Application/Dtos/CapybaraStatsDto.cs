@@ -1,6 +1,4 @@
-﻿using CapybaraPetApp.Domain.CapybaraAggregate;
-
-namespace CapybaraPetApp.Application.Dtos;
+﻿namespace CapybaraPetApp.Application.Dtos;
 
 public record CapybaraStatsDto
 {

@@ -20,6 +20,6 @@ public class MappingProfile : Profile
         CreateMap<ItemDetail, ItemDetailDto>();
         CreateMap<Item, ItemDto>();
         CreateMap<UserAchievement, UserAchievementDto>();
-        CreateMap<User,UserDto>();
+        CreateMap<User, UserDto>();
     }
 }

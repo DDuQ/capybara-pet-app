@@ -9,7 +9,7 @@ public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchieve
     public void Configure(EntityTypeBuilder<UserAchievement> builder)
     {
         builder.ToTable("User_Achievement");
-        
+
         builder.HasOne(userAchievement => userAchievement.User)
             .WithMany(user => user.UserAchievements)
             .HasForeignKey(userAchievement => userAchievement.UserId);

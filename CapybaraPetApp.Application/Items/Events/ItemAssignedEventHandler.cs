@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate.Events;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Items.Events;
 
-public class ItemAssignedEventHandler : INotificationHandler<ItemAssignedEvent>
+public class ItemAssignedEventHandler : IDomainEventHandler<ItemAssignedEvent>
 {
     private readonly IItemRepository _itemRepository;
 
@@ -14,9 +14,9 @@ public class ItemAssignedEventHandler : INotificationHandler<ItemAssignedEvent>
         _itemRepository = itemRepository;
     }
 
-    public async Task Handle(ItemAssignedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemAssignedEvent domainEvent, CancellationToken cancellationToken)
     {
-        notification.Item.AssignUser(notification.User);
-        await _itemRepository.UpdateAsync(notification.Item);
+        domainEvent.Item.AssignUser(domainEvent.User);
+        await _itemRepository.UpdateAsync(domainEvent.Item);
     }
 }

@@ -1,7 +1,5 @@
-﻿using MediatR;
+﻿namespace CapybaraPetApp.Domain.Common;
 
-namespace CapybaraPetApp.Domain.Common;
-
-public interface IDomainEvent : INotification
+public interface IDomainEvent
 {
 }

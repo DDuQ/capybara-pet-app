@@ -1,11 +1,8 @@
-﻿using CapybaraPetApp.Application.Users.Commands.AddCapybara;
-using CapybaraPetApp.Application.Users.Commands.AddItem;
-using CapybaraPetApp.Application.Users.Commands.AddUserAchievement;
+﻿using CapybaraPetApp.Application.Users.Commands.AssignCapybara;
 using CapybaraPetApp.Application.Users.Commands.CreateUser;
 using CapybaraPetApp.Application.Users.Commands.UseItem;
 using CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 using CapybaraPetApp.Application.Users.Queries.GetUser;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Users;

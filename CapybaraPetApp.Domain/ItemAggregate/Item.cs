@@ -19,7 +19,7 @@ public class Item : AggregateRoot
     public Item(
         string name,
         ItemDetail itemDetail,
-        Guid? id = null) : 
+        Guid? id = null) :
         base(id ?? Guid.NewGuid())
     {
         Name = name;

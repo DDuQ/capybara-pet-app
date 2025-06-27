@@ -1,11 +1,11 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Capybaras.Queries;
 
-public class GetCapybaraQueryHandler : IRequestHandler<GetCapybaraQuery, ErrorOr<Capybara>>
+public class GetCapybaraQueryHandler : IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
@@ -14,10 +14,10 @@ public class GetCapybaraQueryHandler : IRequestHandler<GetCapybaraQuery, ErrorOr
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Capybara>> Handle(GetCapybaraQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Capybara>> Handle(GetCapybaraQuery query, CancellationToken cancellationToken)
     {
-        var capybara = await _capybaraRepository.GetByIdAsync(request.CapybaraId);
-        
+        var capybara = await _capybaraRepository.GetByIdAsync(query.CapybaraId);
+
         if (capybara is null)
         {
             return Error.NotFound(description: "Capybara not found.");

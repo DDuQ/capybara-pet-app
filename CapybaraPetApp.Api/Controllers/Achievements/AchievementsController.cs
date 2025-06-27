@@ -1,6 +1,7 @@
-﻿using CapybaraPetApp.Application.Achievements.Commands;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Achievements.Commands;
 using CapybaraPetApp.Domain.AchievementAggregate;
-using MediatR;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Achievements;
@@ -8,11 +9,11 @@ namespace CapybaraPetApp.Api.Controllers.Achievements;
 [Route("api/[controller]")]
 public class AchievementsController : ApiController
 {
-    private readonly ISender _sender;
+    private readonly ICommandHandler<CreateAchievementCommand, ErrorOr<Achievement>> _command;
 
-    public AchievementsController(ISender sender)
+    public AchievementsController(ICommandHandler<CreateAchievementCommand, ErrorOr<Achievement>> command)
     {
-        _sender = sender;
+        _command = command;
     }
 
     [HttpPost]
@@ -20,7 +21,7 @@ public class AchievementsController : ApiController
     {
         var command = new CreateAchievementCommand(achievementType);
 
-        var createAchievementResult = await _sender.Send(command);
+        var createAchievementResult = await _command.Handle(command);
 
         if (createAchievementResult.IsError)
         {

@@ -6,7 +6,7 @@ namespace CapybaraPetApp.Domain.CapybaraAggregate;
 
 public class Capybara : AggregateRoot
 {
-    private readonly List<Interaction> _interactions = new();
+    private readonly List<Interaction> _interactions = [];
     private readonly CapybaraStats _stats = CapybaraStats.Empty();
     public string Name { get; set; }
     public Guid? UserId { get; set; }

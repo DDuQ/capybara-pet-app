@@ -1,7 +1,7 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregate;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Domain.AchievementAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Achievements.Commands;
 
-public record CreateAchievementCommand(AchievementType AchievementType) : IRequest<ErrorOr<Achievement>>;
+public record CreateAchievementCommand(AchievementType AchievementType) : ICommand<ErrorOr<Achievement>>;

@@ -1,12 +1,12 @@
-﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Interactions.Commands.CreateInteraction;
 
-public class CreateInteractionCommandHandler : IRequestHandler<CreateInteractionCommand, ErrorOr<Interaction>>
+public class CreateInteractionCommandHandler : ICommandHandler<CreateInteractionCommand, ErrorOr<Interaction>>
 {
-    public Task<ErrorOr<Interaction>> Handle(CreateInteractionCommand request, CancellationToken cancellationToken)
+    public Task<ErrorOr<Interaction>> Handle(CreateInteractionCommand command, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

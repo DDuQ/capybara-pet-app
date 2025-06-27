@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate.Events;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Achievements.Events;
 
-public class UserAchievementAssignedEventHandler : INotificationHandler<UserAchievementAssignedEvent>
+public class UserAchievementAssignedEventHandler : IDomainEventHandler<UserAchievementAssignedEvent>
 {
     private readonly IAchievementRepository _achievementRepository;
 
@@ -13,10 +13,10 @@ public class UserAchievementAssignedEventHandler : INotificationHandler<UserAchi
         _achievementRepository = achievementRepository;
     }
 
-    public async Task Handle(UserAchievementAssignedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(UserAchievementAssignedEvent domainEvent, CancellationToken cancellationToken)
     {
-        var achievement = await _achievementRepository.GetByIdAsync(notification.UserAchievement.AchievementId);
-        achievement?.AssignUserAchievement(notification.UserAchievement);
+        var achievement = await _achievementRepository.GetByIdAsync(domainEvent.UserAchievement.AchievementId);
+        achievement?.AssignUserAchievement(domainEvent.UserAchievement);
         await _achievementRepository.UpdateAsync(achievement!);
     }
 }

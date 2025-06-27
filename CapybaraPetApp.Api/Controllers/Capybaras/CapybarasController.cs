@@ -1,7 +1,8 @@
-﻿using CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 using CapybaraPetApp.Application.Capybaras.Queries;
 using CapybaraPetApp.Domain.CapybaraAggregate;
-using MediatR;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Capybaras;
@@ -9,11 +10,13 @@ namespace CapybaraPetApp.Api.Controllers.Capybaras;
 [Route("api/[controller]")]
 public class CapybarasController : ApiController
 {
-    private readonly ISender _sender;
+    private readonly IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> _query;
+    private readonly ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> _command;
 
-    public CapybarasController(ISender sender)
+    public CapybarasController(IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> query, ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> command)
     {
-        _sender = sender;
+        _query = query;
+        _command = command;
     }
 
     [HttpGet("{id}")]
@@ -21,7 +24,7 @@ public class CapybarasController : ApiController
     {
         var query = new GetCapybaraQuery(id);
 
-        var getCapybaraResult = await _sender.Send(query); 
+        var getCapybaraResult = await _query.Handle(query);
 
         if (getCapybaraResult.IsError)
         {
@@ -36,7 +39,7 @@ public class CapybarasController : ApiController
     {
         var command = new CreateCapybaraCommand(capybaraName, id, capybaraStats);
 
-        var result = await _sender.Send(command);
+        var result = await _command.Handle(command);
 
         if (result.IsError)
         {

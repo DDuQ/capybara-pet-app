@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using ErrorOr;
-using MediatR;
 
-namespace CapybaraPetApp.Application.Users.Commands.AddItem;
+namespace CapybaraPetApp.Application.Users.Commands.AssignItem;
 
-public class AssignItemCommandHandler : IRequestHandler<AssignItemCommand, ErrorOr<Success>>
+public class AssignItemCommandHandler : ICommandHandler<AssignItemCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IItemRepository _itemRepository;
@@ -15,16 +15,16 @@ public class AssignItemCommandHandler : IRequestHandler<AssignItemCommand, Error
         _itemRepository = itemRepository;
     }
 
-    public async Task<ErrorOr<Success>> Handle(AssignItemCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(AssignItemCommand command, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(request.ItemId);
+        var item = await _itemRepository.GetByIdAsync(command.ItemId);
 
         if (item is null)
         {
             return Error.NotFound(description: "Item does not exists.");
         }
 
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
         {

@@ -1,6 +1,6 @@
 using CapybaraPetApp.Api.Extensions;
-using CapybaraPetApp.Infrastructure;
 using CapybaraPetApp.Application;
+using CapybaraPetApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,11 +1,11 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Queries.GetUser;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery, ErrorOr<User>>
+public class GetUserQueryHandler : IQueryHandler<GetUserQuery, ErrorOr<User>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -14,11 +14,11 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, ErrorOr<User>>
         _userRepository = userRepository;
     }
 
-    public async Task<ErrorOr<User>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<User>> Handle(GetUserQuery query, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        var user = await _userRepository.GetByIdAsync(query.Id);
 
-        if (user is null) 
+        if (user is null)
         {
             return Error.NotFound(description: "User not found.");
         }

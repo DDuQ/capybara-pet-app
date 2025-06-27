@@ -1,5 +1,4 @@
-﻿using CapybaraPetApp.Domain.ItemAggregate;
-using CapybaraPetApp.Domain.UserAggregate;
+﻿using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +11,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable(nameof(User));
 
         builder.Property(user => user.Username).IsRequired().HasMaxLength(50);
-        
+
         builder.Property(user => user.Email).IsRequired().HasMaxLength(100);
 
         builder.HasMany(user => user.Capybaras)

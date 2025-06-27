@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate.Events;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Capybaras.Events;
 
-public class CapybaraAssignedEventHandler : INotificationHandler<CapybaraAssignedEvent>
+public class CapybaraAssignedEventHandler : IDomainEventHandler<CapybaraAssignedEvent>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
@@ -13,9 +13,8 @@ public class CapybaraAssignedEventHandler : INotificationHandler<CapybaraAssigne
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task Handle(CapybaraAssignedEvent notification, CancellationToken cancellationToken)
+    public Task Handle(CapybaraAssignedEvent domainEvent, CancellationToken cancellationToken)
     {
-        notification.Capybara.AddUserId(notification.UserId);
-        await _capybaraRepository.UpdateAsync(notification.Capybara);
+        throw new NotImplementedException();
     }
 }

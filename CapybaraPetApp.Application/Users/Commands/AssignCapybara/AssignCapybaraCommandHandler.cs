@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using ErrorOr;
-using MediatR;
 
-namespace CapybaraPetApp.Application.Users.Commands.AddCapybara;
+namespace CapybaraPetApp.Application.Users.Commands.AssignCapybara;
 
-public class AssignCapybaraCommandHandler : IRequestHandler<AssignCapybaraCommand, ErrorOr<Success>>
+public class AssignCapybaraCommandHandler : ICommandHandler<AssignCapybaraCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly ICapybaraRepository _capybaraRepository;
@@ -15,16 +15,16 @@ public class AssignCapybaraCommandHandler : IRequestHandler<AssignCapybaraComman
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Success>> Handle(AssignCapybaraCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(AssignCapybaraCommand command, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user == null)
         {
             return Error.NotFound(description: "User not found.");
         }
 
-        var capybara = await _capybaraRepository.GetByIdAsync(request.CapybaraId);
+        var capybara = await _capybaraRepository.GetByIdAsync(command.CapybaraId);
 
         if (capybara == null)
         {
@@ -34,7 +34,7 @@ public class AssignCapybaraCommandHandler : IRequestHandler<AssignCapybaraComman
         user.AssignCapybara(capybara);
 
         await _userRepository.UpdateAsync(user);
-        
+
         return Result.Success;
     }
 }

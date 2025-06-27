@@ -1,10 +1,10 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.UseItem;
 
-public class UseItemCommandHandler : IRequestHandler<UseItemCommand, ErrorOr<Success>>
+public class UseItemCommandHandler : ICommandHandler<UseItemCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IItemRepository _itemRepository;
@@ -23,23 +23,23 @@ public class UseItemCommandHandler : IRequestHandler<UseItemCommand, ErrorOr<Suc
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Success>> Handle(UseItemCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(UseItemCommand command, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetByIdAsync(request.ItemId);
+        var item = await _itemRepository.GetByIdAsync(command.ItemId);
 
         if (item is null)
         {
             return Error.NotFound(description: "Item not found.");
         }
 
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
         {
             return Error.NotFound(description: "User not found.");
         }
 
-        var capybara = await _capybaraRepository.GetByIdAsync(request.capybaraId);
+        var capybara = await _capybaraRepository.GetByIdAsync(command.capybaraId);
 
         if (capybara is null)
         {
@@ -52,15 +52,15 @@ public class UseItemCommandHandler : IRequestHandler<UseItemCommand, ErrorOr<Suc
             return Error.Conflict(description: "Capybara is not owned by this user.");
         }
 
-        var userItem = _userItemRepository.GetByIdsAsync(request.UserId, request.ItemId);
+        var userItem = _userItemRepository.GetByIdsAsync(command.UserId, command.ItemId);
 
         if (userItem is null)
         {
             return Error.NotFound("User does not have this item.");
         }
 
-        item.UseItem(request.UserId, request.capybaraId, request.Amount);
-        
+        item.UseItem(command.UserId, command.capybaraId, command.Amount);
+
         await _itemRepository.UpdateAsync(item);
 
         return Result.Success;

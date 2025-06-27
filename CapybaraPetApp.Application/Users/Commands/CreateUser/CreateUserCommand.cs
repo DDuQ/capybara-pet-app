@@ -1,7 +1,7 @@
-﻿using CapybaraPetApp.Domain.UserAggregate;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.CreateUser;
 
-public record CreateUserCommand(string Username, string Email, Guid? Id) : IRequest<ErrorOr<User>>;
+public record CreateUserCommand(string Username, string Email, Guid? Id) : ICommand<ErrorOr<User>>;

@@ -25,7 +25,7 @@ public class User : AggregateRoot
     public User(
         string username,
         string email,
-        Guid? id) : 
+        Guid? id) :
         base(id ?? Guid.NewGuid())
     {
         Username = username;

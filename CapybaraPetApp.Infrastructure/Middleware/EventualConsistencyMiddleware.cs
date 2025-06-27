@@ -1,7 +1,7 @@
-﻿using CapybaraPetApp.Domain.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.EventualConsistency;
 using CapybaraPetApp.Infrastructure.Persistence;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 
 namespace CapybaraPetApp.Infrastructure.Middleware;
@@ -12,7 +12,7 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
 
     private readonly RequestDelegate _next = next;
 
-    public async Task InvokeAsync(HttpContext context, IPublisher publisher, CapybaraPetAppDbContext dbContext)
+    public async Task InvokeAsync(HttpContext context, IDomainEventDispatcher dispatcher, CapybaraPetAppDbContext dbContext)
     {
         var transaction = await dbContext.Database.BeginTransactionAsync();
         context.Response.OnCompleted(async () =>
@@ -23,7 +23,7 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
                 {
                     while (domainEvents.TryDequeue(out var nextEvent))
                     {
-                        await publisher.Publish(nextEvent);
+                        await dispatcher.DispatchAsync(nextEvent);
                     }
                 }
 

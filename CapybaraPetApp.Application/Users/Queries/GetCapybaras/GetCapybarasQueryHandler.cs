@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Application.Dtos;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 
-public class GetCapybarasQueryHandler : IRequestHandler<GetCapybarasQuery, ErrorOr<List<CapybaraDto>>>
+public class GetCapybarasQueryHandler : IQueryHandler<GetCapybarasQuery, ErrorOr<List<CapybaraDto>>>
 {
     private readonly ICapybaraRepository _capybarasRepository;
     private readonly IUserRepository _userRepository;
@@ -19,16 +19,16 @@ public class GetCapybarasQueryHandler : IRequestHandler<GetCapybarasQuery, Error
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<List<CapybaraDto>>> Handle(GetCapybarasQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<CapybaraDto>>> Handle(GetCapybarasQuery query, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var user = await _userRepository.GetByIdAsync(query.UserId);
 
         if (user is null)
         {
             return Error.NotFound(description: "User not found.");
         }
 
-        var capybaras = await _capybarasRepository.GetCapybarasByUserIdAsync(request.UserId);
+        var capybaras = await _capybarasRepository.GetCapybarasByUserIdAsync(query.UserId);
 
         if (capybaras is null)
         {

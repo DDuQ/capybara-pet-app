@@ -6,7 +6,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Domain.ItemAggregate.Events;
 
-public record ItemUsedEvent(Guid UserId, Guid CapybaraId, InteractionDetail InteractionDetail, UserItem UserItem) : IDomainEvent 
+public record ItemUsedEvent(Guid UserId, Guid CapybaraId, InteractionDetail InteractionDetail, UserItem UserItem) : IDomainEvent
 {
     public static readonly Error UserDoesNotExist = EventualConsistencyError.From(
         code: $"{nameof(ItemUsedEvent)}.{nameof(UserDoesNotExist)}",

@@ -1,11 +1,11 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Users.Commands.CreateUser;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ErrorOr<User>>
+public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, ErrorOr<User>>
 {
     private readonly IUserRepository _userRepository;
 
@@ -14,14 +14,14 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Error
         _userRepository = userRepository;
     }
 
-    public async Task<ErrorOr<User>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<User>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        if (await _userRepository.ExistsByEmail(request.Email))
+        if (await _userRepository.ExistsByEmail(command.Email))
         {
-            return Error.Conflict(description:"There is an user that already uses that email.");
+            return Error.Conflict(description: "There is an user that already uses that email.");
         }
 
-        var user = new User(request.Username, request.Email, request.Id);
+        var user = new User(command.Username, command.Email, command.Id);
 
         await _userRepository.AddAsync(user);
 

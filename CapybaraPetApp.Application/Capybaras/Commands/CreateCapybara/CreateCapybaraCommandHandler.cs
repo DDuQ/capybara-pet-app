@@ -1,11 +1,11 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
-using MediatR;
 
 namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
-public class CreateCapybaraCommandHandler : IRequestHandler<CreateCapybaraCommand, ErrorOr<Capybara>>
+public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
@@ -14,13 +14,13 @@ public class CreateCapybaraCommandHandler : IRequestHandler<CreateCapybaraComman
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
     {
         Capybara? capybara = null;
 
-        if (request.Id is not null)
+        if (command.Id is not null)
         {
-            capybara = await _capybaraRepository.GetByIdAsync((Guid)request.Id);
+            capybara = await _capybaraRepository.GetByIdAsync((Guid)command.Id);
         }
 
         if (capybara is not null)
@@ -29,9 +29,9 @@ public class CreateCapybaraCommandHandler : IRequestHandler<CreateCapybaraComman
         }
 
         capybara = new Capybara(
-            request.Name,
-            request.Stats,
-            request.Id);
+            command.Name,
+            command.Stats,
+            command.Id);
 
         await _capybaraRepository.AddAsync(capybara);
 
