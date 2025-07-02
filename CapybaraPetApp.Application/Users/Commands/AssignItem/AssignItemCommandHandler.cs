@@ -21,14 +21,14 @@ public class AssignItemCommandHandler : ICommandHandler<AssignItemCommand, Error
 
         if (item is null)
         {
-            return Error.NotFound(description: "Item does not exists.");
+            return Error.NotFound(description: "Item does not exists."); //TODO: Add error code to Domain (ItemErrors).
         }
 
         var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
         {
-            return Error.NotFound(description: "Item does not exists.");
+            return Error.NotFound(description: "Item does not exists."); //TODO: Add error code to Domain (ItemErrors).
         }
 
         user.AssignItem(item);

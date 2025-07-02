@@ -16,6 +16,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(user => user.Capybaras)
             .WithOne()
-            .HasForeignKey("UserId");
+            .HasForeignKey("OwnerId");
     }
 }

@@ -5,7 +5,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
-public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>>
+public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
@@ -14,27 +14,22 @@ public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraComman
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
     {
-        Capybara? capybara = null;
+        //if (command.Id is not null)
+        //{
+        //    capybara = await _capybaraRepository.GetByIdAsync((Guid)command.Id);
+        //}
 
-        if (command.Id is not null)
-        {
-            capybara = await _capybaraRepository.GetByIdAsync((Guid)command.Id);
-        }
+        //if (capybara is not null)
+        //{
+        //    return Error.NotFound(description: "Capybara not found.");
+        //}
 
-        if (capybara is not null)
-        {
-            return Error.NotFound(description: "Capybara not found.");
-        }
-
-        capybara = new Capybara(
-            command.Name,
-            command.Stats,
-            command.Id);
+        var capybara = new Capybara(command.Name, command.Stats);
 
         await _capybaraRepository.AddAsync(capybara);
 
-        return capybara;
+        return capybara.Id;
     }
 }

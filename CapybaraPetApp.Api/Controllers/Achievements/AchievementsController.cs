@@ -9,9 +9,9 @@ namespace CapybaraPetApp.Api.Controllers.Achievements;
 [Route("api/[controller]")]
 public class AchievementsController : ApiController
 {
-    private readonly ICommandHandler<CreateAchievementCommand, ErrorOr<Achievement>> _command;
+    private readonly ICommandHandler<CreateAchievementCommand, ErrorOr<Guid>> _command;
 
-    public AchievementsController(ICommandHandler<CreateAchievementCommand, ErrorOr<Achievement>> command)
+    public AchievementsController(ICommandHandler<CreateAchievementCommand, ErrorOr<Guid>> command)
     {
         _command = command;
     }

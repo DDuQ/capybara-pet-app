@@ -11,9 +11,9 @@ namespace CapybaraPetApp.Api.Controllers.Capybaras;
 public class CapybarasController : ApiController
 {
     private readonly IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> _query;
-    private readonly ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> _command;
+    private readonly ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>> _command;
 
-    public CapybarasController(IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> query, ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> command)
+    public CapybarasController(IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> query, ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>> command)
     {
         _query = query;
         _command = command;
@@ -35,9 +35,9 @@ public class CapybarasController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCapybara(string capybaraName, Guid? id, CapybaraStats capybaraStats)
+    public async Task<IActionResult> CreateCapybara(string capybaraName, CapybaraStats capybaraStats)
     {
-        var command = new CreateCapybaraCommand(capybaraName, id, capybaraStats);
+        var command = new CreateCapybaraCommand(capybaraName, capybaraStats);
 
         var result = await _command.Handle(command);
 
@@ -46,6 +46,6 @@ public class CapybarasController : ApiController
             return BadRequest(result.Errors);
         }
 
-        return CreatedAtAction(nameof(GetCapybara), new { id = result.Value.Id }, result.Value);
+        return CreatedAtAction(nameof(GetCapybara), new { id = result.Value }, result.Value);
     }
 }

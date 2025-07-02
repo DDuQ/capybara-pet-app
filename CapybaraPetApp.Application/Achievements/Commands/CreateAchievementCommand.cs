@@ -4,4 +4,4 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Achievements.Commands;
 
-public record CreateAchievementCommand(AchievementType AchievementType) : ICommand<ErrorOr<Achievement>>;
+public record CreateAchievementCommand(AchievementType AchievementType) : ICommand<ErrorOr<Guid>>;

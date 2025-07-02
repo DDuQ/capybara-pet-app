@@ -10,10 +10,10 @@ namespace CapybaraPetApp.Domain.UserAggregate;
 
 public class User : AggregateRoot
 {
-    public readonly List<UserAchievement> _userAchievements = new();
-    public readonly List<Capybara> _capybaras = new();
-    public readonly List<Interaction> _interactions = new();
-    public readonly List<UserItem> _userItems = new();
+    public readonly List<UserAchievement> _userAchievements = [];
+    public readonly List<Capybara> _capybaras = [];
+    public readonly List<Interaction> _interactions = [];
+    public readonly List<UserItem> _userItems = [];
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     private readonly string _passwordHash = null!;

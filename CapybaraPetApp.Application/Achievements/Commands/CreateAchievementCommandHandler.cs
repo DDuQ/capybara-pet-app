@@ -5,7 +5,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Achievements.Commands;
 
-public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievementCommand, ErrorOr<Achievement>>
+public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievementCommand, ErrorOr<Guid>>
 {
     private readonly IAchievementRepository _achievementRepository;
 
@@ -14,7 +14,7 @@ public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievement
         _achievementRepository = achievementRepository;
     }
 
-    public async Task<ErrorOr<Achievement>> Handle(CreateAchievementCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(CreateAchievementCommand command, CancellationToken cancellationToken)
     {
         if (await _achievementRepository.ExistsByNameAsync(command.AchievementType.Name))
         {
@@ -25,6 +25,6 @@ public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievement
 
         await _achievementRepository.AddAsync(achievement);
 
-        return achievement;
+        return achievement.Id;
     }
 }

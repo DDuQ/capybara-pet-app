@@ -30,12 +30,12 @@ public class Item : AggregateRoot
 
     public ErrorOr<Success> UseItem(Guid userId, Guid capybaraId, int amount)
     {
-        if (!_userItems.Any(it => it.ItemId == Id && it.UserId == userId))
-        {
-            return Error.NotFound(description: "UserItem not found in item.");
-        }
+        var userItem = _userItems.FirstOrDefault(it => it.UserId == userId);
 
-        var userItem = _userItems.First(it => it.ItemId == Id && it.UserId == userId);
+        if (userItem is null)
+        {
+            return Error.NotFound(description: "UserItem not found in item."); //TODO: Add error code to Domain (UserItemErrors).
+        }
 
         userItem.SubstractAmount(amount);
 

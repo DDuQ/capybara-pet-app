@@ -5,7 +5,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Items.Commands.CreateItem;
 
-public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, ErrorOr<Item>>
+public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, ErrorOr<Guid>>
 {
     private readonly IItemRepository _itemRepository;
 
@@ -14,17 +14,17 @@ public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, Error
         _itemRepository = itemRepository;
     }
 
-    public async Task<ErrorOr<Item>> Handle(CreateItemCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Guid>> Handle(CreateItemCommand command, CancellationToken cancellationToken)
     {
         if (await _itemRepository.ExistsByNameAsync(command.Name))
         {
-            Error.Conflict(description: $"Item already exists.");
+            Error.Conflict(description: $"Item already exists."); //TODO: Add error code to Domain (ItemErrors).
         }
 
         var item = new Item(command.Name, command.ItemDetail);
 
         await _itemRepository.AddAsync(item);
 
-        return item;
+        return item.Id;
     }
 }

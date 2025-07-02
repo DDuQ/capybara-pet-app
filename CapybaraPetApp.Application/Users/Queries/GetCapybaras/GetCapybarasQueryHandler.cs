@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
-using CapybaraPetApp.Application.Dtos;
+using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 
-public class GetCapybarasQueryHandler : IQueryHandler<GetCapybarasQuery, ErrorOr<List<CapybaraDto>>>
+public class GetCapybarasQueryHandler : IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>>
 {
     private readonly ICapybaraRepository _capybarasRepository;
     private readonly IUserRepository _userRepository;
@@ -19,22 +19,22 @@ public class GetCapybarasQueryHandler : IQueryHandler<GetCapybarasQuery, ErrorOr
         _mapper = mapper;
     }
 
-    public async Task<ErrorOr<List<CapybaraDto>>> Handle(GetCapybarasQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<List<Capybara>>> Handle(GetCapybarasQuery query, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(query.UserId);
 
         if (user is null)
         {
-            return Error.NotFound(description: "User not found.");
+            return Error.NotFound(description: "User not found."); //TODO: Add error code to Domain (UserErrors).
         }
 
         var capybaras = await _capybarasRepository.GetCapybarasByUserIdAsync(query.UserId);
 
         if (capybaras is null)
         {
-            return Error.NotFound(description: "User does not have any capy-friends yet. ):");
+            return Error.NotFound(description: "User does not have any capy-friends yet. ):"); //TODO: Add error code to Domain (UserErrors).
         }
 
-        return _mapper.Map<List<CapybaraDto>>(capybaras);
+        return capybaras;
     }
 }

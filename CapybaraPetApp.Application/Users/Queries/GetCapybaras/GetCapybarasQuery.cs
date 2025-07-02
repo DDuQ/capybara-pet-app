@@ -1,8 +1,7 @@
 ﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Dtos;
+using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 
-public record GetCapybarasQuery(
-    Guid UserId) : IQuery<ErrorOr<List<CapybaraDto>>>;
+public record GetCapybarasQuery(Guid UserId) : IQuery<ErrorOr<List<Capybara>>>;

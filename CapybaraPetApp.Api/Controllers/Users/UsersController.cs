@@ -1,8 +1,14 @@
-﻿using CapybaraPetApp.Application.Users.Commands.AssignCapybara;
+﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Users.Commands.AssignCapybara;
+using CapybaraPetApp.Application.Users.Commands.AssignItem;
+using CapybaraPetApp.Application.Users.Commands.AssignUserAchievement;
 using CapybaraPetApp.Application.Users.Commands.CreateUser;
 using CapybaraPetApp.Application.Users.Commands.UseItem;
 using CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 using CapybaraPetApp.Application.Users.Queries.GetUser;
+using CapybaraPetApp.Domain.CapybaraAggregate;
+using CapybaraPetApp.Domain.UserAggregate;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Users;
@@ -10,19 +16,38 @@ namespace CapybaraPetApp.Api.Controllers.Users;
 [Route("api/[controller]")]
 public class UsersController : ApiController
 {
-    private readonly ISender _sender;
+    private readonly ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> _adoptCapybaraCommand;
+    private readonly ICommandHandler<UseItemCommand, ErrorOr<Success>> _useItemCommand;
+    private readonly ICommandHandler<AssignItemCommand, ErrorOr<Success>> _assignItemCommand;
+    private readonly ICommandHandler<AssignUserAchievementCommand, ErrorOr<Success>> _assignUserAchievementCommand;
+    private readonly ICommandHandler<CreateUserCommand, ErrorOr<Guid>> _createUserCommand;
+    private readonly IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> _getCapybarasQuery;
+    private readonly IQueryHandler<GetUserQuery, ErrorOr<User>> _getUserQuery;
 
-    public UsersController(ISender sender)
+    public UsersController(
+        ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> adoptCapybaraCommand,
+        ICommandHandler<UseItemCommand, ErrorOr<Success>> useItemCommand,
+        ICommandHandler<AssignItemCommand, ErrorOr<Success>> assignItemCommand,
+        ICommandHandler<AssignUserAchievementCommand, ErrorOr<Success>> assignUserAchievementCommand,
+        ICommandHandler<CreateUserCommand, ErrorOr<Guid>> createUserCommand,
+        IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> getCapybarasQuery,
+        IQueryHandler<GetUserQuery, ErrorOr<User>> getUserQuery)
     {
-        _sender = sender;
+        _adoptCapybaraCommand = adoptCapybaraCommand;
+        _useItemCommand = useItemCommand;
+        _assignItemCommand = assignItemCommand;
+        _assignUserAchievementCommand = assignUserAchievementCommand;
+        _createUserCommand = createUserCommand;
+        _getCapybarasQuery = getCapybarasQuery;
+        _getUserQuery = getUserQuery;
     }
 
     [HttpPost("capybara")]
-    public async Task<IActionResult> AssignCapybara(Guid userId, Guid capybaraId)
+    public async Task<IActionResult> AdoptCapybara(Guid userId, Guid capybaraId)
     {
-        var command = new AssignCapybaraCommand(userId, capybaraId);
+        var command = new AdoptCapybaraCommand(userId, capybaraId);
 
-        var assignCapybaraResult = await _sender.Send(command);
+        var assignCapybaraResult = await _adoptCapybaraCommand.Handle(command);
 
         if (assignCapybaraResult.IsError)
         {
@@ -37,7 +62,7 @@ public class UsersController : ApiController
     {
         var command = new UseItemCommand(userId, capybaraId, itemId, amount);
 
-        var useItemResult = await _sender.Send(command);
+        var useItemResult = await _useItemCommand.Handle(command);
 
         if (useItemResult.IsError)
         {
@@ -52,7 +77,7 @@ public class UsersController : ApiController
     {
         var command = new AssignItemCommand(userId, itemId);
 
-        var assignItemCommandResult = await _sender.Send(command);
+        var assignItemCommandResult = await _assignItemCommand.Handle(command);
 
         if (assignItemCommandResult.IsError)
         {
@@ -67,7 +92,7 @@ public class UsersController : ApiController
     {
         var command = new AssignUserAchievementCommand(userId, achievementId);
 
-        var assignUserAchievementResult = await _sender.Send(command);
+        var assignUserAchievementResult = await _assignUserAchievementCommand.Handle(command);
 
         if (assignUserAchievementResult.IsError)
         {
@@ -82,7 +107,7 @@ public class UsersController : ApiController
     {
         var query = new GetCapybarasQuery(id);
 
-        var getCapybarasResult = await _sender.Send(query);
+        var getCapybarasResult = await _getCapybarasQuery.Handle(query);
 
         if (getCapybarasResult.IsError)
         {
@@ -97,7 +122,7 @@ public class UsersController : ApiController
     {
         var query = new GetUserQuery(id);
 
-        var getUserResult = await _sender.Send(query);
+        var getUserResult = await _getUserQuery.Handle(query);
 
         if (getUserResult.IsError)
         {
@@ -114,7 +139,7 @@ public class UsersController : ApiController
                                             createUserRequest.Email,
                                             createUserRequest.Id);
 
-        var createUserResult = await _sender.Send(command);
+        var createUserResult = await _createUserCommand.Handle(command);
 
         if (createUserResult.IsError)
         {

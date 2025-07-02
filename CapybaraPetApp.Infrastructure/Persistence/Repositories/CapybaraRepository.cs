@@ -16,7 +16,7 @@ public class CapybaraRepository : Repository<Capybara>, ICapybaraRepository
     public async Task<List<Capybara>> GetCapybarasByUserIdAsync(Guid userId)
     {
         return await _capybara
-            .Where(capybara => capybara.UserId == userId)
+            .Where(capybara => capybara.OwnerId == userId)
             .Include(capybara => capybara.Interactions)
             .ToListAsync();
     }

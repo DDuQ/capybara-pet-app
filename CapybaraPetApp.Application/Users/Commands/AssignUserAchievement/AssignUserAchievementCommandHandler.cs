@@ -23,14 +23,14 @@ public class AssignUserAchievementCommandHandler : ICommandHandler<AssignUserAch
 
         if (achievement is null)
         {
-            return Error.NotFound(description: "Achievement does not exists.");
+            return Error.NotFound(description: "Achievement does not exists."); //TODO: Add error code to Domain (AchievementErrors).
         }
 
         var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
         {
-            return Error.NotFound(description: "User does not exists.");
+            return Error.NotFound(description: "User does not exists."); //TODO: Add error code to Domain (UserErrors).
         }
 
         var userAchievement = new UserAchievement(command.UserId, command.AchievementId);

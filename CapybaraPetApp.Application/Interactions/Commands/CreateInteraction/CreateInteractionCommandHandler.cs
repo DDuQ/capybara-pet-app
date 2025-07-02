@@ -1,13 +1,12 @@
 ﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Interactions.Commands.CreateInteraction;
 
-public class CreateInteractionCommandHandler : ICommandHandler<CreateInteractionCommand, ErrorOr<Interaction>>
+public class CreateInteractionCommandHandler : ICommandHandler<CreateInteractionCommand, ErrorOr<Guid>>
 {
-    public Task<ErrorOr<Interaction>> Handle(CreateInteractionCommand command, CancellationToken cancellationToken)
+    public Task<ErrorOr<Guid>> Handle(CreateInteractionCommand command, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); //TODO: Implement this method to handle the creation of an interaction.
     }
 }

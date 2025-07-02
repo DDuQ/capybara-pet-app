@@ -9,7 +9,7 @@ public class Capybara : AggregateRoot
     private readonly List<Interaction> _interactions = [];
     private readonly CapybaraStats _stats = CapybaraStats.Empty();
     public string Name { get; set; }
-    public Guid? UserId { get; set; }
+    public Guid? OwnerId { get; set; }
     public IReadOnlyCollection<Interaction> Interactions => _interactions;
     public CapybaraStats Stats => _stats;
 
@@ -69,12 +69,12 @@ public class Capybara : AggregateRoot
 
     public ErrorOr<Success> AddUserId(Guid userId)
     {
-        if (UserId == userId)
+        if (OwnerId == userId)
         {
             return Error.Conflict(description: "Capybara has been already assigned to this user.");
         }
 
-        UserId = userId;
+        OwnerId = userId;
         return Result.Success;
     }
 
