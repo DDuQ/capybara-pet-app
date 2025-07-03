@@ -17,7 +17,6 @@ public class CapybaraRepository : Repository<Capybara>, ICapybaraRepository
     {
         return await _capybara
             .Where(capybara => capybara.OwnerId == userId)
-            .Include(capybara => capybara.Interactions)
             .ToListAsync();
     }
 }

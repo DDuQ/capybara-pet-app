@@ -5,22 +5,21 @@ using CapybaraPetApp.Domain.UserAggregate.Events;
 
 namespace CapybaraPetApp.Application.Capybaras.Events;
 
-public class InteractionCreatedEventHandler : IDomainEventHandler<InteractionCreatedEvent>
+public class UpdateCapybaraMoodOnInteractionHandler : IDomainEventHandler<UpdateCapybaraMoodOnInteraction>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
-    public InteractionCreatedEventHandler(ICapybaraRepository capybaraRepository)
+    public UpdateCapybaraMoodOnInteractionHandler(ICapybaraRepository capybaraRepository)
     {
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task Handle(InteractionCreatedEvent domainEvent, CancellationToken cancellationToken)
+    public async Task Handle(UpdateCapybaraMoodOnInteraction domainEvent, CancellationToken cancellationToken)
     {
         var capybara = await _capybaraRepository.GetByIdAsync(domainEvent.Interaction.CapybaraId)
-            ?? throw new EventualConsistencyException(InteractionCreatedEvent.CapybaraNotFound);
+            ?? throw new EventualConsistencyException(UpdateCapybaraMoodOnInteraction.CapybaraNotFound);
 
-        capybara.AddInteraction(domainEvent.Interaction);
-        capybara.Interact(domainEvent.Interaction);
+        capybara.ReactToInteraction(domainEvent.Interaction);
 
         await _capybaraRepository.UpdateAsync(capybara);
     }

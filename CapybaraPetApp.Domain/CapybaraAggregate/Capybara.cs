@@ -6,11 +6,9 @@ namespace CapybaraPetApp.Domain.CapybaraAggregate;
 
 public class Capybara : AggregateRoot
 {
-    private readonly List<Interaction> _interactions = [];
     private readonly CapybaraStats _stats = CapybaraStats.Empty();
     public string Name { get; set; }
     public Guid? OwnerId { get; set; }
-    public IReadOnlyCollection<Interaction> Interactions => _interactions;
     public CapybaraStats Stats => _stats;
 
     public Capybara(
@@ -25,28 +23,16 @@ public class Capybara : AggregateRoot
 
     private Capybara() { }
 
-    public ErrorOr<Success> Interact(Interaction interaction)
+    public ErrorOr<Success> ReactToInteraction(Interaction interaction)
     {
-        switch (interaction.InteractionDetail.InteractionType)
+        var detail = interaction.InteractionDetail;
+        return detail.InteractionType switch
         {
-            case InteractionType.Feed:
-                GiveFruits(interaction.InteractionDetail.Quantity);
-                break;
-
-            case InteractionType.Play:
-                Play(interaction.InteractionDetail.Quantity);
-                break;
-
-            case InteractionType.Clean:
-                BathTime(interaction.InteractionDetail.Quantity);
-                break;
-
-            default:
-                return InteractionErrors.UnrecognizedInteractionType;
-        }
-
-        _interactions.Add(interaction);
-        return Result.Success;
+            InteractionType.Feed => GiveFruits(detail.Quantity),
+            InteractionType.Play => Play(detail.Quantity),
+            InteractionType.Clean => BathTime(detail.Quantity),
+            _ => InteractionErrors.UnrecognizedInteractionType
+        };
     }
 
     private ErrorOr<Success> GiveFruits(int fruitQuantity)
@@ -67,19 +53,15 @@ public class Capybara : AggregateRoot
         return Result.Success;
     }
 
-    public ErrorOr<Success> AddUserId(Guid userId)
+    public ErrorOr<Success> SetOwner(Guid userId)
     {
+        //TODO: Review logic for assigning an owner.
         if (OwnerId == userId)
         {
-            return Error.Conflict(description: "Capybara has been already assigned to this user.");
+            return Error.Conflict(description: "Capybara is already assigned to this user."); //TODO: Add error code to Domain (CapybaraErrors).
         }
 
         OwnerId = userId;
         return Result.Success;
-    }
-
-    public void AddInteraction(Interaction interaction)
-    {
-        _interactions.Add(interaction);
     }
 }

@@ -12,14 +12,6 @@ public class InteractionConfiguration : IEntityTypeConfiguration<Interaction>
 
         builder.OwnsOne(interaction => interaction.InteractionDetail);
 
-        builder.HasOne(interaction => interaction.User)
-            .WithMany(user => user.Interactions)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.HasOne(interaction => interaction.Capybara)
-            .WithMany(capybara => capybara.Interactions)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasKey(interaction => new { interaction.Id, interaction.UserId, interaction.CapybaraId });
     }
 }

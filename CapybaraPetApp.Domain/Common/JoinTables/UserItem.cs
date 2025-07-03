@@ -1,6 +1,4 @@
-﻿using CapybaraPetApp.Domain.ItemAggregate;
-using CapybaraPetApp.Domain.UserAggregate;
-using ErrorOr;
+﻿using ErrorOr;
 
 namespace CapybaraPetApp.Domain.Common.JoinTables;
 
@@ -12,34 +10,31 @@ public class UserItem
         ItemId = itemId;
     }
 
-
     const int MaxAmount = 999;
     private UserItem() { }
 
     public int Amount { get; private set; } = 0;
     public Guid UserId { get; set; }
-    public User User { get; set; }
     public Guid ItemId { get; set; }
-    public Item Item { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now; //TODO: Is this necessary here?
 
-    public ErrorOr<Success> AddAmount(int amount)
+    public ErrorOr<Success> Add(int amount)
     {
         if (amount < 1)
         {
-            return Error.Conflict(description: "Amount should be at least 1 or more.");
+            return Error.Conflict(description: "Should add at least 1 or more.");
         }
 
         if (amount > MaxAmount)
         {
-            return Error.Conflict(description: $"Amount cannot surpass the limit ({MaxAmount}).");
+            return Error.Conflict(description: $"Cannot add beyond the limit ({MaxAmount}).");
         }
 
         Amount = amount;
         return Result.Success;
     }
 
-    public ErrorOr<Success> SubstractAmount(int amount)
+    public ErrorOr<Success> Use(int amount)
     {
         if (Amount - amount <= 0)
         {

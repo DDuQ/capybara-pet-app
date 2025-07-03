@@ -31,7 +31,7 @@ public class AdoptCapybaraCommandHandler : ICommandHandler<AdoptCapybaraCommand,
             return Error.NotFound(description: "Capybara not found."); //TODO: Add error code to Domain (CapybaraErrors).
         }
 
-        user.AssignCapybara(capybara);
+        user.AdoptCapybara(capybara.Id);
 
         await _userRepository.UpdateAsync(user);
 

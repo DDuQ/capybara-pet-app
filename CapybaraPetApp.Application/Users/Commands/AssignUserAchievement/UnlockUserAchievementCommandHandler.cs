@@ -5,19 +5,19 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Commands.AssignUserAchievement;
 
-public class AssignUserAchievementCommandHandler : ICommandHandler<AssignUserAchievementCommand, ErrorOr<Success>>
+public class UnlockUserAchievementCommandHandler : ICommandHandler<UnlockUserAchievementCommand, ErrorOr<Success>>
 {
     private readonly IUserRepository _userRepository;
     private readonly IAchievementRepository _achievementRepository;
 
-    public AssignUserAchievementCommandHandler(IUserRepository userRepository, IAchievementRepository achievementRepository)
+    public UnlockUserAchievementCommandHandler(IUserRepository userRepository, IAchievementRepository achievementRepository)
     {
         _userRepository = userRepository;
         _achievementRepository = achievementRepository;
     }
 
 
-    public async Task<ErrorOr<Success>> Handle(AssignUserAchievementCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Success>> Handle(UnlockUserAchievementCommand command, CancellationToken cancellationToken)
     {
         var achievement = await _achievementRepository.GetByIdAsync(command.AchievementId);
 
@@ -35,7 +35,7 @@ public class AssignUserAchievementCommandHandler : ICommandHandler<AssignUserAch
 
         var userAchievement = new UserAchievement(command.UserId, command.AchievementId);
 
-        user.AssignUserAchievement(userAchievement);
+        user.UnlockAchievement(command.AchievementId);
 
         return Result.Success;
     }

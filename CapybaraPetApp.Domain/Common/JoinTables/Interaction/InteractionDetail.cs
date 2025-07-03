@@ -17,42 +17,28 @@ public record InteractionDetail
     public InteractionType InteractionType { get; private set; }
     public int Quantity { get; private set; }
 
-    public static ErrorOr<Success> IsInteractionDetailValid(InteractionDetail interactionDetail)
+    public static ErrorOr<Success> Validate(InteractionDetail interactionDetail)
     {
         if (interactionDetail.Quantity <= 0)
         {
             return InteractionErrors.QuantityCannotBeLessThanOne;
         }
 
-        switch (interactionDetail.InteractionType)
+        return interactionDetail.InteractionType switch
         {
-            case InteractionType.Feed:
-                if (interactionDetail.Quantity > 100)
-                {
-                    return InteractionErrors.TooMuchFruit;
-                }
-                break;
+            InteractionType.Feed when interactionDetail.Quantity > 100 =>
+                InteractionErrors.TooMuchFruit,
 
-            case InteractionType.Play:
-                if (InteractionTakesMoreThan(AnHour, interactionDetail.Quantity))
-                {
-                    return InteractionErrors.CannotTakeMoreThanAnHour;
-                }
-                break;
+            InteractionType.Play or InteractionType.Clean
+                when TakesLongerThanAnHour(interactionDetail.Quantity) =>
+                InteractionErrors.CannotTakeMoreThanAnHour,
 
-            case InteractionType.Clean:
-                if (InteractionTakesMoreThan(AnHour, interactionDetail.Quantity))
-                {
-                    return InteractionErrors.CannotTakeMoreThanAnHour;
-                }
-                break;
+            InteractionType.Feed or InteractionType.Play or InteractionType.Clean =>
+                Result.Success,
 
-            default:
-                return InteractionErrors.UnrecognizedInteractionType;
-        }
-
-        return Result.Success;
+            _ => InteractionErrors.UnrecognizedInteractionType
+        };
     }
 
-    private static bool InteractionTakesMoreThan(int frameOfTime, int quantity) => quantity > frameOfTime;
+    private static bool TakesLongerThanAnHour(int expectedTime) => expectedTime > AnHour;
 }

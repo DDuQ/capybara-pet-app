@@ -30,7 +30,7 @@ public record CapybaraStats
     {
         if (IsExhausted)
         {
-            return Error.Conflict(description: $"Capy does not have enough energy (currently: {Energy}) to play right now. :c");
+            return Error.Conflict(description: $"Capy does not have enough energy (currently: {Energy}) to play right now.");
         }
 
         Happiness += amount;

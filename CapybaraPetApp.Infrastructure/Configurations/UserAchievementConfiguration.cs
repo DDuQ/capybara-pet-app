@@ -10,14 +10,6 @@ public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchieve
     {
         builder.ToTable("User_Achievement");
 
-        builder.HasOne(userAchievement => userAchievement.User)
-            .WithMany(user => user.UserAchievements)
-            .HasForeignKey(userAchievement => userAchievement.UserId);
-
-        builder.HasOne(userAchievement => userAchievement.Achievement)
-            .WithMany(achievement => achievement.UserAchievements)
-            .HasForeignKey(userAchievement => userAchievement.AchievementId);
-
         builder.HasKey(userAchievement => new { userAchievement.UserId, userAchievement.AchievementId });
     }
 }

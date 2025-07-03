@@ -14,8 +14,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(user => user.Email).IsRequired().HasMaxLength(100);
 
-        builder.HasMany(user => user.Capybaras)
+        builder.HasMany(user => user.UserCapybaras)
             .WithOne()
-            .HasForeignKey("OwnerId");
+            .HasForeignKey("UserId");
     }
 }

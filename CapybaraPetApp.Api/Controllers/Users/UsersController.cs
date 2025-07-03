@@ -19,7 +19,7 @@ public class UsersController : ApiController
     private readonly ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> _adoptCapybaraCommand;
     private readonly ICommandHandler<UseItemCommand, ErrorOr<Success>> _useItemCommand;
     private readonly ICommandHandler<AssignItemCommand, ErrorOr<Success>> _assignItemCommand;
-    private readonly ICommandHandler<AssignUserAchievementCommand, ErrorOr<Success>> _assignUserAchievementCommand;
+    private readonly ICommandHandler<UnlockUserAchievementCommand, ErrorOr<Success>> _assignUserAchievementCommand;
     private readonly ICommandHandler<CreateUserCommand, ErrorOr<Guid>> _createUserCommand;
     private readonly IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> _getCapybarasQuery;
     private readonly IQueryHandler<GetUserQuery, ErrorOr<User>> _getUserQuery;
@@ -28,7 +28,7 @@ public class UsersController : ApiController
         ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> adoptCapybaraCommand,
         ICommandHandler<UseItemCommand, ErrorOr<Success>> useItemCommand,
         ICommandHandler<AssignItemCommand, ErrorOr<Success>> assignItemCommand,
-        ICommandHandler<AssignUserAchievementCommand, ErrorOr<Success>> assignUserAchievementCommand,
+        ICommandHandler<UnlockUserAchievementCommand, ErrorOr<Success>> assignUserAchievementCommand,
         ICommandHandler<CreateUserCommand, ErrorOr<Guid>> createUserCommand,
         IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> getCapybarasQuery,
         IQueryHandler<GetUserQuery, ErrorOr<User>> getUserQuery)
@@ -90,7 +90,7 @@ public class UsersController : ApiController
     [HttpPost("user-achievement")]
     public async Task<IActionResult> AssignUserAchievement(Guid userId, Guid achievementId)
     {
-        var command = new AssignUserAchievementCommand(userId, achievementId);
+        var command = new UnlockUserAchievementCommand(userId, achievementId);
 
         var assignUserAchievementResult = await _assignUserAchievementCommand.Handle(command);
 
