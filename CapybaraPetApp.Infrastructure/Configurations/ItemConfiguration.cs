@@ -10,6 +10,6 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
         builder.ToTable(nameof(Item));
 
-        builder.OwnsOne(item => item.ItemDetail);
+        builder.OwnsOne(i => i.ItemDetail);
     }
 }

@@ -28,7 +28,7 @@ public class User : AggregateRoot
         Email = email;
     }
 
-    public User() { }
+    private User() { }
 
     public ErrorOr<Success> UnlockAchievement(Guid achievementId)
     {

@@ -1,4 +1,6 @@
-﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
+﻿using CapybaraPetApp.Domain.CapybaraAggregate;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
+using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,8 +12,18 @@ public class InteractionConfiguration : IEntityTypeConfiguration<Interaction>
     {
         builder.ToTable(nameof(Interaction));
 
-        builder.OwnsOne(interaction => interaction.InteractionDetail);
+        builder.OwnsOne(i => i.InteractionDetail);
 
-        builder.HasKey(interaction => new { interaction.Id, interaction.UserId, interaction.CapybaraId });
+        builder.HasKey(i => new { i.Id, i.UserId, i.CapybaraId });
+
+        builder.HasOne<User>()
+            .WithMany(u => u.Interactions)
+            .HasForeignKey(i => i.UserId)
+            .IsRequired();
+
+        builder.HasOne<Capybara>()
+            .WithMany()
+            .HasForeignKey(i => i.CapybaraId)
+            .IsRequired();
     }
 }

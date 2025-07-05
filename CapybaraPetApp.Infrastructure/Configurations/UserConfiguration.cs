@@ -13,9 +13,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.Username).IsRequired().HasMaxLength(50);
 
         builder.Property(user => user.Email).IsRequired().HasMaxLength(100);
-
-        builder.HasMany(user => user.UserCapybaras)
-            .WithOne()
-            .HasForeignKey("UserId");
     }
 }

@@ -16,7 +16,6 @@ public class UserItem
     public int Amount { get; private set; } = 0;
     public Guid UserId { get; set; }
     public Guid ItemId { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now; //TODO: Is this necessary here?
 
     public ErrorOr<Success> Add(int amount)
     {

@@ -22,6 +22,7 @@ public class CapybaraPetAppDbContext : DbContext
     }
 
     public DbSet<Capybara> Capybara => Set<Capybara>();
+    public DbSet<UserCapybara> UserCapybara => Set<UserCapybara>();
     public DbSet<User> User => Set<User>();
     public DbSet<UserItem> UserItem => Set<UserItem>();
     public DbSet<Item> Item => Set<Item>();

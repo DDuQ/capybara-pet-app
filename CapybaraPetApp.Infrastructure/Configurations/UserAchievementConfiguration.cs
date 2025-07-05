@@ -1,4 +1,6 @@
-﻿using CapybaraPetApp.Domain.Common.JoinTables;
+﻿using CapybaraPetApp.Domain.AchievementAggregate;
+using CapybaraPetApp.Domain.Common.JoinTables;
+using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +12,16 @@ public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchieve
     {
         builder.ToTable("User_Achievement");
 
-        builder.HasKey(userAchievement => new { userAchievement.UserId, userAchievement.AchievementId });
+        builder.HasKey(ua => new { ua.UserId, ua.AchievementId });
+
+        builder.HasOne<User>()
+            .WithMany(u => u.UserAchievements)
+            .HasForeignKey(ua => ua.UserId)
+            .IsRequired();
+
+        builder.HasOne<Achievement>()
+            .WithMany()
+            .HasForeignKey(ua => ua.AchievementId)
+            .IsRequired();
     }
 }
