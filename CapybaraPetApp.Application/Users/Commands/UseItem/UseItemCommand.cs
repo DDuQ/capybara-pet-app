@@ -3,4 +3,4 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Commands.UseItem;
 
-public record UseItemCommand(Guid UserId, Guid capybaraId, Guid ItemId, int Amount) : ICommand<ErrorOr<Success>>;
+public record UseItemCommand(Guid UserId, Guid CapybaraId, Guid ItemId, int Amount) : ICommand<ErrorOr<Success>>;

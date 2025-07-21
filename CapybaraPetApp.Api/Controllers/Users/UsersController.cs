@@ -1,4 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
+﻿using CapybaraPetApp.Api.Controllers.Users.Requests;
+using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Users.Commands.AssignCapybara;
 using CapybaraPetApp.Application.Users.Commands.AssignItem;
 using CapybaraPetApp.Application.Users.Commands.AssignUserAchievement;
@@ -13,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Users;
 
-[Route("api/[controller]")]
 public class UsersController : ApiController
 {
     private readonly ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> _adoptCapybaraCommand;
@@ -42,7 +42,84 @@ public class UsersController : ApiController
         _getUserQuery = getUserQuery;
     }
 
-    [HttpPost("capybara")]
+    [HttpGet(APIEndpoints.User.Get)]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
+    {
+        var query = new GetUserQuery(id);
+
+        var getUserResult = await _getUserQuery.Handle(query);
+
+        if (getUserResult.IsError)
+        {
+            return Problem(getUserResult.Errors);
+        }
+
+        return Ok(getUserResult.Value);
+    }
+
+    [HttpPost(APIEndpoints.User.Create)]
+    public async Task<IActionResult> Create(RegisterUserRequest createUserRequest)
+    {
+        var command = new CreateUserCommand(createUserRequest.Username,
+                                            createUserRequest.Email,
+                                            createUserRequest.Id);
+
+        var createUserResult = await _createUserCommand.Handle(command);
+
+        if (createUserResult.IsError)
+        {
+            return Problem(createUserResult.Errors);
+        }
+
+        return Ok(createUserResult.Value);
+    }
+
+    [HttpPost(APIEndpoints.User.UseItem)]
+    public async Task<IActionResult> UseItem([FromRoute] Guid userId, [FromBody] UseItemRequest useItemRequest)
+    {
+        var command = new UseItemCommand(userId, useItemRequest.CapybaraId, useItemRequest.ItemId, useItemRequest.ItemQuantity);
+
+        var useItemResult = await _useItemCommand.Handle(command);
+
+        if (useItemResult.IsError)
+        {
+            return Problem(useItemResult.Errors);
+        }
+
+        return Ok(useItemResult.Value);
+    }
+
+    [HttpPost(APIEndpoints.User.AssignItem)]
+    public async Task<IActionResult> AssignItem([FromRoute] Guid userId, [FromBody] AssignItemRequest assignItemRequest)
+    {
+        var command = new AssignItemCommand(userId, assignItemRequest.ItemId);
+
+        var assignItemCommandResult = await _assignItemCommand.Handle(command);
+
+        if (assignItemCommandResult.IsError)
+        {
+            return Problem(assignItemCommandResult.Errors);
+        }
+
+        return Ok(assignItemCommandResult.Value);
+    }
+
+    [HttpPost(APIEndpoints.User.UnlockAchievement)]
+    public async Task<IActionResult> UnlockAchievement([FromRoute] Guid userId, [FromRoute] Guid achievementId)
+    {
+        var command = new UnlockUserAchievementCommand(userId, achievementId);
+
+        var assignUserAchievementResult = await _assignUserAchievementCommand.Handle(command);
+
+        if (assignUserAchievementResult.IsError)
+        {
+            return Problem(assignUserAchievementResult.Errors);
+        }
+
+        return Ok(assignUserAchievementResult.Value);
+    }
+
+    [HttpPost(APIEndpoints.User.AdoptCapybara)]
     public async Task<IActionResult> AdoptCapybara(Guid userId, Guid capybaraId)
     {
         var command = new AdoptCapybaraCommand(userId, capybaraId);
@@ -57,53 +134,8 @@ public class UsersController : ApiController
         return Ok(assignCapybaraResult.Value);
     }
 
-    [HttpPost("use-item")]
-    public async Task<IActionResult> UseItem(Guid userId, Guid capybaraId, Guid itemId, int amount)
-    {
-        var command = new UseItemCommand(userId, capybaraId, itemId, amount);
-
-        var useItemResult = await _useItemCommand.Handle(command);
-
-        if (useItemResult.IsError)
-        {
-            return Problem(useItemResult.Errors);
-        }
-
-        return Ok(useItemResult.Value);
-    }
-
-    [HttpPost("user-item")]
-    public async Task<IActionResult> AssignItem(Guid userId, Guid itemId)
-    {
-        var command = new AssignItemCommand(userId, itemId);
-
-        var assignItemCommandResult = await _assignItemCommand.Handle(command);
-
-        if (assignItemCommandResult.IsError)
-        {
-            return Problem(assignItemCommandResult.Errors);
-        }
-
-        return Ok(assignItemCommandResult.Value);
-    }
-
-    [HttpPost("user-achievement")]
-    public async Task<IActionResult> AssignUserAchievement(Guid userId, Guid achievementId)
-    {
-        var command = new UnlockUserAchievementCommand(userId, achievementId);
-
-        var assignUserAchievementResult = await _assignUserAchievementCommand.Handle(command);
-
-        if (assignUserAchievementResult.IsError)
-        {
-            return Problem(assignUserAchievementResult.Errors);
-        }
-
-        return Ok(assignUserAchievementResult.Value);
-    }
-
-    [HttpGet("capybaras")]
-    public async Task<IActionResult> GetCapybarasByUserId(Guid id)
+    [HttpGet(APIEndpoints.User.GetCapybaras)]
+    public async Task<IActionResult> GetCapybaras([FromRoute] Guid id)
     {
         var query = new GetCapybarasQuery(id);
 
@@ -115,37 +147,5 @@ public class UsersController : ApiController
         }
 
         return Ok(getCapybarasResult.Value);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(Guid id)
-    {
-        var query = new GetUserQuery(id);
-
-        var getUserResult = await _getUserQuery.Handle(query);
-
-        if (getUserResult.IsError)
-        {
-            return Problem(getUserResult.Errors);
-        }
-
-        return Ok(getUserResult.Value);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> RegisterUser(RegisterUserRequest createUserRequest)
-    {
-        var command = new CreateUserCommand(createUserRequest.Username,
-                                            createUserRequest.Email,
-                                            createUserRequest.Id);
-
-        var createUserResult = await _createUserCommand.Handle(command);
-
-        if (createUserResult.IsError)
-        {
-            return Problem(createUserResult.Errors);
-        }
-
-        return Ok(createUserResult.Value);
     }
 }

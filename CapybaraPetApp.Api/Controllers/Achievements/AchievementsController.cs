@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Achievements;
 
-[Route("api/[controller]")]
 public class AchievementsController : ApiController
 {
     private readonly ICommandHandler<CreateAchievementCommand, ErrorOr<Guid>> _command;
@@ -16,8 +15,8 @@ public class AchievementsController : ApiController
         _command = command;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAchievement(AchievementType achievementType)
+    [HttpPost(APIEndpoints.Achievements.Create)]
+    public async Task<IActionResult> CreateAchievement([FromBody] AchievementType achievementType)
     {
         var command = new CreateAchievementCommand(achievementType);
 

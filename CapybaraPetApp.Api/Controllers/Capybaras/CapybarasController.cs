@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CapybaraPetApp.Api.Controllers.Capybaras;
 
-[Route("api/[controller]")]
 public class CapybarasController : ApiController
 {
     private readonly IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> _query;
@@ -19,8 +18,8 @@ public class CapybarasController : ApiController
         _command = command;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetCapybara(Guid id)
+    [HttpGet(APIEndpoints.Capybara.Get)]
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var query = new GetCapybaraQuery(id);
 
@@ -34,8 +33,8 @@ public class CapybarasController : ApiController
         return Ok(getCapybaraResult.Value);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateCapybara(string capybaraName, CapybaraStats capybaraStats)
+    [HttpPost(APIEndpoints.Capybara.Create)]
+    public async Task<IActionResult> Create(string capybaraName, CapybaraStats capybaraStats)
     {
         var command = new CreateCapybaraCommand(capybaraName, capybaraStats);
 
@@ -46,6 +45,6 @@ public class CapybarasController : ApiController
             return BadRequest(result.Errors);
         }
 
-        return CreatedAtAction(nameof(GetCapybara), new { id = result.Value }, result.Value);
+        return CreatedAtAction(nameof(Get), new { id = result.Value }, new { id = result.Value });
     }
 }

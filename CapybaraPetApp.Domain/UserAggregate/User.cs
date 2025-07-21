@@ -45,7 +45,7 @@ public class User : AggregateRoot
     {
         if (_userCapybaras.Any(c => c.CapybaraId == capybaraId))
         {
-            return Error.Conflict(description: "Avatar already added to User."); //TODO: Add error code to Domain (UserErrors).
+            return Error.Conflict(description: "Capybara already added to User."); //TODO: Add error code to Domain (UserErrors).
         }
 
         _userCapybaras.Add(new UserCapybara(Id, capybaraId));

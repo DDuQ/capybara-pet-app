@@ -31,7 +31,7 @@ public class UseItemCommandHandler : ICommandHandler<UseItemCommand, ErrorOr<Suc
             return Error.NotFound(description: "Item not found."); //TODO: Add error code to Domain (ItemErrors).
         }
 
-        user.UseItemOnCapybara(command.ItemId, command.capybaraId, command.Amount);
+        user.UseItemOnCapybara(command.ItemId, command.CapybaraId, command.Amount);
 
         await _itemRepository.UpdateAsync(item);
 
