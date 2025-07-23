@@ -9,7 +9,5 @@ public class AchievementConfiguration : IEntityTypeConfiguration<Achievement>
     public void Configure(EntityTypeBuilder<Achievement> builder)
     {
         builder.ToTable(nameof(Achievement));
-
-        builder.OwnsOne(achievement => achievement.AchievementType);
     }
 }

@@ -13,8 +13,8 @@ public class AchievementRepository : Repository<Achievement>, IAchievementReposi
         _achievement = dbContext.Achievement;
     }
 
-    public async Task<bool> ExistsByNameAsync(string name)
+    public async Task<bool> ExistsByNameAsync(string title)
     {
-        return await _achievement.AnyAsync(ach => string.Equals(ach.AchievementType.Name, name, StringComparison.OrdinalIgnoreCase));
+        return await _achievement.AnyAsync(ach => string.Equals(ach.Title, title, StringComparison.OrdinalIgnoreCase));
     }
 }

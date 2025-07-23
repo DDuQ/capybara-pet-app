@@ -1,50 +1,74 @@
-﻿using ErrorOr;
+using ErrorOr;
 
 namespace CapybaraPetApp.Domain.CapybaraAggregate;
 
 public record CapybaraStats
 {
-    private bool IsExhausted { get; set; } = false;
-    public int Happiness { get; set; }
-    public int Health { get; set; }
-    public int Energy { get; set; }
+    private const int MaxStatValue = 100;
+    private const int MinStatValue = 0;
+    
+    private bool IsExhausted => Energy <= 0;
+    
+    public int Happiness { get; private set; }
+    public int Health { get; private set; }
+    public int Energy { get; private set; }
 
-    public CapybaraStats(int happiness, int health, int energy)
+    private CapybaraStats(int happiness, int health, int energy)
     {
-        Happiness = happiness;
-        Health = health;
-        Energy = energy;
+        Happiness = ClampStatValue(happiness);
+        Health = ClampStatValue(health);
+        Energy = ClampStatValue(energy);
     }
-
-    //TODO: Update Happiness, Health, Energy logic.
-    private CapybaraStats() { }
 
     internal ErrorOr<Success> Feed(int amount)
     {
-        Health += amount;
-        Energy += amount / 2;
+        if (amount <= 0)
+            return CapybaraErrors.InvalidStatChange;
+            
+        Health = ClampStatValue(Health + amount);
+        Energy = ClampStatValue(Energy + (amount / 2));
         return Result.Success;
     }
 
     internal ErrorOr<Success> Play(int amount)
     {
+        if (amount <= 0)
+            return CapybaraErrors.InvalidStatChange;
+            
         if (IsExhausted)
-        {
-            return Error.Conflict(description: $"Capy does not have enough energy (currently: {Energy}) to play right now.");
-        }
+            return CapybaraErrors.InsufficientEnergy(Energy);
 
-        Happiness += amount;
-        Energy -= amount / 2;
-        IsExhausted = Energy <= 0;
+        Happiness = ClampStatValue(Happiness + amount);
+        Energy = ClampStatValue(Energy - (amount / 2));
         return Result.Success;
     }
 
     internal ErrorOr<Success> Clean(int amount)
     {
-        Health += amount + 2;
-        Happiness += amount * 2;
+        if (amount <= 0)
+            return CapybaraErrors.InvalidStatChange;
+            
+        Health = ClampStatValue(Health + amount + 2);
+        Happiness = ClampStatValue(Happiness + (amount * 2));
         return Result.Success;
     }
+    
+    private static int ClampStatValue(int value) => 
+        Math.Clamp(value, MinStatValue, MaxStatValue);
 
     internal static CapybaraStats Empty() => new(happiness: 0, health: 0, energy: 0);
+    
+    public static ErrorOr<CapybaraStats> Create(int happiness, int health, int energy)
+    {
+        if (happiness < MinStatValue || happiness > MaxStatValue)
+            return CapybaraErrors.InvalidHappiness;
+            
+        if (health < MinStatValue || health > MaxStatValue)
+            return CapybaraErrors.InvalidHealth;
+            
+        if (energy < MinStatValue || energy > MaxStatValue)
+            return CapybaraErrors.InvalidEnergy;
+            
+        return new CapybaraStats(happiness, health, energy);
+    }
 }

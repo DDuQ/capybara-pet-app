@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Application.Common;
+using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Infrastructure.Common;
 using CapybaraPetApp.Infrastructure.Persistence;
 using CapybaraPetApp.Infrastructure.Persistence.Repositories;

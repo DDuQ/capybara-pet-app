@@ -45,6 +45,6 @@ public class CapybarasController : ApiController
             return BadRequest(result.Errors);
         }
 
-        return CreatedAtAction(nameof(Get), new { id = result.Value }, new { id = result.Value });
+        return CreatedAtAction(nameof(Get), new { id = result.Value }, result.Value);
     }
 }

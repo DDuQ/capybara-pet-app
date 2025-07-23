@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.Common;
+using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using ErrorOr;
 
@@ -10,6 +10,23 @@ public class Capybara : AggregateRoot
     public string Name { get; set; }
     public Guid? OwnerId { get; set; }
     public CapybaraStats Stats => _stats;
+
+    public static ErrorOr<Capybara> Create(
+        string name,
+        int initialHappiness = 0,
+        int initialHealth = 100,
+        int initialEnergy = 100,
+        Guid? id = null)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return CapybaraErrors.NameRequired;
+            
+        var statsResult = CapybaraStats.Create(initialHappiness, initialHealth, initialEnergy);
+        if (statsResult.IsError)
+            return statsResult.Errors;
+            
+        return new Capybara(name, statsResult.Value, id);
+    }
 
     public Capybara(
         string name,
@@ -55,10 +72,9 @@ public class Capybara : AggregateRoot
 
     public ErrorOr<Success> SetOwner(Guid userId)
     {
-        //TODO: Review logic for assigning an owner.
         if (OwnerId == userId)
         {
-            return Error.Conflict(description: "Capybara is already assigned to this user."); //TODO: Add error code to Domain (CapybaraErrors).
+            return CapybaraErrors.AlreadyAssigned;
         }
 
         OwnerId = userId;

@@ -16,15 +16,20 @@ public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievement
 
     public async Task<ErrorOr<Guid>> Handle(CreateAchievementCommand command, CancellationToken cancellationToken)
     {
-        if (await _achievementRepository.ExistsByNameAsync(command.AchievementType.Name))
+        if (await _achievementRepository.ExistsByNameAsync(command.Title))
         {
-            return Error.Conflict(description: $"Item {command.AchievementType.Name} already exists.");
+            return Error.Conflict(description: $"Item {command.Title} already exists.");
         }
 
-        var achievement = new Achievement(command.AchievementType);
+        var achievement = Achievement.Create(command.Title, command.Description, command.Points, command.Rarity);
+        
+        if (achievement.IsError)
+        {
+            return achievement.Errors;
+        }
+        
+        await _achievementRepository.AddAsync(achievement.Value);
 
-        await _achievementRepository.AddAsync(achievement);
-
-        return achievement.Id;
+        return achievement.Value.Id;
     }
 }

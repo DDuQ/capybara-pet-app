@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregate;
+using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.JoinTables;

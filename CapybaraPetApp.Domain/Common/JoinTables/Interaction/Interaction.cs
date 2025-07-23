@@ -1,4 +1,4 @@
-﻿namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction;
+namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 
 public class Interaction : Entity
 {

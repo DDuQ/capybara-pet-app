@@ -1,6 +1,6 @@
-﻿using CapybaraPetApp.Application.Abstractions;
+﻿using CapybaraPetApp.Api.Controllers.Achievements.Requests;
+using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Achievements.Commands;
-using CapybaraPetApp.Domain.AchievementAggregate;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,17 +16,18 @@ public class AchievementsController : ApiController
     }
 
     [HttpPost(APIEndpoints.Achievements.Create)]
-    public async Task<IActionResult> CreateAchievement([FromBody] AchievementType achievementType)
+    public async Task<IActionResult> CreateAchievement([FromBody] CreateAchievementRequest createAchievementRequest)
     {
-        var command = new CreateAchievementCommand(achievementType);
+        var command = new CreateAchievementCommand(
+            createAchievementRequest.Title,
+            createAchievementRequest.Description,
+            createAchievementRequest.Points,
+            createAchievementRequest.Rarity);
 
         var createAchievementResult = await _command.Handle(command);
 
-        if (createAchievementResult.IsError)
-        {
-            return Problem(createAchievementResult.Errors);
-        }
-
-        return Ok(createAchievementResult.Value);
+        return createAchievementResult.IsError
+            ? Problem(createAchievementResult.Errors)
+            : Ok(createAchievementResult.Value);
     }
 }

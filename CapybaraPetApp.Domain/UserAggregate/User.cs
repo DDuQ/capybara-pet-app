@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.Common;
+using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.JoinTables;
 using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate.Events;
@@ -34,7 +34,7 @@ public class User : AggregateRoot
     {
         if (_userAchievements.Any(ua => ua.AchievementId == achievementId))
         {
-            return Error.Conflict(description: "User achievement has been assigned already."); //TODO: Add error code to Domain (UserAchievementErrors).
+            return UserErrors.AchievementAlreadyAssigned;
         }
 
         _userAchievements.Add(new UserAchievement(Id, achievementId));
@@ -45,7 +45,7 @@ public class User : AggregateRoot
     {
         if (_userCapybaras.Any(c => c.CapybaraId == capybaraId))
         {
-            return Error.Conflict(description: "Capybara already added to User."); //TODO: Add error code to Domain (UserErrors).
+            return UserErrors.CapybaraAlreadyAdded;
         }
 
         _userCapybaras.Add(new UserCapybara(Id, capybaraId));
@@ -53,11 +53,11 @@ public class User : AggregateRoot
         return Result.Success;
     }
 
-    public ErrorOr<Success> BuyItem(Guid itemId) //TODO: Logic for buying an item.
+    public ErrorOr<Success> BuyItem(Guid itemId) //TODO: Currency logic when buying items.
     {
         if (_userItems.Any(it => it.ItemId == itemId))
         {
-            return Error.Conflict(description: "UserItem already added to User."); //TODO: Add error code to Domain (UserItemErrors).
+            return UserErrors.ItemNotOwned;
         }
 
         var userItem = new UserItem(Id, itemId);
@@ -82,7 +82,7 @@ public class User : AggregateRoot
 
         if (userItem is null)
         {
-            return Error.Conflict(description: "User does not have this item."); //TODO: Add error code to Domain (UserItemErrors).
+            return UserErrors.ItemNotOwned;
         }
 
         userItem.Use(itemAmount);

@@ -10,5 +10,5 @@ public interface IAchievementRepository
 
     Task UpdateAsync(Achievement achievement);
 
-    Task<bool> ExistsByNameAsync(string name);
+    Task<bool> ExistsByNameAsync(string title);
 }

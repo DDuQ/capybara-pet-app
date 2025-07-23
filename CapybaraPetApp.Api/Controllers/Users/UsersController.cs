@@ -49,12 +49,7 @@ public class UsersController : ApiController
 
         var getUserResult = await _getUserQuery.Handle(query);
 
-        if (getUserResult.IsError)
-        {
-            return Problem(getUserResult.Errors);
-        }
-
-        return Ok(getUserResult.Value);
+        return getUserResult.IsError ? Problem(getUserResult.Errors) : Ok(getUserResult.Value);
     }
 
     [HttpPost(APIEndpoints.User.Create)]
@@ -66,27 +61,22 @@ public class UsersController : ApiController
 
         var createUserResult = await _createUserCommand.Handle(command);
 
-        if (createUserResult.IsError)
-        {
-            return Problem(createUserResult.Errors);
-        }
-
-        return Ok(createUserResult.Value);
+        return createUserResult.IsError
+            ? Problem(createUserResult.Errors)
+            : CreatedAtAction(nameof(Get), new { id = createUserResult.Value }, createUserResult.Value);
     }
 
     [HttpPost(APIEndpoints.User.UseItem)]
     public async Task<IActionResult> UseItem([FromRoute] Guid userId, [FromBody] UseItemRequest useItemRequest)
     {
-        var command = new UseItemCommand(userId, useItemRequest.CapybaraId, useItemRequest.ItemId, useItemRequest.ItemQuantity);
+        var command = new UseItemCommand(userId,
+            useItemRequest.CapybaraId,
+            useItemRequest.ItemId,
+            useItemRequest.ItemQuantity);
 
         var useItemResult = await _useItemCommand.Handle(command);
 
-        if (useItemResult.IsError)
-        {
-            return Problem(useItemResult.Errors);
-        }
-
-        return Ok(useItemResult.Value);
+        return useItemResult.IsError ? Problem(useItemResult.Errors) : Ok(useItemResult.Value);
     }
 
     [HttpPost(APIEndpoints.User.AssignItem)]
@@ -96,12 +86,9 @@ public class UsersController : ApiController
 
         var assignItemCommandResult = await _assignItemCommand.Handle(command);
 
-        if (assignItemCommandResult.IsError)
-        {
-            return Problem(assignItemCommandResult.Errors);
-        }
-
-        return Ok(assignItemCommandResult.Value);
+        return assignItemCommandResult.IsError
+            ? Problem(assignItemCommandResult.Errors)
+            : Ok(assignItemCommandResult.Value);
     }
 
     [HttpPost(APIEndpoints.User.UnlockAchievement)]
@@ -111,12 +98,9 @@ public class UsersController : ApiController
 
         var assignUserAchievementResult = await _assignUserAchievementCommand.Handle(command);
 
-        if (assignUserAchievementResult.IsError)
-        {
-            return Problem(assignUserAchievementResult.Errors);
-        }
-
-        return Ok(assignUserAchievementResult.Value);
+        return assignUserAchievementResult.IsError
+            ? Problem(assignUserAchievementResult.Errors)
+            : Ok(assignUserAchievementResult.Value);
     }
 
     [HttpPost(APIEndpoints.User.AdoptCapybara)]
@@ -126,12 +110,7 @@ public class UsersController : ApiController
 
         var assignCapybaraResult = await _adoptCapybaraCommand.Handle(command);
 
-        if (assignCapybaraResult.IsError)
-        {
-            return Problem(assignCapybaraResult.Errors);
-        }
-
-        return Ok(assignCapybaraResult.Value);
+        return assignCapybaraResult.IsError ? Problem(assignCapybaraResult.Errors) : Ok(assignCapybaraResult.Value);
     }
 
     [HttpGet(APIEndpoints.User.GetCapybaras)]
@@ -141,11 +120,6 @@ public class UsersController : ApiController
 
         var getCapybarasResult = await _getCapybarasQuery.Handle(query);
 
-        if (getCapybarasResult.IsError)
-        {
-            return Problem(getCapybarasResult.Errors);
-        }
-
-        return Ok(getCapybarasResult.Value);
+        return getCapybarasResult.IsError ? Problem(getCapybarasResult.Errors) : Ok(getCapybarasResult.Value);
     }
 }
