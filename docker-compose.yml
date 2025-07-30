@@ -8,16 +8,39 @@ services:
       dockerfile: CapybaraPetApp.Api/Dockerfile
     depends_on:
       - capybarapetapp-db
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
 
   capybarapetapp-db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: CapybaraPetApp.Db
     environment:
-       ACCEPT_EULA: Y
-       MSSQL_SA_PASSWORD: Admin123.
-       MSSQL_PID: Developer
-       MSSQL_TCP_PORT: 1234 
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: Admin123.
+      MSSQL_PID: Developer
+      MSSQL_TCP_PORT: 1234 
     volumes:
        - ./.containers/database:/var/opt/mssql/data
     ports:
        - "1234:1234"
+    
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: Keycloak
+    command: start-dev
+    environment:
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./.containers/keycloak:/opt/keycloak/data
+    ports:
+      - "8080:8080"
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: Jaeger
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "16686:16686"

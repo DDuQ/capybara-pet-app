@@ -48,15 +48,12 @@ public class Achievement : AggregateRoot
     
     public double GetRarityPercentage()
     {
-        // Calculate the percentage based on the rarity
-        // Lower enum values represent rarer achievements
+        //TODO: Check this logic in the future. Not urgent.
         var totalRarities = Enum.GetValues(typeof(Rarity)).Length;
         var rarityValue = (int)Rarity;
         
-        // Convert to percentage (1.0 = 100% for most common, approaching 0% for rarest)
         var percentage = 1.0 - (double)rarityValue / (totalRarities - 1);
         
-        // Convert to actual percentage (0-100%)
         return percentage * 100;
     }
 
@@ -65,9 +62,9 @@ public class Achievement : AggregateRoot
 
 public enum Rarity
 {
-    Common,     // Most common achievements
-    Uncommon,   // Somewhat rare
-    Rare,       // Hard to get
-    Epic,       // Very rare
-    Legendary   // Extremely rare
+    Common,     
+    Uncommon,
+    Rare,    
+    Epic,    
+    Legendary
 }

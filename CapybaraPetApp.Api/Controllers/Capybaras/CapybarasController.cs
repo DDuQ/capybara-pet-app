@@ -12,7 +12,10 @@ public class CapybarasController : ApiController
     private readonly IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> _query;
     private readonly ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>> _command;
 
-    public CapybarasController(IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> query, ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>> command)
+    public CapybarasController(
+        IQueryHandler<GetCapybaraQuery, 
+        ErrorOr<Capybara>> query,
+        ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>> command)
     {
         _query = query;
         _command = command;
@@ -25,12 +28,7 @@ public class CapybarasController : ApiController
 
         var getCapybaraResult = await _query.Handle(query);
 
-        if (getCapybaraResult.IsError)
-        {
-            return Problem(getCapybaraResult.Errors);
-        }
-
-        return Ok(getCapybaraResult.Value);
+        return getCapybaraResult.IsError ? Problem(getCapybaraResult.Errors) : Ok(getCapybaraResult.Value);
     }
 
     [HttpPost(APIEndpoints.Capybara.Create)]
@@ -40,11 +38,8 @@ public class CapybarasController : ApiController
 
         var result = await _command.Handle(command);
 
-        if (result.IsError)
-        {
-            return BadRequest(result.Errors);
-        }
-
-        return CreatedAtAction(nameof(Get), new { id = result.Value }, result.Value);
+        return result.IsError
+            ? BadRequest(result.Errors)
+            : CreatedAtAction(nameof(Get),new { id = result.Value }, result.Value);
     }
 }
