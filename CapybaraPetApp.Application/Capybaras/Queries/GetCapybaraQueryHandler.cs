@@ -20,7 +20,7 @@ public class GetCapybaraQueryHandler : IQueryHandler<GetCapybaraQuery, ErrorOr<C
 
         if (capybara is null)
         {
-            return Error.NotFound(description: "Capybara not found.");
+            return CapybaraErrors.NotFound;
         }
 
         return capybara;

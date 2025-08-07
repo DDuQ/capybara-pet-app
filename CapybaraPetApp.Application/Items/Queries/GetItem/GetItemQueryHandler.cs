@@ -14,9 +14,10 @@ public class GetItemQueryHandler : IQueryHandler<GetItemQuery, ErrorOr<Item>>
         _itemRepository = itemRepository;
     }
 
-    public Task<ErrorOr<Item>> Handle(GetItemQuery query, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Item>> Handle(GetItemQuery query, CancellationToken cancellationToken)
     {
+        var item = await _itemRepository.GetByIdAsync(query.ItemId);
 
-        throw new NotImplementedException();
+        return item is not null ? item : ItemErrors.NotFound;
     }
 }

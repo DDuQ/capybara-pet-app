@@ -1,28 +1,30 @@
-version: '3.4'
-
 services:
   capybarapetapp.api:
     image: ${DOCKER_REGISTRY-}capybarapetappapi
+    container_name: CapybaraPetApp.Api
     build:
       context: .
       dockerfile: CapybaraPetApp.Api/Dockerfile
-    depends_on:
-      - capybarapetapp-db
     environment:
+      SQLServerDbSettings__ConnectionString: "Server=capybarapetapp.db,1433;Initial Catalog=CapybaraPetApp;User Id=sa;Password=Admin123.;TrustServerCertificate=True;MultipleActiveResultSets=True;Connect Timeout=30;ConnectRetryCount=5;ConnectRetryInterval=5;"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
+    ports:
+      - "5000:8080"
+    depends_on:
+      - capybarapetapp.db
+    restart: on-failure
 
-  capybarapetapp-db:
+  capybarapetapp.db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: CapybaraPetApp.Db
     environment:
       ACCEPT_EULA: Y
       MSSQL_SA_PASSWORD: Admin123.
-      MSSQL_PID: Developer
-      MSSQL_TCP_PORT: 1234 
+      MSSQL_TCP_PORT: 1433
     volumes:
-       - ./.containers/database:/var/opt/mssql/data
+      - ./.containers/database:/var/opt/mssql/data
     ports:
-       - "1234:1234"
+      - "1433:1433"
     
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -30,12 +32,12 @@ services:
     command: start-dev
     environment:
       KC_HEALTH_ENABLED: true
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
     volumes:
-      - ./.containers/keycloak:/opt/keycloak/data
+      - ./.containers/identity:/opt/keycloak/data
     ports:
-      - "8080:8080"
+      - "18080:8080"
 
   jaeger:
     image: jaegertracing/all-in-one:latest

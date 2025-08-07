@@ -1,42 +1,48 @@
+using CapybaraPetApp.Api.Endpoints;
 using CapybaraPetApp.Api.Extensions;
 using CapybaraPetApp.Application;
 using CapybaraPetApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenWithAuth(builder.Configuration);
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+    .AddJwtBearer(o =>
     {
-        options.RequireHttpsMetadata = false;
-        options.Audience = builder.Configuration["Authentication:Audience"]!;
-        options.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"]!;
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        o.RequireHttpsMetadata = false;
+        o.Audience = builder.Configuration["Authentication:Audience"]!;
+        o.MetadataAddress = builder.Configuration["Authentication:MetadataAddress"]!;
+        o.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidIssuer = builder.Configuration["Authentication:ValidIssuer"]!,
+            ValidIssuer = builder.Configuration["Authentication:ValidIssuer"]!
         };
+        //
+        // o.Events = new JwtBearerEvents
+        // {
+        //     OnAuthenticationFailed = context =>
+        //     {
+        //         Console.WriteLine("Authentication failed: " + context.Exception.Message);
+        //         return Task.CompletedTask;
+        //     }
+        // };
     });
 
 builder.Services
     .AddOpenTelemetry()
-    .ConfigureResource(resource => resource.AddService("CapybaraPetApp.Api"))
+    .ConfigureResource(resource => resource.AddService(builder.Environment.ApplicationName))
     .WithTracing(tracing =>
     {
         tracing
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation();
-        
+
         tracing.AddOtlpExporter();
     });
 
@@ -56,12 +62,10 @@ if (app.Environment.IsDevelopment())
 
 app.AddMiddleware();
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseAuthentication();
-
-app.MapControllers();
+app.MapEndpoints();
 
 app.Run();

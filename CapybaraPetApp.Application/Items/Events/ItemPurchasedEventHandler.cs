@@ -9,7 +9,6 @@ public class ItemPurchasedEventHandler : IDomainEventHandler<ItemPurchasedEvent>
 {
     private readonly IItemRepository _itemRepository;
 
-
     public ItemPurchasedEventHandler(IItemRepository itemRepository)
     {
         _itemRepository = itemRepository;

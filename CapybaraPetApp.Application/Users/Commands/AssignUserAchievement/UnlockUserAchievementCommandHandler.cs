@@ -1,6 +1,8 @@
 ﻿using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
+using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.Common.JoinTables;
+using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Commands.AssignUserAchievement;
@@ -23,14 +25,14 @@ public class UnlockUserAchievementCommandHandler : ICommandHandler<UnlockUserAch
 
         if (achievement is null)
         {
-            return Error.NotFound(description: "Achievement does not exists."); //TODO: Add error code to Domain (AchievementErrors).
+            return AchievementErrors.NotFound;
         }
 
         var user = await _userRepository.GetByIdAsync(command.UserId);
 
         if (user is null)
         {
-            return Error.NotFound(description: "User does not exists."); //TODO: Add error code to Domain (UserErrors).
+            return UserErrors.NotFound;
         }
 
         var userAchievement = new UserAchievement(command.UserId, command.AchievementId);

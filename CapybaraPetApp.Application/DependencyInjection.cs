@@ -20,8 +20,6 @@ public static class DependencyInjection
 
         services.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();
 
-        services.AddAutoMapper(typeof(DependencyInjection));
-
         return services;
     }
 }

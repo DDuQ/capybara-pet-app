@@ -1,11 +1,11 @@
-﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Items.Commands.CreateItem;
 
-public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, ErrorOr<Guid>>
+public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, ErrorOr<Item>>
 {
     private readonly IItemRepository _itemRepository;
 
@@ -14,17 +14,17 @@ public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, Error
         _itemRepository = itemRepository;
     }
 
-    public async Task<ErrorOr<Guid>> Handle(CreateItemCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Item>> Handle(CreateItemCommand command, CancellationToken cancellationToken)
     {
         if (await _itemRepository.ExistsByNameAsync(command.Name))
         {
-            Error.Conflict(description: $"Item already exists."); //TODO: Add error code to Domain (ItemErrors).
+            return ItemErrors.ItemAlreadyExists;
         }
 
         var item = new Item(command.Name, command.ItemDetail);
 
         await _itemRepository.AddAsync(item);
 
-        return item.Id;
+        return item;
     }
 }

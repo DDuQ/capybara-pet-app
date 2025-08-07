@@ -13,12 +13,12 @@ public class UserCapybaraConfiguration : IEntityTypeConfiguration<UserCapybara>
         builder.ToTable("User_Capybara");
         builder.HasKey(uc => new { uc.UserId, uc.CapybaraId });
 
-        builder.HasOne<User>()
+        builder.HasOne(uc => uc.User)
             .WithMany(u => u.UserCapybaras)       
             .HasForeignKey(uc => uc.UserId)
             .IsRequired();
 
-        builder.HasOne<Capybara>()
+        builder.HasOne(uc => uc.Capybara)
             .WithMany()           
             .HasForeignKey(uc => uc.CapybaraId)
             .IsRequired();

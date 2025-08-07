@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
-//TODO: Use Dapper on all query repositories for performance and use EF Core only for commands.
+//TODO: Use Dapper on all query repositories for performance and use EF Core only for commands. [Debatable]
 public class UserRepository : Repository<User>, IUserRepository
 {
     private readonly DbSet<User> _user;
@@ -17,6 +17,19 @@ public class UserRepository : Repository<User>, IUserRepository
     public async Task<bool> ExistsByEmail(string email)
     {
         return await _user.AnyAsync(x => x.Email == email);
+    }
+
+    async Task<User?> IUserRepository.GetByIdAsync(Guid id)
+    {
+        return await _user
+            .Include(u => u.UserAchievements)
+            .ThenInclude(ua => ua.Achievement)
+            .Include(u => u.Interactions)
+            .Include(u => u.UserItems)
+            .ThenInclude(ui => ui.Item)
+            .Include(u => u.UserCapybaras)
+            .ThenInclude(uc => uc.Capybara)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<List<User>> GetAllAsync()

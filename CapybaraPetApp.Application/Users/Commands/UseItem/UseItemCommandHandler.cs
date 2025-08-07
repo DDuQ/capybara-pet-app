@@ -1,5 +1,7 @@
 ﻿using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
+using CapybaraPetApp.Domain.ItemAggregate;
+using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Application.Users.Commands.UseItem;
@@ -21,14 +23,14 @@ public class UseItemCommandHandler : ICommandHandler<UseItemCommand, ErrorOr<Suc
 
         if (user is null)
         {
-            return Error.NotFound(description: "User not found."); //TODO: Add error code to Domain (UserErrors).
+            return UserErrors.NotFound;
         }
 
         var item = await _itemRepository.GetByIdAsync(command.ItemId);
 
         if (item is null)
         {
-            return Error.NotFound(description: "Item not found."); //TODO: Add error code to Domain (ItemErrors).
+            return ItemErrors.NotFound;
         }
 
         user.UseItemOnCapybara(command.ItemId, command.CapybaraId, command.Amount);

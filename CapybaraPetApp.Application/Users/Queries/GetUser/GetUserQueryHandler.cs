@@ -20,7 +20,7 @@ public class GetUserQueryHandler : IQueryHandler<GetUserQuery, ErrorOr<User>>
 
         if (user is null)
         {
-            return Error.NotFound(description: "User not found.");
+            return UserErrors.NotFound;
         }
 
         return user;

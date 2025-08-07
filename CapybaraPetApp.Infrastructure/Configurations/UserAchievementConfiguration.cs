@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregate;
+using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.Common.JoinTables;
 using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +14,16 @@ public class UserAchievementConfiguration : IEntityTypeConfiguration<UserAchieve
 
         builder.HasKey(ua => new { ua.UserId, ua.AchievementId });
 
-        builder.HasOne<User>()
+        builder.HasOne(ua => ua.User)
             .WithMany(u => u.UserAchievements)
             .HasForeignKey(ua => ua.UserId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne<Achievement>()
+        builder.HasOne(ua => ua.Achievement)
             .WithMany()
             .HasForeignKey(ua => ua.AchievementId)
-            .IsRequired();
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

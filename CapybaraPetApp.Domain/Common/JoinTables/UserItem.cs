@@ -1,4 +1,6 @@
-﻿using ErrorOr;
+﻿using CapybaraPetApp.Domain.ItemAggregate;
+using CapybaraPetApp.Domain.UserAggregate;
+using ErrorOr;
 
 namespace CapybaraPetApp.Domain.Common.JoinTables;
 
@@ -10,27 +12,27 @@ public class UserItem
         ItemId = itemId;
     }
 
-    const int MaxAmount = 999;
-    private UserItem() { }
+    private const int MaxAmount = 999;
+    private UserItem() { } // For EF Core
 
     public int Amount { get; private set; } = 0;
-    public Guid UserId { get; set; }
-    public Guid ItemId { get; set; }
+    public Guid UserId { get; private set; }
+    public Guid ItemId { get; private set; }
+    public Item Item { get; private set; }
+    public User User { get; private set; }
 
     public ErrorOr<Success> Add(int amount)
     {
-        if (amount < 1)
+        switch (amount)
         {
-            return Error.Conflict(description: "Should add at least 1 or more.");
+            case < 1:
+                return Error.Conflict(description: "Should add at least 1 or more.");
+            case > MaxAmount:
+                return Error.Conflict(description: $"Cannot add beyond the limit ({MaxAmount}).");
+            default:
+                Amount = amount;
+                return Result.Success;
         }
-
-        if (amount > MaxAmount)
-        {
-            return Error.Conflict(description: $"Cannot add beyond the limit ({MaxAmount}).");
-        }
-
-        Amount = amount;
-        return Result.Success;
     }
 
     public ErrorOr<Success> Use(int amount)

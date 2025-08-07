@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
                         Scopes = new Dictionary<string, string>
                         {
                             { "openid", "openid" },
-                            { "profile", "profile" },
+                            { "profile", "profile" }
                         }
                     }
                 }
@@ -48,7 +48,7 @@ public static class ServiceCollectionExtensions
 
             o.AddSecurityRequirement(securityRequirement);
         });
-        
+
         return services;
     }
 }

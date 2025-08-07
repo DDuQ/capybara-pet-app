@@ -14,12 +14,12 @@ public class UserItemConfiguration : IEntityTypeConfiguration<UserItem>
 
         builder.HasKey(ui => new { ui.UserId, ui.ItemId });
 
-        builder.HasOne<User>()
+        builder.HasOne(ui => ui.User)
             .WithMany(u => u.UserItems)
             .HasForeignKey(ui => ui.UserId)
             .IsRequired();
 
-        builder.HasOne<Item>()
+        builder.HasOne(ui => ui.Item)
             .WithMany()
             .HasForeignKey(ui => ui.ItemId)
             .IsRequired();

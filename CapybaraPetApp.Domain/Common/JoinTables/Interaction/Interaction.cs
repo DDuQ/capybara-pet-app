@@ -13,7 +13,7 @@ public class Interaction : Entity
         InteractedAt = DateTimeOffset.UtcNow;
     }
 
-    private Interaction() { }
+    private Interaction() { } // For EF Core
 
     public InteractionDetail InteractionDetail { get; private set; }
     public DateTimeOffset InteractedAt { get; private set; }

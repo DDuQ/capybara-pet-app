@@ -1,4 +1,7 @@
-﻿namespace CapybaraPetApp.Domain.Common.JoinTables;
+using CapybaraPetApp.Domain.AchievementAggregate;
+using CapybaraPetApp.Domain.UserAggregate;
+
+namespace CapybaraPetApp.Domain.Common.JoinTables;
 
 public class UserAchievement
 {
@@ -9,10 +12,14 @@ public class UserAchievement
         UnlockedAt = DateTimeOffset.UtcNow;
     }
 
-    private UserAchievement() { }
+    private UserAchievement()
+    {
+    } // For EF Core
 
-    public Guid UserId { get; set; }
-    public Guid AchievementId { get; set; }
-    public DateTimeOffset UnlockedAt { get; set; }
+    public Guid UserId { get; private set; }
+    public Guid AchievementId { get; private set; }
+    public DateTimeOffset UnlockedAt { get; private set; }
+    public User User { get; private set; } = null!;
+    public Achievement Achievement { get; private set; } = null!;
 }
 

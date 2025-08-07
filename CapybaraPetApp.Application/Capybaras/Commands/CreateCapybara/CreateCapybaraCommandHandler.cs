@@ -5,7 +5,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
-public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraCommand, ErrorOr<Guid>>
+public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>>
 {
     private readonly ICapybaraRepository _capybaraRepository;
 
@@ -14,12 +14,12 @@ public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraComman
         _capybaraRepository = capybaraRepository;
     }
 
-    public async Task<ErrorOr<Guid>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
     {
         var capybara = new Capybara(command.Name, command.Stats);
 
         await _capybaraRepository.AddAsync(capybara);
 
-        return capybara.Id;
+        return capybara;
     }
 }

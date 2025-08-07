@@ -1,4 +1,4 @@
-﻿using CapybaraPetApp.Domain.AchievementAggregate;
+using CapybaraPetApp.Domain.AchievementAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -15,7 +15,7 @@ public record ItemDetail
 
     public ItemType ItemType { get; set; }
     public int BonusEffect { get; set; }
-    public int Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     public static ErrorOr<Success> Validate(int quantity, int bonusEffect)
     {
@@ -31,5 +31,5 @@ public record ItemDetail
         return Result.Success;
     }
 
-    internal int CalculatedQuantityPerBonusEffect => BonusEffect * Quantity;
+    internal int CalculatedQuantityPerBonusEffect => BonusEffect * Quantity!.Value;
 }
