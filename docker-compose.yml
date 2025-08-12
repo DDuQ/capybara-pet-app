@@ -1,28 +1,29 @@
+volumes:
+    sql-data:
+    identity-data:
+  
 services:
-  capybarapetapp.api:
-    image: ${DOCKER_REGISTRY-}capybarapetappapi
+  api:
+    image: capybarapetapp/api
     container_name: CapybaraPetApp.Api
     build:
       context: .
       dockerfile: CapybaraPetApp.Api/Dockerfile
     environment:
-      SQLServerDbSettings__ConnectionString: "Server=capybarapetapp.db,1433;Initial Catalog=CapybaraPetApp;User Id=sa;Password=Admin123.;TrustServerCertificate=True;MultipleActiveResultSets=True;Connect Timeout=30;ConnectRetryCount=5;ConnectRetryInterval=5;"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
     ports:
       - "5000:8080"
-    depends_on:
-      - capybarapetapp.db
+    depends_on: [database]
     restart: on-failure
 
-  capybarapetapp.db:
+  database:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: CapybaraPetApp.Db
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: Admin123.
-      MSSQL_TCP_PORT: 1433
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Admin123.
     volumes:
-      - ./.containers/database:/var/opt/mssql/data
+      - sql-data:/var/opt/mssql
     ports:
       - "1433:1433"
     
@@ -31,11 +32,11 @@ services:
     container_name: Keycloak
     command: start-dev
     environment:
-      KC_HEALTH_ENABLED: true
-      KC_BOOTSTRAP_ADMIN_USERNAME: admin
-      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      - KC_HEALTH_ENABLED=true
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
     volumes:
-      - ./.containers/identity:/opt/keycloak/data
+      - identity-data:/opt/keycloak/data
     ports:
       - "18080:8080"
 
