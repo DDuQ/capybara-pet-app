@@ -12,35 +12,48 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    outputs: 
+      short_sha: ${{ steps.vars.outputs.short_sha }}
     
     steps:
-    - name: Checkout repository
-      id: github
-      uses: actions/checkout@v3
-   
-    - name: Setup WebApi .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '8.0.x'
+      - name: Checkout repository
+        id: github
+        uses: actions/checkout@v3
+     
+      - name: Setup WebApi .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: Configure Azure ACR
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ vars.ACR_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+          
+      - name: SHA of the commit
+        id: vars
+        run: |
+          calculatedSha=$(git rev-parse --short ${{ github.sha }})
+          echo "short_sha=$calculatedSha" >> $GITHUB_OUTPUT
+          
+      - name: Build and push Docker image to ACR
+        env:
+          ACR_REGISTRY: ${{ vars.ACR_SERVER }}
+          IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+          IMAGE_NAME: ${{ vars.APP_NAME }}
+        run: |
+          docker build -f CapybaraPetApp.Api/Dockerfile -t $ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG -t $ACR_REGISTRY/$IMAGE_NAME:latest .
+          docker push $ACR_REGISTRY/$IMAGE_NAME --all-tags
         
-    - name: Configure Azure ACR
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ vars.ACR_SERVER }}
-        username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
-        
-    - name: SHA of the commit
-      id: vars
-      run: |
-        calculatedSha=$(git rev-parse --short ${{ github.sha }})
-        echo "short_sha=$calculatedSha" >> $GITHUB_OUTPUT
-        
-    - name: Build and push Docker image to ACR
-      env:
-        ACR_REGISTRY: ${{ vars.ACR_SERVER }}
-        IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
-        IMAGE_NAME: ${{ vars.APP_NAME }}
-      run: |
-        docker build -f CapybaraPetApp.Api/Dockerfile -t $ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG -t $ACR_REGISTRY/$IMAGE_NAME:latest .
-        docker push $ACR_REGISTRY/$IMAGE_NAME --all-tags
+  deploy-container-to-ACS:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
