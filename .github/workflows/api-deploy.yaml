@@ -27,5 +27,5 @@ jobs:
       uses: azure/docker-login@v2
       with:
         login-server: ${{ vars.ACR_SERVER }}
-        username: ${{ secrets.ACR_USENAME }}
+        username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
