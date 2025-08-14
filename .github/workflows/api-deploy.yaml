@@ -6,7 +6,7 @@ on:
     branches:
       - main
 
-# NOTE: Be careful about YAML spacing, it could drive into issues.
+# NOTE: Be careful about YAML spacing, it could drive into unwanted issues.
 
 # Workflow of the pipeline.
 jobs:
@@ -29,3 +29,18 @@ jobs:
         login-server: ${{ vars.ACR_SERVER }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
+        
+    - name: SHA of the commit
+      id: vars
+      run: |
+        calculatedSHA=$(git rev-parse --short ${{ github.sha }})
+        echo "::set-output name=short_sha::$calculatedSha"
+        
+    - name: Build and push Docker image to ACR
+      env:
+        ACR_REGISTRY: ${{ vars.ACR_SERVER }}
+        IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+        IMAGE_NAME: ${{ vars.APP_NAME }}
+      run: |
+        docker build -f CapybaraPetApp.Api/Dockerfile -t $ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG -t $ACR_REGISTRY/$IMAGE_NAME:latest .
+        docker push $ACR_REGISTRY/$IMAGE_NAME --all-tags
