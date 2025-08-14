@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "capybarapetapprg" {
   location = "UK South"
-  name = "capybara-pet-app-rg"
+  name = "capybarapetapp-rg"
   
   tags = {
     environment = var.env_id
