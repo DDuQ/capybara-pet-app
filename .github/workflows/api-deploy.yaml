@@ -65,7 +65,7 @@ jobs:
           APP_NAME: ${{ vars.APP_NAME }}
         with: 
           registryUrl: ${{ vars.ACR_SERVER }}
-          imageToDeploy: $ACR_REGISTRY/$APP_NAME:$IMAGE_TAG
+          imageToDeploy: $ACR_SERVER/$APP_NAME:$IMAGE_TAG
           targetPort: 8080
           ingress: external
           containerAppName: $APP_NAME-api-dev
