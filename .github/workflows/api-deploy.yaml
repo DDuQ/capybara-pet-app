@@ -37,11 +37,6 @@ jobs:
         run: |
           calculatedSha=$(git rev-parse --short ${{ github.sha }})
           echo "short_sha=$calculatedSha" >> $GITHUB_OUTPUT
-          
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
       
       - name: Build and push Docker image to ACR
         env:

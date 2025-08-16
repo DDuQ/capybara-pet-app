@@ -1,6 +1,6 @@
 resource "azurerm_container_registry" "acr" {
   location            = azurerm_resource_group.capybarapetapprg.location
-  name                = "${var.appname}${var.env_id}"
+  name                = "${var.appname}registry${var.env_id}"
   resource_group_name = azurerm_resource_group.capybarapetapprg.name
   sku                 =  "Standard"
   admin_enabled       = true
