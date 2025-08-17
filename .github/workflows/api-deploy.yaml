@@ -73,4 +73,4 @@ jobs:
           containerAppEnvironment: $APP_NAME-appenv-dev
           resourceGroup: $APP_NAME-rg
           environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=Development SQLServerDbSettings__ConnectionString= $DB_CONNECTION_STRING
+            ASPNETCORE_ENVIRONMENT=Development SQLServerDbSettings__ConnectionString=$DB_CONNECTION_STRING
