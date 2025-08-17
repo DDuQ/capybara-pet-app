@@ -72,4 +72,4 @@ jobs:
           containerAppEnvironment: $APP_NAME-appenv-dev
           resourceGroup: $APP_NAME-rg
           environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://+:8080
+            ASPNETCORE_ENVIRONMENT=Development
