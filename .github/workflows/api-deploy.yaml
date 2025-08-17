@@ -63,6 +63,7 @@ jobs:
           IMAGE_TAG: ${{ needs.build-and-deploy.outputs.short_sha }}
           ACR_SERVER: ${{ vars.ACR_SERVER }}
           APP_NAME: ${{ vars.APP_NAME }}
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
         with: 
           registryUrl: ${{ vars.ACR_SERVER }}
           imageToDeploy: $ACR_SERVER/$APP_NAME:$IMAGE_TAG
@@ -72,4 +73,4 @@ jobs:
           containerAppEnvironment: $APP_NAME-appenv-dev
           resourceGroup: $APP_NAME-rg
           environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=Development
+            ASPNETCORE_ENVIRONMENT=Development SQLServerDbSettings__ConnectionString= $DB_CONNECTION_STRING
