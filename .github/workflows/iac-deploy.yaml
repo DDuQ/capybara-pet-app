@@ -41,7 +41,7 @@ jobs:
         working-directory: ./iac/
         
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -var="sql_pass=${{ secrets.TF_VAR_DB_PASSWORD }}" -auto-approve tfplan
         working-directory: ./iac/
         
       - name: Notify failure
