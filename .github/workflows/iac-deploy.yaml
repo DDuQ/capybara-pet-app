@@ -2,12 +2,10 @@ name: "IaC Deploy"
 
 on:
   push:
-#    paths:
-#      - "iac/**"
     branches:
       - main
 
-jobs: 
+jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     env:
@@ -18,7 +16,7 @@ jobs:
     
     steps:
       - name: Checkout Repo
-        uses: actions/checkout
+        uses: actions/checkout@v3
         
       - name: Azure Login
         uses: azure/login@v1
@@ -33,7 +31,3 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: ./iac/
-        
-      - name: Terraform plan
-        run: terraform plan --output plan
-        
