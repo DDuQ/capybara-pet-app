@@ -37,11 +37,11 @@ jobs:
         working-directory: ./iac/
         
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -var="sql_pass=${{ secrets.TF_VAR_DB_PASSWORD }}" -out=tfplan
         working-directory: ./iac/
         
       - name: Terraform Apply
-        run: terraform apply -var="sql_pass=${{ secrets.TF_VAR_DB_PASSWORD }}" -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan
         working-directory: ./iac/
         
       - name: Notify failure
