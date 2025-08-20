@@ -2,8 +2,6 @@ name: "IaC Deploy"
 
 on:
   push:
-#    paths:
-#      - "iac/**"
     branches:
       - main
 
@@ -33,7 +31,3 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: ./iac/
-        
-      - name: Terraform plan
-        run: terraform plan --output plan
-        
