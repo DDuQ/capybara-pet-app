@@ -5,6 +5,13 @@ terraform {
         version = "4.39.0"
     }
   }
+  
+  backend "azurerm" {
+    resource_group_name = "capybarapetapp-rg"
+    storage_account_name = "capybarapetappiacfiles"
+    container_name = "terraform"
+    key = "terraform.state"
+  }
 }
 
 provider "azurerm" {

@@ -5,5 +5,6 @@ resource "azurerm_resource_group" "capybarapetapprg" {
   tags = {
     environment = var.env_id
     src = var.src_key
+    review = "demo"
   }
 }

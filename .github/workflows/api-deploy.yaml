@@ -1,14 +1,12 @@
 name: Build and Deploy API to Azure
 
-# Controls when the actions will run.
 on:
   push:
+    paths-ignore:
+      - "iac/**"
     branches:
       - main
 
-# NOTE: Be careful about YAML spacing, it could drive into unwanted issues.
-
-# Workflow of the pipeline.
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
