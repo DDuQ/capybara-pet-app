@@ -31,3 +31,19 @@ jobs:
       - name: Terraform init
         run: terraform init
         working-directory: ./iac/
+        
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./iac/
+        
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: ./iac/
+        
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./iac/
+        
+      - name: Notify failure
+        if: failure()
+        run: echo "Terraform apply failed for ${{ github.ref_name }}"
