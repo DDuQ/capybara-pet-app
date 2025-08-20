@@ -2,8 +2,8 @@ name: "IaC Deploy"
 
 on:
   push:
-    paths:
-      - "iac/**"
+#    paths:
+#      - "iac/**"
     branches:
       - main
 
@@ -36,5 +36,4 @@ jobs:
         
       - name: Terraform plan
         run: terraform plan --output plan
-        
         
