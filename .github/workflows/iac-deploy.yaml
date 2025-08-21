@@ -46,4 +46,4 @@ jobs:
         
       - name: Notify failure
         if: failure()
-        run: echo "Terraform apply failed for ${{ github.ref_name }}"
+        run: echo "Terraform deployment failed for ${{ github.ref_name }}"
