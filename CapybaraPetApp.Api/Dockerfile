@@ -12,5 +12,6 @@ EXPOSE 8080
 EXPOSE 8081
 COPY --from=build /app/publish .
  
-USER app
+RUN adduser --disabled-password --gecos '' appuser 
+USER appuser
 ENTRYPOINT ["dotnet", "CapybaraPetApp.Api.dll"]
