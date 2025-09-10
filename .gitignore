@@ -228,8 +228,22 @@ temp/
 # Visual Studio temporary files
 .vscode/.settings
 
-# Rider settings
-.idea/
+# --- Terraform ---
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# --- Terraform providers (binaries) ---
+*.exe
+.terraform/providers/
+
+# --- Keycloak DB files ---
+*.mv.db
+*.trace.db
+
+# --- Docker overrides (if local only) ---
+docker-compose.override.yml
 
 # Ignore FileContextIndex files
 FileContextIndex*
