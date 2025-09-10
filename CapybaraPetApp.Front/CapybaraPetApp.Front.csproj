@@ -11,12 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_ContentIncludedByDefault Remove="Components\Demo\CodeDemo.razor" />
-      <_ContentIncludedByDefault Remove="Components\Demo\PageDemo.razor" />
-      <_ContentIncludedByDefault Remove="Components\Demo\ParameterDemo.razor" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Folder Include="wwwroot\lib\" />
     </ItemGroup>
 
