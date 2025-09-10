@@ -1,0 +1,31 @@
+@inject NavbarService Navbar
+@implements IDisposable
+
+<aside class="sidebar@(NavMenuClass)" @attributes="AdditionalAttributes">
+    <nav>
+        <NavLink href="/" class="nav-item" activeClass="active">🏠 Home</NavLink>
+        <NavLink href="/leaderboards" class="nav-item" activeClass="active">🏆 Leaderboards</NavLink>
+        <NavLink href="/activities" class="nav-item" activeClass="active">🎮 Activities</NavLink>
+        <NavLink href="/shop" class="nav-item" activeClass="active">🛒 Shop</NavLink>
+        <NavLink href="/settings" class="nav-item" activeClass="active">⚙️ Settings</NavLink>
+    </nav>
+</aside>
+
+
+@code {
+    private string? NavMenuClass => Navbar.IsOpen ? " open" : "";
+    
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    
+
+    protected override void OnInitialized()
+    {
+        Navbar.OnChange += StateHasChanged;
+    }
+    
+    public void Dispose()
+    {
+        Navbar.OnChange -= StateHasChanged;
+    }
+}
