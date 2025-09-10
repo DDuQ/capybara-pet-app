@@ -238,3 +238,7 @@ FileContextIndex*
 /.containers/database
 /db
 /CapybaraPetApp.Infrastructure/Migrations
+
+
+# Client-side libraries
+wwwroot/lib/
