@@ -1,6 +1,7 @@
 using CapybaraPetApp.Domain.Common;
 using CapybaraPetApp.Domain.Common.JoinTables;
 using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
 using CapybaraPetApp.Domain.ItemAggregate.Events;
 using CapybaraPetApp.Domain.UserAggregate.Events;
 using ErrorOr;
@@ -12,14 +13,14 @@ public class User : AggregateRoot
     public readonly List<UserAchievement> _userAchievements = [];
     public readonly List<UserCapybara> _userCapybaras = [];
     public readonly List<UserItem> _userItems = [];
-    public readonly List<Interaction> _interactions = [];
+    public readonly List<InteractionHistory> _interactions = [];
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
-    private readonly string _passwordHash = null!; //TODO: Implement password hashing and validation.
+    internal string PasswordHash = null!; //TODO: Implement password hashing and validation.
     public IReadOnlyCollection<UserAchievement> UserAchievements => _userAchievements.ToList();
     public IReadOnlyCollection<UserCapybara> UserCapybaras => _userCapybaras.ToList();
     public IReadOnlyCollection<UserItem> UserItems => _userItems.ToList();
-    public IReadOnlyCollection<Interaction> Interactions => _interactions.ToList();
+    public IReadOnlyCollection<InteractionHistory> Interactions => _interactions.ToList();
 
     public User(string username, string email, Guid? id)
         : base(id ?? Guid.NewGuid())
@@ -29,7 +30,7 @@ public class User : AggregateRoot
     }
 
     private User() { }
-
+    
     public ErrorOr<Success> UnlockAchievement(Guid achievementId)
     {
         if (_userAchievements.Any(ua => ua.AchievementId == achievementId))
@@ -66,12 +67,10 @@ public class User : AggregateRoot
         return Result.Success;
     }
 
-    public void InteractWithCapybara(Guid capybaraId, InteractionDetail interactionDetail)
+    public void InteractWithCapybara(Guid capybaraId, IInteractionStrategy interactionStrategy, int quantity)
     {
-        var interaction = new Interaction(interactionDetail, Id, capybaraId);
-
-        _interactions.Add(interaction);
-        _domainEvents.Add(new UpdateCapybaraMoodOnInteraction(interaction));
+        _interactions.Add(new InteractionHistory(Id, capybaraId));
+        _domainEvents.Add(new UpdateCapybaraMoodOnInteraction(capybaraId, interactionStrategy, quantity));
     }
 
     public bool OwnsCapybara(Guid capybaraId) => _userCapybaras.Any(uc => uc.CapybaraId == capybaraId);
@@ -89,5 +88,14 @@ public class User : AggregateRoot
 
         _domainEvents.Add(new ApplyItemEffectToCapybaraEvent(Id, itemId, capybaraId, itemAmount));
         return Result.Success;
+    }
+}
+
+public static class UserExtensions
+{
+    public static User AddHashedPassword(this User user, string hashedPassword)
+    {
+        user.PasswordHash = hashedPassword;
+        return user;
     }
 }

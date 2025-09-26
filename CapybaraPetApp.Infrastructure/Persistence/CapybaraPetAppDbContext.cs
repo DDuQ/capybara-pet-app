@@ -26,7 +26,7 @@ public class CapybaraPetAppDbContext : DbContext
     public DbSet<User> User => Set<User>();
     public DbSet<UserItem> UserItem => Set<UserItem>();
     public DbSet<Item> Item => Set<Item>();
-    public DbSet<Interaction> Interaction => Set<Interaction>();
+    public DbSet<InteractionHistory> InteractionHistory => Set<InteractionHistory>();
     public DbSet<Achievement> Achievement => Set<Achievement>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -16,7 +16,7 @@ public class CreateCapybaraCommandHandler : ICommandHandler<CreateCapybaraComman
 
     public async Task<ErrorOr<Capybara>> Handle(CreateCapybaraCommand command, CancellationToken cancellationToken)
     {
-        var capybara = new Capybara(command.Name, command.Stats);
+        var capybara = new Capybara(command.Name);
 
         await _capybaraRepository.AddAsync(capybara);
 

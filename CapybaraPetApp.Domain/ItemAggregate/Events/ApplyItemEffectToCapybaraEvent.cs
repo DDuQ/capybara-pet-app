@@ -4,7 +4,7 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Domain.ItemAggregate.Events;
 
-public record ApplyItemEffectToCapybaraEvent(Guid UserId, Guid ItemId, Guid CapybaraId, int itemAmount) : IDomainEvent
+public record ApplyItemEffectToCapybaraEvent(Guid UserId, Guid ItemId, Guid CapybaraId, int Quantity) : IDomainEvent
 {
     public static readonly Error UserDoesNotExist = EventualConsistencyError.From(
         code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(UserDoesNotExist)}",
@@ -13,6 +13,10 @@ public record ApplyItemEffectToCapybaraEvent(Guid UserId, Guid ItemId, Guid Capy
     public static readonly Error ItemDoesNotExist = EventualConsistencyError.From(
         code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(ItemDoesNotExist)}",
         description: "Item does not exists.");
+
+    public static readonly Error InsufficientItem = EventualConsistencyError.From(
+        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InsufficientItem)}",
+    description: "Insufficient item quantity.");
 
     public static readonly Error InvalidInteractionType = EventualConsistencyError.From(
         code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InvalidInteractionType)}",

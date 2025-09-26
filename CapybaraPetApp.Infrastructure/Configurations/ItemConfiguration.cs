@@ -10,6 +10,17 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
         builder.ToTable(nameof(Item));
 
-        builder.OwnsOne(i => i.ItemDetail);
+        builder.OwnsOne(i => i.ItemDetail, detail =>
+        {
+            detail.Property(d => d.ItemType)
+                .HasConversion<string>()
+                .IsRequired();
+
+            detail.Property(d => d.BonusEffect)
+                .IsRequired();
+        });
+        
+        builder.Property(i => i.Quantity)
+            .IsRequired();
     }
 }

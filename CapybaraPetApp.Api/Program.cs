@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigrations();
 }
 
-app.AddMiddleware();
+app.UseMiddleware();
 
 app.UseAuthentication();
 

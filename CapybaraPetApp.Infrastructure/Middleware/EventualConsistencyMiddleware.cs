@@ -10,8 +10,6 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
 {
     public const string DomainEventsKey = "DomainEventsKey";
 
-    private readonly RequestDelegate _next = next;
-
     public async Task InvokeAsync(HttpContext context, IDomainEventDispatcher dispatcher, CapybaraPetAppDbContext dbContext)
     {
         var transaction = await dbContext.Database.BeginTransactionAsync();
@@ -39,6 +37,6 @@ public class EventualConsistencyMiddleware(RequestDelegate next)
             }
         });
 
-        await _next(context);
+        await next(context);
     }
 }

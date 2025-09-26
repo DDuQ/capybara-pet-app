@@ -2,6 +2,7 @@ using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Common;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
+using Microsoft.AspNetCore.Identity;
 
 namespace CapybaraPetApp.Application.Users.Commands.CreateUser;
 
@@ -21,7 +22,9 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, Error
             return UserErrors.EmailAlreadyInUse;
         }
 
+        //TODO: Make JWT Auth implementation.
         var user = new User(command.Username, command.Email, command.Id);
+        user.AddHashedPassword(new PasswordHasher<User>().HashPassword(user,command.Password));
 
         await _userRepository.AddAsync(user);
 

@@ -15,7 +15,7 @@ public static class CreateCapybaraEndpoint
                 string capybaraName, CapybaraStats capybaraStats,
                 ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> commandHandler) =>
             {
-                var command = new CreateCapybaraCommand(capybaraName, capybaraStats);
+                var command = new CreateCapybaraCommand(capybaraName);
 
                 var result = await commandHandler.Handle(command);
 

@@ -15,7 +15,7 @@ public static class CreateUserEndpoint
         app.MapPost(APIEndpoints.User.Create, async (
                 RegisterUserRequest request, ICommandHandler<CreateUserCommand, ErrorOr<User>> commandHandler) =>
             {
-                var command = new CreateUserCommand(request.Username, request.Email, request.Id);
+                var command = new CreateUserCommand(request.Username, request.Email, request.Password, request.Id);
 
                 var result = await commandHandler.Handle(command);
 

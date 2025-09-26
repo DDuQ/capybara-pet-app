@@ -6,13 +6,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CapybaraPetApp.Infrastructure.Configurations;
 
-public class InteractionConfiguration : IEntityTypeConfiguration<Interaction>
+public class InteractionHistoryConfiguration : IEntityTypeConfiguration<InteractionHistory>
 {
-    public void Configure(EntityTypeBuilder<Interaction> builder)
+    public void Configure(EntityTypeBuilder<InteractionHistory> builder)
     {
-        builder.ToTable(nameof(Interaction));
-
-        builder.OwnsOne(i => i.InteractionDetail);
+        builder.ToTable(nameof(InteractionHistory));
 
         builder.HasKey(i => new { i.Id, i.UserId, i.CapybaraId });
 

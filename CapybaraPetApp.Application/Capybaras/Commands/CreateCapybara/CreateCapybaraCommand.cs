@@ -4,4 +4,4 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Application.Capybaras.Commands.CreateCapybara;
 
-public record CreateCapybaraCommand(string Name, CapybaraStats? Stats) : ICommand<ErrorOr<Capybara>>;
+public record CreateCapybaraCommand(string Name) : ICommand<ErrorOr<Capybara>>;

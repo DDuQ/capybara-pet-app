@@ -4,18 +4,16 @@ namespace CapybaraPetApp.Domain.ItemAggregate;
 
 public record ItemDetail
 {
-    public ItemDetail(ItemType itemType, int quantity, int bonusEffect = 1)
+    public ItemDetail(ItemType itemType, int bonusEffect = 1)
     {
         ItemType = itemType;
         BonusEffect = bonusEffect;
-        Quantity = quantity;
     }
 
     private ItemDetail() { }
 
-    public ItemType ItemType { get; set; }
-    public int BonusEffect { get; set; }
-    public int? Quantity { get; set; }
+    public ItemType ItemType { get; }
+    public int BonusEffect { get; }
 
     public static ErrorOr<Success> Validate(int quantity, int bonusEffect)
     {
@@ -30,6 +28,4 @@ public record ItemDetail
 
         return Result.Success;
     }
-
-    internal int CalculatedQuantityPerBonusEffect => BonusEffect * Quantity!.Value;
 }

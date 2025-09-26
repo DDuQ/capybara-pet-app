@@ -17,7 +17,7 @@ public static class DependepencyInjection
         return services;
     }
 
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         var sqlServerDbSettings = configuration.GetSection(SQLServerDbSettings.Section).Get<SQLServerDbSettings>();
         services.Configure<SQLServerDbSettings>(configuration.GetSection(SQLServerDbSettings.Section));

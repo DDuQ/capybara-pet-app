@@ -5,7 +5,7 @@ namespace CapybaraPetApp.Infrastructure;
 
 public static class QueryCommandPipeline
 {
-    public static IApplicationBuilder AddMiddleware(this IApplicationBuilder app)
+    public static IApplicationBuilder UseMiddleware(this IApplicationBuilder app)
     {
         return app.UseMiddleware<EventualConsistencyMiddleware>();
     }

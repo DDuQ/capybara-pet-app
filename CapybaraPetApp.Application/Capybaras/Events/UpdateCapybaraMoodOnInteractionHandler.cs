@@ -16,10 +16,10 @@ public class UpdateCapybaraMoodOnInteractionHandler : IDomainEventHandler<Update
 
     public async Task Handle(UpdateCapybaraMoodOnInteraction domainEvent, CancellationToken cancellationToken)
     {
-        var capybara = await _capybaraRepository.GetByIdAsync(domainEvent.Interaction.CapybaraId)
+        var capybara = await _capybaraRepository.GetByIdAsync(domainEvent.CapybaraId)
             ?? throw new EventualConsistencyException(UpdateCapybaraMoodOnInteraction.CapybaraNotFound);
 
-        capybara.ReactToInteraction(domainEvent.Interaction);
+        capybara.ReactToInteraction(domainEvent.InteractionStrategy, domainEvent.Quantity);
 
         await _capybaraRepository.UpdateAsync(capybara);
     }

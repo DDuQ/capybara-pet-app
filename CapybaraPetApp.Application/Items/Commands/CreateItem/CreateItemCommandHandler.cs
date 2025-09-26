@@ -21,7 +21,7 @@ public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, Error
             return ItemErrors.ItemAlreadyExists;
         }
 
-        var item = new Item(command.Name, command.ItemDetail);
+        var item = new Item(command.Name, command.ItemDetail, command.Quantity);
 
         await _itemRepository.AddAsync(item);
 

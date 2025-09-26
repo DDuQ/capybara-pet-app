@@ -1,21 +1,19 @@
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
+
 namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 
-public class Interaction : Entity
+public class InteractionHistory : Entity
 {
-    public Interaction(
-        InteractionDetail interactionDetail,
+    public InteractionHistory(
         Guid userId,
         Guid capybaraId) : base(Guid.NewGuid())
     {
-        InteractionDetail = interactionDetail;
         UserId = userId;
         CapybaraId = capybaraId;
         InteractedAt = DateTimeOffset.UtcNow;
     }
 
-    private Interaction() { } // For EF Core
-
-    public InteractionDetail InteractionDetail { get; private set; }
+    private InteractionHistory() { } // For EF Core
     public DateTimeOffset InteractedAt { get; private set; }
     public Guid UserId { get; set; }
     public Guid CapybaraId { get; set; }

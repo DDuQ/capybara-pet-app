@@ -28,25 +28,30 @@ public class ApplyItemEffectToCapybaraEventHandler : IDomainEventHandler<ApplyIt
         var item = await _itemRepository.GetByIdAsync(domainEvent.ItemId)
             ?? throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.ItemDoesNotExist);
 
-        var interactionTypeResult = ItemInteractionMapping.TryGetInteractionType(item.ItemDetail.ItemType);
+        var itemUsageResult = item.Use(domainEvent.Quantity);
+
+        if (itemUsageResult.IsError)
+        {
+            throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.InsufficientItem,
+                itemUsageResult.Errors);
+        }
+
+        var interactionTypeResult = ItemInteractionMapping.TryGetInteractionStrategy(item.ItemDetail.ItemType);
 
         if (interactionTypeResult.IsError)
         {
             throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.InvalidInteractionType, interactionTypeResult.Errors);
         }
 
-        var interactionDetail = new InteractionDetail(interactionTypeResult.Value, domainEvent.itemAmount);
-
-        var interactionDetailResult = InteractionDetail.Validate(interactionDetail);
+        var interactionDetailResult = interactionTypeResult.Value.Validate(domainEvent.Quantity);
 
         if (interactionDetailResult.IsError)
         {
             throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.InvalidInteractionDetail, interactionDetailResult.Errors);
         }
 
-        user.InteractWithCapybara(domainEvent.CapybaraId, interactionDetail);
+        user.InteractWithCapybara(domainEvent.CapybaraId, interactionTypeResult.Value, domainEvent.Quantity);
 
-        await _itemRepository.UpdateAsync(item);
         await _userRepository.UpdateAsync(user);
     }
 }
