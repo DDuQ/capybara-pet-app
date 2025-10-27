@@ -1,6 +1,5 @@
 using CapybaraPetApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -14,9 +13,6 @@ public static class ApplicationBuilderExtensions
         var dbContext = scope.ServiceProvider.GetRequiredService<CapybaraPetAppDbContext>();
         if (dbContext.Database.GetService<IRelationalDatabaseCreator>().Exists()) return;
         var pendingMigrations = dbContext.Database.GetPendingMigrations();
-        if (pendingMigrations.Any())
-        {
-            dbContext.Database.Migrate();
-        }
+        if (pendingMigrations.Any()) dbContext.Database.Migrate();
     }
 }

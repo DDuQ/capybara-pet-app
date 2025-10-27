@@ -2,14 +2,15 @@
 
 public abstract class AggregateRoot : Entity
 {
+    protected readonly List<IDomainEvent> _domainEvents = [];
+
     protected AggregateRoot(Guid id) : base(id)
     {
     }
 
     protected AggregateRoot()
-    { }
-
-    protected readonly List<IDomainEvent> _domainEvents = [];
+    {
+    }
 
     public List<IDomainEvent> PopDomainEvents()
     {

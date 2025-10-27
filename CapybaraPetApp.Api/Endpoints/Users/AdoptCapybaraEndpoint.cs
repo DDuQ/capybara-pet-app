@@ -1,5 +1,5 @@
-using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Users.Commands.AssignCapybara;
+using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Users.Commands.AdoptCapybara;
 using ErrorOr;
 
 namespace CapybaraPetApp.Api.Endpoints.Users;

@@ -11,7 +11,7 @@ public static class CapybaraErrors
     public static Error NameRequired => Error.Validation(
         $"{nameof(Capybara)}.{nameof(NameRequired)}",
         "Name is required.");
-    
+
     public static Error AlreadyAssigned => Error.Conflict(
         $"{nameof(Capybara)}.{nameof(AlreadyAssigned)}",
         "Capybara is already assigned to a user.");
@@ -31,12 +31,15 @@ public static class CapybaraErrors
     public static Error InvalidEnergy => Error.Validation(
         $"{nameof(Capybara)}.{nameof(InvalidEnergy)}",
         "Energy must be between 0 and 100.");
-        
+
     public static Error InvalidStatChange => Error.Validation(
         $"{nameof(Capybara)}.{nameof(InvalidStatChange)}",
         "Stat change amount must be greater than zero.");
-        
-    public static Error InsufficientEnergy(int currentEnergy) => Error.Conflict(
-        $"{nameof(Capybara)}.{nameof(InsufficientEnergy)}",
-        $"Capy does not have enough energy (currently: {currentEnergy}) to perform this action.");
+
+    public static Error InsufficientEnergy(int currentEnergy)
+    {
+        return Error.Conflict(
+            $"{nameof(Capybara)}.{nameof(InsufficientEnergy)}",
+            $"Capy does not have enough energy (currently: {currentEnergy}) to perform this action.");
+    }
 }

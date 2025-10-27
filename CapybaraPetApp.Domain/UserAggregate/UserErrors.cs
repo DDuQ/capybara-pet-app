@@ -12,8 +12,8 @@ public static class UserErrors
         $"{nameof(User)}.{nameof(EmailAlreadyInUse)}",
         "Email is already in use.");
 
-    public static Error CapybaraAlreadyAdded = Error.Conflict(
-        $"{nameof(User)}.{nameof(CapybaraAlreadyAdded)}",
+    public static Error CapybaraAlreadyAdopted = Error.Conflict(
+        $"{nameof(User)}.{nameof(CapybaraAlreadyAdopted)}",
         "Capybara is already added to this user.");
 
     public static Error AchievementAlreadyAssigned = Error.Conflict(

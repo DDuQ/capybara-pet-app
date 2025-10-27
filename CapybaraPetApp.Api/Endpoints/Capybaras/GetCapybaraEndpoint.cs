@@ -1,4 +1,4 @@
-using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Users.Queries.GetCapybaras;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;

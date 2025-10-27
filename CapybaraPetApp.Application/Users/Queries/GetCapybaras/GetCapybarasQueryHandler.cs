@@ -1,5 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
@@ -21,10 +21,7 @@ public class GetCapybarasQueryHandler : IQueryHandler<GetCapybarasQuery, ErrorOr
     {
         var user = await _userRepository.GetByIdAsync(query.UserId);
 
-        if (user is null)
-        {
-            return UserErrors.NotFound;
-        }
+        if (user is null) return UserErrors.NotFound;
 
         var capybaras = await _capybarasRepository.GetCapybarasByUserIdAsync(query.UserId);
 

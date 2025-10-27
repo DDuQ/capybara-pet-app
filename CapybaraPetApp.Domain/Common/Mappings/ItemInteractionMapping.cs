@@ -1,5 +1,4 @@
-﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
-using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
+﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 
@@ -11,13 +10,13 @@ public static class ItemInteractionMapping
     {
         { ItemType.Fruit, new FeedStrategy() },
         { ItemType.Toy, new PlayStrategy() },
-        { ItemType.CleaningTool, new BathStrategy() },
+        { ItemType.CleaningTool, new BathStrategy() }
     };
 
     public static ErrorOr<IInteractionStrategy> TryGetInteractionStrategy(ItemType itemType)
     {
-        return Mapping.TryGetValue(itemType, out var interactionStrategy) 
-            ? interactionStrategy 
+        return Mapping.TryGetValue(itemType, out var interactionStrategy)
+            ? interactionStrategy
             : Error.Conflict(description: "Item type not related to any interaction type.");
     }
 }

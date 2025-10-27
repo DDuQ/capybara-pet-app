@@ -1,5 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
 
@@ -18,13 +18,10 @@ public class BuyItemCommandHandler : ICommandHandler<BuyItemCommand, ErrorOr<Suc
     {
         var user = await _userRepository.GetByIdAsync(command.UserId);
 
-        if (user is null)
-        {
-            return UserErrors.NotFound;
-        }
+        if (user is null) return UserErrors.NotFound;
 
         var result = user.BuyItem(command.ItemId);
-        await _userRepository.UpdateAsync(user);
+        _userRepository.UpdateAsync(user);
         return result;
     }
 }

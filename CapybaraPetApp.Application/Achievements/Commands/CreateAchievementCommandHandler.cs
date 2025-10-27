@@ -1,5 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.AchievementAggregate;
 using ErrorOr;
 
@@ -14,20 +14,16 @@ public class CreateAchievementCommandHandler : ICommandHandler<CreateAchievement
         _achievementRepository = achievementRepository;
     }
 
-    public async Task<ErrorOr<Achievement>> Handle(CreateAchievementCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<Achievement>> Handle(CreateAchievementCommand command,
+        CancellationToken cancellationToken)
     {
         if (await _achievementRepository.ExistsByNameAsync(command.Title))
-        {
             return Error.Conflict(description: $"Item {command.Title} already exists.");
-        }
 
         var achievement = Achievement.Create(command.Title, command.Description, command.Points, command.Rarity);
-        
-        if (achievement.IsError)
-        {
-            return achievement.Errors;
-        }
-        
+
+        if (achievement.IsError) return achievement.Errors;
+
         await _achievementRepository.AddAsync(achievement.Value);
 
         return achievement.Value;

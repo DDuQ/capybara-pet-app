@@ -1,5 +1,5 @@
 using CapybaraPetApp.Api.Endpoints.Items.Requests;
-using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Items.Commands.CreateItem;
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;

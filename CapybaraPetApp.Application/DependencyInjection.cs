@@ -1,4 +1,5 @@
 ﻿using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CapybaraPetApp.Application;
@@ -9,13 +10,13 @@ public static class DependencyInjection
     {
         services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))
             .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))
-                .AsImplementedInterfaces()
+            .AsImplementedInterfaces()
             .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<>)))
-                .AsImplementedInterfaces()
+            .AsImplementedInterfaces()
             .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)))
-                .AsImplementedInterfaces()
+            .AsImplementedInterfaces()
             .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)))
-                .AsImplementedInterfaces()
+            .AsImplementedInterfaces()
             .WithScopedLifetime());
 
         services.AddSingleton<IDomainEventDispatcher, DomainEventDispatcher>();

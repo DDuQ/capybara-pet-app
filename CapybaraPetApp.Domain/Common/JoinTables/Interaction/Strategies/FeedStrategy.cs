@@ -17,16 +17,16 @@ public class FeedStrategy : IInteractionStrategy
 
     public ErrorOr<Success> Apply(Capybara capybara, int quantity)
     {
-            if (quantity <= 0)
-                return CapybaraErrors.InvalidStatChange;
-            
-            var health = IInteractionStrategy.ClampStatValue(capybara.Stats.Health + quantity);
-            var energy = IInteractionStrategy.ClampStatValue(capybara.Stats.Energy + (quantity / 2));
-            
-            var capybaraStats = new CapybaraStats(capybara.Stats.Happiness, health, energy);
-        
-            capybara.UpdateStats(capybaraStats);
-            
-            return Result.Success;
+        if (quantity <= 0)
+            return CapybaraErrors.InvalidStatChange;
+
+        var health = IInteractionStrategy.ClampStatValue(capybara.Stats.Health + quantity);
+        var energy = IInteractionStrategy.ClampStatValue(capybara.Stats.Energy + quantity / 2);
+
+        var capybaraStats = new CapybaraStats(capybara.Stats.Happiness, health, energy);
+
+        capybara.UpdateStats(capybaraStats);
+
+        return Result.Success;
     }
 }

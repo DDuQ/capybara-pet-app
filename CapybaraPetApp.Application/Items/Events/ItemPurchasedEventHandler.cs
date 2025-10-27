@@ -1,5 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.Common.EventualConsistency;
 using CapybaraPetApp.Domain.UserAggregate.Events;
 
@@ -16,8 +16,8 @@ public class ItemPurchasedEventHandler : IDomainEventHandler<ItemPurchasedEvent>
 
     public async Task Handle(ItemPurchasedEvent domainEvent, CancellationToken cancellationToken)
     {
-        //TODO: Re-purpose this logic.
+        //TODO: Re-purpose this logic -- Add a balance to the user and discount the value of said item purchased.
         var item = await _itemRepository.GetByIdAsync(domainEvent.ItemId)
-            ?? throw new EventualConsistencyException(ItemPurchasedEvent.ItemDoesNotExist);
+                   ?? throw new EventualConsistencyException(ItemPurchasedEvent.ItemDoesNotExist);
     }
 }

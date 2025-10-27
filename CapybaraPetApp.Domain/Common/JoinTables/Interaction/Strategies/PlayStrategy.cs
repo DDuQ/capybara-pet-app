@@ -3,7 +3,6 @@ using ErrorOr;
 
 namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
 
-
 public class PlayStrategy : IInteractionStrategy
 {
     public ErrorOr<Success> Validate(int playTimeHours)
@@ -20,15 +19,15 @@ public class PlayStrategy : IInteractionStrategy
     {
         if (quantity <= 0)
             return CapybaraErrors.InvalidStatChange;
-        
+
         if (IInteractionStrategy.IsExhausted(capybara.Stats.Energy))
             return CapybaraErrors.InsufficientEnergy(capybara.Stats.Energy);
 
         var happiness = IInteractionStrategy.ClampStatValue(capybara.Stats.Happiness + quantity);
-        var energy = IInteractionStrategy.ClampStatValue(capybara.Stats.Energy - (quantity / 2));
+        var energy = IInteractionStrategy.ClampStatValue(capybara.Stats.Energy - quantity / 2);
 
         var capybaraStats = new CapybaraStats(happiness, capybara.Stats.Health, energy);
-        
+
         capybara.UpdateStats(capybaraStats);
         return Result.Success;
     }

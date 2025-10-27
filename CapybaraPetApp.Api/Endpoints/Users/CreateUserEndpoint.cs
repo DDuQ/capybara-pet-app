@@ -1,5 +1,5 @@
 using CapybaraPetApp.Api.Endpoints.Users.Requests;
-using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Users.Commands.CreateUser;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;

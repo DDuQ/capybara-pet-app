@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ErrorOr" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.0-rc.1.25451.107" />
-    <PackageReference Include="Scrutor" Version="6.1.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="ErrorOr" Version="2.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.0-rc.1.25451.107"/>
+        <PackageReference Include="Scrutor" Version="6.1.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CapybaraPetApp.Domain\CapybaraPetApp.Domain.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CapybaraPetApp.Domain\CapybaraPetApp.Domain.csproj"/>
+    </ItemGroup>
 
 </Project>

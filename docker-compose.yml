@@ -1,7 +1,7 @@
 volumes:
-    sql-data:
-    identity-data:
-  
+  sql-data:
+  identity-data:
+
 services:
   api:
     image: capybarapetapp/api
@@ -13,7 +13,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
     ports:
       - "5000:8080"
-    depends_on: [database]
+    depends_on: [ database ]
     restart: on-failure
 
   database:
@@ -26,7 +26,7 @@ services:
       - sql-data:/var/opt/mssql
     ports:
       - "1433:1433"
-    
+  
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: Keycloak

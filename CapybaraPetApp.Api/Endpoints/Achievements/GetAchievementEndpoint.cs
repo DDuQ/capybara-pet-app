@@ -1,4 +1,4 @@
-using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Achievements.Queries;
 using CapybaraPetApp.Domain.AchievementAggregate;
 using ErrorOr;

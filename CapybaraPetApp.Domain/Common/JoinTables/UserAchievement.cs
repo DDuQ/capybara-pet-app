@@ -22,4 +22,3 @@ public class UserAchievement
     public User User { get; private set; } = null!;
     public Achievement Achievement { get; private set; } = null!;
 }
-

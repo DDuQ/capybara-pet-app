@@ -15,7 +15,7 @@ public static class AchievementErrors
     public static Error InvalidRarity => Error.Validation(
         $"{nameof(Achievement)}.{nameof(InvalidRarity)}",
         "Achievement rarity is invalid.");
-        
+
     public static Error InvalidAchievementType => Error.Validation(
         $"{nameof(Achievement)}.{nameof(InvalidAchievementType)}",
         "Achievement type is invalid.");
@@ -23,16 +23,19 @@ public static class AchievementErrors
     public static Error InvalidPoints => Error.Validation(
         $"{nameof(Achievement)}.{nameof(InvalidPoints)}",
         "Achievement points must be a positive number.");
-        
+
     public static Error InvalidTitle => Error.Validation(
         $"{nameof(Achievement)}.{nameof(InvalidTitle)}",
         "Achievement title cannot be empty.");
-        
+
     public static Error InvalidDescription => Error.Validation(
         $"{nameof(Achievement)}.{nameof(InvalidDescription)}",
         "Achievement description cannot be empty.");
-        
-    public static Error AchievementNotUnlocked(Guid achievementId) => Error.Conflict(
-        $"{nameof(Achievement)}.{nameof(AchievementNotUnlocked)}",
-        $"Achievement with ID '{achievementId}' has not been unlocked yet.");
+
+    public static Error AchievementNotUnlocked(Guid achievementId)
+    {
+        return Error.Conflict(
+            $"{nameof(Achievement)}.{nameof(AchievementNotUnlocked)}",
+            $"Achievement with ID '{achievementId}' has not been unlocked yet.");
+    }
 }

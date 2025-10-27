@@ -7,22 +7,30 @@ namespace CapybaraPetApp.Domain.ItemAggregate.Events;
 public record ApplyItemEffectToCapybaraEvent(Guid UserId, Guid ItemId, Guid CapybaraId, int Quantity) : IDomainEvent
 {
     public static readonly Error UserDoesNotExist = EventualConsistencyError.From(
-        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(UserDoesNotExist)}",
-        description: "User does not exists.");
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(UserDoesNotExist)}",
+        "User does not exists.");
 
     public static readonly Error ItemDoesNotExist = EventualConsistencyError.From(
-        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(ItemDoesNotExist)}",
-        description: "Item does not exists.");
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(ItemDoesNotExist)}",
+        "Item does not exists.");
 
     public static readonly Error InsufficientItem = EventualConsistencyError.From(
-        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InsufficientItem)}",
-    description: "Insufficient item quantity.");
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InsufficientItem)}",
+        "Insufficient item quantity.");
 
     public static readonly Error InvalidInteractionType = EventualConsistencyError.From(
-        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InvalidInteractionType)}",
-        description: "Invalid interaction type.");
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InvalidInteractionType)}",
+        "Invalid interaction type.");
 
     public static readonly Error InvalidInteractionDetail = EventualConsistencyError.From(
-        code: $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InvalidInteractionDetail)}",
-        description: "Invalid interaction detail.");
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(InvalidInteractionDetail)}",
+        "Invalid interaction detail.");
+
+    public static readonly Error CapybaraDoesNotExist = EventualConsistencyError.From(
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(CapybaraDoesNotExist)}",
+        "Capybara does not exists.");
+
+    public static readonly Error ItemHasNotBeenAssigned = EventualConsistencyError.From(
+        $"{nameof(ApplyItemEffectToCapybaraEvent)}.{nameof(ItemHasNotBeenAssigned)}",
+        "Item has not been assigned to the user.");
 }

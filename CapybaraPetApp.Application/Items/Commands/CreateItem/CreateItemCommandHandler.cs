@@ -1,5 +1,5 @@
-using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.ItemAggregate;
 using ErrorOr;
 
@@ -16,12 +16,9 @@ public class CreateItemCommandHandler : ICommandHandler<CreateItemCommand, Error
 
     public async Task<ErrorOr<Item>> Handle(CreateItemCommand command, CancellationToken cancellationToken)
     {
-        if (await _itemRepository.ExistsByNameAsync(command.Name))
-        {
-            return ItemErrors.ItemAlreadyExists;
-        }
+        if (await _itemRepository.ExistsByNameAsync(command.Name)) return ItemErrors.ItemAlreadyExists;
 
-        var item = new Item(command.Name, command.ItemDetail, command.Quantity);
+        var item = new Item(command.Name, command.ItemDetail);
 
         await _itemRepository.AddAsync(item);
 

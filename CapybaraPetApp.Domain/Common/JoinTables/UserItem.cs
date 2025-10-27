@@ -6,16 +6,19 @@ namespace CapybaraPetApp.Domain.Common.JoinTables;
 
 public class UserItem
 {
+    private const int MaxAmount = 999;
+
     public UserItem(Guid userId, Guid itemId)
     {
         UserId = userId;
         ItemId = itemId;
     }
 
-    private const int MaxAmount = 999;
-    private UserItem() { } // For EF Core
+    private UserItem()
+    {
+    } // For EF Core
 
-    public int Amount { get; private set; } = 0;
+    public int Quantity { get; private set; }
     public Guid UserId { get; private set; }
     public Guid ItemId { get; private set; }
     public Item Item { get; private set; }
@@ -30,19 +33,17 @@ public class UserItem
             case > MaxAmount:
                 return Error.Conflict(description: $"Cannot add beyond the limit ({MaxAmount}).");
             default:
-                Amount = amount;
+                Quantity = amount;
                 return Result.Success;
         }
     }
 
     public ErrorOr<Success> Use(int amount)
     {
-        if (Amount - amount <= 0)
-        {
+        if (Quantity - amount <= 0)
             return Error.Conflict(description: "There are not enough instances of this item to use.");
-        }
 
-        Amount -= amount;
+        Quantity -= amount;
         return Result.Success;
     }
 }

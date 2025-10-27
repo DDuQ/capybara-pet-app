@@ -1,5 +1,5 @@
-﻿using CapybaraPetApp.Application.Abstractions;
-using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.ItemAggregate;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
@@ -21,21 +21,15 @@ public class UseItemCommandHandler : ICommandHandler<UseItemCommand, ErrorOr<Suc
     {
         var user = await _userRepository.GetByIdAsync(command.UserId);
 
-        if (user is null)
-        {
-            return UserErrors.NotFound;
-        }
+        if (user is null) return UserErrors.NotFound;
 
         var item = await _itemRepository.GetByIdAsync(command.ItemId);
 
-        if (item is null)
-        {
-            return ItemErrors.NotFound;
-        }
+        if (item is null) return ItemErrors.NotFound;
 
         user.UseItemOnCapybara(command.ItemId, command.CapybaraId, command.Amount);
 
-        await _itemRepository.UpdateAsync(item);
+        _itemRepository.UpdateAsync(item);
 
         return Result.Success;
     }

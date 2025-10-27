@@ -2,14 +2,20 @@
 
 public abstract class Entity
 {
+    protected Entity(Guid id)
+    {
+        Id = id;
+    }
+
+    protected Entity()
+    {
+    }
+
     public Guid Id { get; init; }
 
     public override bool Equals(object? other)
     {
-        if (other is null || other.GetType() != GetType())
-        {
-            return false;
-        }
+        if (other is null || other.GetType() != GetType()) return false;
 
         return ((Entity)other).Id == Id;
     }
@@ -18,8 +24,4 @@ public abstract class Entity
     {
         return Id.GetHashCode();
     }
-
-    protected Entity(Guid id) => Id = id;
-
-    protected Entity() { }
 }

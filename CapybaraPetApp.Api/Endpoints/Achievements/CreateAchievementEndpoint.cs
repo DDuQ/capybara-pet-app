@@ -1,5 +1,5 @@
 using CapybaraPetApp.Api.Endpoints.Achievements.Requests;
-using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Achievements.Commands;
 using CapybaraPetApp.Domain.AchievementAggregate;
 using ErrorOr;

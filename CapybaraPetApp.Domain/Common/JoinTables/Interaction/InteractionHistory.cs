@@ -1,5 +1,3 @@
-using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
-
 namespace CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 
 public class InteractionHistory : Entity
@@ -13,7 +11,10 @@ public class InteractionHistory : Entity
         InteractedAt = DateTimeOffset.UtcNow;
     }
 
-    private InteractionHistory() { } // For EF Core
+    private InteractionHistory()
+    {
+    } // For EF Core
+
     public DateTimeOffset InteractedAt { get; private set; }
     public Guid UserId { get; set; }
     public Guid CapybaraId { get; set; }
