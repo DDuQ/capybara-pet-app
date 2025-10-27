@@ -1,28 +1,20 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.Common.JoinTables;
 using Microsoft.EntityFrameworkCore;
 
 namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
-public class UserItemRepository : IUserItemRepository
+public class UserItemRepository(CapybaraPetAppDbContext dbContext) : IUserItemRepository
 {
-    private readonly DbSet<UserItem> _userItem;
-    private readonly CapybaraPetAppDbContext _dbContext;
+    private readonly DbSet<UserItem> _userItems = dbContext.UserItem;
 
-    public UserItemRepository(CapybaraPetAppDbContext dbContext)
+    public async Task<List<UserItem>> GetAllByUserIdAsync(Guid userId)
     {
-        _userItem = dbContext.UserItem;
-        _dbContext = dbContext;
+        return await _userItems.Where(userItem => userItem.UserId == userId).ToListAsync();
     }
 
-    public async Task<UserItem?> GetByIdsAsync(Guid userId, Guid itemId)
+    public void UpdateAsync(UserItem userItem)
     {
-        return await _userItem.FirstOrDefaultAsync(userItem => userItem.UserId == userId && userItem.ItemId == itemId);
-    }
-
-    public async Task UpdateAsync(UserItem userItem)
-    {
-        _userItem.Update(userItem);
-        await _dbContext.SaveChangesAsync();
+        _userItems.Update(userItem);
     }
 }

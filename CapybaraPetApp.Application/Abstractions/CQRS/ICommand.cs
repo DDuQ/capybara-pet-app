@@ -1,4 +1,4 @@
-﻿namespace CapybaraPetApp.Application.Abstractions;
+﻿namespace CapybaraPetApp.Application.Abstractions.CQRS;
 
 public interface ICommand : IBaseCommand;
 

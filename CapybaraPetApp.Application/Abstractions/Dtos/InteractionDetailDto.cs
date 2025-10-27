@@ -1,6 +1,6 @@
 ﻿using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 
-namespace CapybaraPetApp.Application.Dtos;
+namespace CapybaraPetApp.Application.Abstractions.Dtos;
 
 public class InteractionDetailDto
 {

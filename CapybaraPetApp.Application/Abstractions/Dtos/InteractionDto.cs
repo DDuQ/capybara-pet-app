@@ -1,4 +1,4 @@
-﻿namespace CapybaraPetApp.Application.Dtos;
+﻿namespace CapybaraPetApp.Application.Abstractions.Dtos;
 
 public class InteractionDto
 {
@@ -8,4 +8,3 @@ public class InteractionDto
     public Guid UserId { get; set; }
     public Guid CapybaraId { get; set; }
 }
-

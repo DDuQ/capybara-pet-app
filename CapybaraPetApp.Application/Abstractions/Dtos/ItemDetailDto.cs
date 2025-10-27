@@ -1,6 +1,6 @@
 ﻿using CapybaraPetApp.Domain.ItemAggregate;
 
-namespace CapybaraPetApp.Application.Dtos;
+namespace CapybaraPetApp.Application.Abstractions.Dtos;
 
 public record ItemDetailDto
 {

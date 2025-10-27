@@ -1,4 +1,5 @@
-﻿using CapybaraPetApp.Domain.Common;
+﻿using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CapybaraPetApp.Application.Abstractions;
@@ -21,10 +22,7 @@ public class DomainEventDispatcher : IDomainEventDispatcher
         foreach (var handler in handlers)
         {
             var method = handlerType.GetMethod("Handle");
-            if (method != null)
-            {
-                await (Task)method.Invoke(handler, [domainEvent, cancellationToken])!;
-            }
+            if (method != null) await (Task)method.Invoke(handler, [domainEvent, cancellationToken])!;
         }
     }
 }

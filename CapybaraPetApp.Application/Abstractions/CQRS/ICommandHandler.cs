@@ -1,4 +1,4 @@
-﻿namespace CapybaraPetApp.Application.Abstractions;
+﻿namespace CapybaraPetApp.Application.Abstractions.CQRS;
 
 public interface ICommandHandler<in TCommand>
     where TCommand : ICommand
@@ -7,7 +7,7 @@ public interface ICommandHandler<in TCommand>
 }
 
 public interface ICommandHandler<in TCommand, TResponse>
-where TCommand : ICommand<TResponse>
+    where TCommand : ICommand<TResponse>
 {
     Task<TResponse> Handle(TCommand command, CancellationToken cancellationToken = default);
 }

@@ -1,27 +1,22 @@
-﻿using CapybaraPetApp.Application.Common;
+﻿using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 
 //TODO: Use Dapper on all query repositories for performance and use EF Core only for commands. [Debatable]
-public class UserRepository : Repository<User>, IUserRepository
+public class UserRepository(CapybaraPetAppDbContext dbContext) : Repository<User>(dbContext), IUserRepository
 {
-    private readonly DbSet<User> _user;
-
-    public UserRepository(CapybaraPetAppDbContext dbContext) : base(dbContext)
-    {
-        _user = dbContext.User;
-    }
+    private readonly DbSet<User> _users = dbContext.User;
 
     public async Task<bool> ExistsByEmail(string email)
     {
-        return await _user.AnyAsync(x => x.Email == email);
+        return await _users.AnyAsync(x => x.Email == email);
     }
 
-    async Task<User?> IUserRepository.GetByIdAsync(Guid id)
+    public override async Task<User?> GetByIdAsync(Guid id)
     {
-        return await _user
+        return await _users
             .Include(u => u.UserAchievements)
             .ThenInclude(ua => ua.Achievement)
             .Include(u => u.Interactions)
@@ -34,7 +29,7 @@ public class UserRepository : Repository<User>, IUserRepository
 
     public async Task<List<User>> GetAllAsync()
     {
-        return await _user
+        return await _users
             .Include(u => u.UserAchievements)
             .Include(u => u.Interactions)
             .Include(u => u.UserItems)

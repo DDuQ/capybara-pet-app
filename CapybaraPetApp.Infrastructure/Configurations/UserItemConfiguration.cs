@@ -1,6 +1,4 @@
 ﻿using CapybaraPetApp.Domain.Common.JoinTables;
-using CapybaraPetApp.Domain.ItemAggregate;
-using CapybaraPetApp.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

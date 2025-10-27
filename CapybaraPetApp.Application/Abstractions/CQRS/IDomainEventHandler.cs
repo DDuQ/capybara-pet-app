@@ -1,6 +1,6 @@
 ﻿using CapybaraPetApp.Domain.Common;
 
-namespace CapybaraPetApp.Application.Abstractions;
+namespace CapybaraPetApp.Application.Abstractions.CQRS;
 
 public interface IDomainEventHandler<TEvent>
     where TEvent : IDomainEvent

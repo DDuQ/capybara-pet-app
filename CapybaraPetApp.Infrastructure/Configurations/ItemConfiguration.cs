@@ -19,8 +19,5 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
             detail.Property(d => d.BonusEffect)
                 .IsRequired();
         });
-        
-        builder.Property(i => i.Quantity)
-            .IsRequired();
     }
 }

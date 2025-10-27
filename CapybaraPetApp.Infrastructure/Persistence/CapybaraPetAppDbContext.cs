@@ -1,3 +1,4 @@
+using System.Reflection;
 using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
@@ -8,7 +9,6 @@ using CapybaraPetApp.Domain.UserAggregate;
 using CapybaraPetApp.Infrastructure.Middleware;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace CapybaraPetApp.Infrastructure.Persistence;
 
@@ -22,7 +22,7 @@ public class CapybaraPetAppDbContext : DbContext
     }
 
     public DbSet<Capybara> Capybara => Set<Capybara>();
-    public DbSet<UserCapybara> UserCapybara => Set<UserCapybara>();
+    public DbSet<AdoptionHistory> AdoptionHistory => Set<AdoptionHistory>();
     public DbSet<User> User => Set<User>();
     public DbSet<UserItem> UserItem => Set<UserItem>();
     public DbSet<Item> Item => Set<Item>();
@@ -37,22 +37,21 @@ public class CapybaraPetAppDbContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        if (_httpContextAccessor.HttpContext is null)
-        {
-            return base.SaveChangesAsync(cancellationToken);
-        }
+        if (_httpContextAccessor.HttpContext is null) return base.SaveChangesAsync(cancellationToken);
 
         var domainEvents = ChangeTracker.Entries<AggregateRoot>()
-           .Select(entry => entry.Entity.PopDomainEvents())
-           .SelectMany(x => x)
-           .ToList();
+            .Select(entry => entry.Entity.PopDomainEvents())
+            .SelectMany(x => x)
+            .ToList();
 
         var result = base.SaveChangesAsync(cancellationToken);
 
-        Queue<IDomainEvent> domainEventsQueue = _httpContextAccessor.HttpContext!.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey, out var value) &&
+        var domainEventsQueue =
+            _httpContextAccessor.HttpContext!.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey,
+                out var value) &&
             value is Queue<IDomainEvent> existingDomainEvents
-            ? existingDomainEvents
-            : [];
+                ? existingDomainEvents
+                : [];
 
         domainEvents.ForEach(domainEventsQueue.Enqueue);
         _httpContextAccessor.HttpContext.Items[EventualConsistencyMiddleware.DomainEventsKey] = domainEventsQueue;
