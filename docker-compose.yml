@@ -11,6 +11,7 @@ services:
       dockerfile: CapybaraPetApp.Api/Dockerfile
     environment:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger:4317"
+      ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "5000:8080"
     depends_on: [ database ]
