@@ -53,7 +53,7 @@ The application implements the Command Query Responsibility Segregation (CQRS) p
 
 - **Commands**: Handle state changes (writes) using Entity Framework Core for transaction management
 - **Queries**: Optimized read operations using Dapper for complex queries
-- **MediatR** is used to implement the mediator pattern, decoupling commands and queries from their handlers
+- **A similar approach like MediatR** is used to implement the mediator pattern, decoupling commands and queries from their handlers
 
 ### Domain-Driven Design (DDD)
 
