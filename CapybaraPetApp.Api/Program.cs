@@ -23,15 +23,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidIssuer = builder.Configuration["Authentication:ValidIssuer"]!
         };
-        //
-        // o.Events = new JwtBearerEvents
-        // {
-        //     OnAuthenticationFailed = context =>
-        //     {
-        //         Console.WriteLine("Authentication failed: " + context.Exception.Message);
-        //         return Task.CompletedTask;
-        //     }
-        // };
     });
 
 builder.Services

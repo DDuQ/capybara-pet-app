@@ -28,7 +28,7 @@ public class GetItemsQueryHandler(
             {
                 ItemId = item.Id,
                 ItemName = item.Name,
-                ItemDescription = $"Type: {item.ItemDetail.ItemType} | Bonus effect: {item.ItemDetail.BonusEffect} %",
+                ItemDescription = $"Type: {item.ItemDetail.ItemType} | Bonus effect: {item.ItemDetail.BonusEffect} %", //TODO: This should be a frontend concern. Deliver data separately.
                 Quantity = ui.Quantity
             });
         

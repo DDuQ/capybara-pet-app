@@ -23,9 +23,7 @@ public class User : AggregateRoot
         Email = email;
     }
 
-    private User()
-    {
-    }
+    private User() {} 
 
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;

@@ -1,3 +1,4 @@
+using CapybaraPetApp.Api.Endpoints.Users.Requests;
 using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Users.Commands.AssignItem;
 using ErrorOr;
@@ -11,9 +12,9 @@ public static class BuyItemEndpoint
     public static IEndpointRouteBuilder MapBuyItem(this IEndpointRouteBuilder app)
     {
         app.MapPost(APIEndpoints.User.BuyItem,
-                async (Guid userId, Guid itemId, ICommandHandler<BuyItemCommand, ErrorOr<Success>> commandHandler) =>
+                async (Guid id, BuyItemRequest request, ICommandHandler<BuyItemCommand, ErrorOr<Success>> commandHandler) =>
                 {
-                    var command = new BuyItemCommand(userId, itemId);
+                    var command = new BuyItemCommand(id, request.ItemId);
 
                     var result = await commandHandler.Handle(command);
 

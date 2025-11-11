@@ -12,9 +12,9 @@ public static class GetCapybarasEndpoint
     public static IEndpointRouteBuilder MapGetCapybaras(this IEndpointRouteBuilder app)
     {
         app.MapGet(APIEndpoints.User.GetCapybaras, async (
-                Guid userId, IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> queryHandler) =>
+                Guid id, IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> queryHandler) =>
             {
-                var query = new GetCapybarasQuery(userId);
+                var query = new GetCapybarasQuery(id);
 
                 var getCapybarasResult = await queryHandler.Handle(query);
 

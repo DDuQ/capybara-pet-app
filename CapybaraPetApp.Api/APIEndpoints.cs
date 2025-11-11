@@ -25,11 +25,11 @@ public static class APIEndpoints
         public const string Create = Base;
         public const string Get = $"{Base}/{{id:guid}}";
         public const string GetCapybaras = $"{Base}/{{id:guid}}/capybaras";
-        public const string AdoptCapybara = $"{Base}/{{userId:guid}}/capybaras";
-        public const string UnlockAchievement = $"{Base}/{{userId:guid}}/achievements/{{achievementId:guid}}";
-        public const string GetItems = $"{Base}/{{userId:guid}}/items";
-        public const string BuyItem = $"{Base}/{{userId:guid}}/purchases";
-        public const string UseItem = $"{Base}/{{userId:guid}}/items/{{itemId:guid}}";
+        public const string AdoptCapybara = $"{Base}/{{id:guid}}/capybaras";
+        public const string UnlockAchievement = $"{Base}/{{id:guid}}/achievements";
+        public const string GetItems = $"{Base}/{{id:guid}}/items";
+        public const string BuyItem = $"{Base}/{{id:guid}}/purchases";
+        public const string UseItem = $"{Base}/{{id:guid}}/items";
     }
 
     public static class Item

@@ -12,7 +12,7 @@ public static class CreateCapybaraEndpoint
     public static IEndpointRouteBuilder MapCreateCapybara(this IEndpointRouteBuilder app)
     {
         app.MapPost(APIEndpoints.Capybara.Create, async (
-                string capybaraName, CapybaraStats capybaraStats,
+                string capybaraName,
                 ICommandHandler<CreateCapybaraCommand, ErrorOr<Capybara>> commandHandler) =>
             {
                 var command = new CreateCapybaraCommand(capybaraName);

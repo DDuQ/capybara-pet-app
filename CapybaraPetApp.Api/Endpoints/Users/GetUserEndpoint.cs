@@ -1,4 +1,5 @@
 using CapybaraPetApp.Application.Abstractions.CQRS;
+using CapybaraPetApp.Application.Abstractions.Dtos;
 using CapybaraPetApp.Application.Users.Queries.GetUser;
 using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
@@ -12,7 +13,7 @@ public static class GetUserEndpoint
     public static IEndpointRouteBuilder MapGetUser(this IEndpointRouteBuilder app)
     {
         app.MapGet(APIEndpoints.User.Get, async (
-                Guid id, IQueryHandler<GetUserQuery, ErrorOr<User>> queryHandler) =>
+                Guid id, IQueryHandler<GetUserQuery, ErrorOr<UserDto>> queryHandler) =>
             {
                 var query = new GetUserQuery(id);
 

@@ -12,10 +12,11 @@ public static class UseItemEndpoint
     public static IEndpointRouteBuilder MapUseItem(this IEndpointRouteBuilder app)
     {
         app.MapPut(APIEndpoints.User.UseItem, async (
+                Guid id,
                 UseItemRequest request,
                 ICommandHandler<UseItemCommand, ErrorOr<Success>> queryHandler) =>
             {
-                var query = new UseItemCommand(request.UserId, request.CapybaraId, request.ItemId, request.ItemAmount);
+                var query = new UseItemCommand(id, request.CapybaraId, request.ItemId, request.ItemAmount);
                 var useItemResult = await queryHandler.Handle(query);
                 return useItemResult.IsError
                     ? EndpointsExtensions.Problem(useItemResult.Errors)

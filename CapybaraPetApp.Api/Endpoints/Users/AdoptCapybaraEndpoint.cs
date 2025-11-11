@@ -1,3 +1,4 @@
+using CapybaraPetApp.Api.Endpoints.Users.Requests;
 using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Users.Commands.AdoptCapybara;
 using ErrorOr;
@@ -11,9 +12,9 @@ public static class AdoptCapybaraEndpoint
     public static IEndpointRouteBuilder MapAdoptCapybara(this IEndpointRouteBuilder app)
     {
         app.MapPost(APIEndpoints.User.AdoptCapybara, async (
-                Guid userId, Guid capybaraId, ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> commandHandler) =>
+                Guid id, AdoptCapybaraRequest request, ICommandHandler<AdoptCapybaraCommand, ErrorOr<Success>> commandHandler) =>
             {
-                var command = new AdoptCapybaraCommand(userId, capybaraId);
+                var command = new AdoptCapybaraCommand(id, request.CapybaraId);
 
                 var assignCapybaraResult = await commandHandler.Handle(command);
 

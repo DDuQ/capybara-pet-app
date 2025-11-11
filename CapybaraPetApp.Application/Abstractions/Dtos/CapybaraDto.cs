@@ -2,10 +2,6 @@
 
 public class CapybaraDto
 {
-    private readonly List<InteractionDto> _interactions = new();
-    public CapybaraStatsDto _stats;
+    public CapybaraStatsDto Stats { get; set; }
     public string Name { get; set; }
-    public Guid? OwnerId { get; set; }
-    public IReadOnlyCollection<InteractionDto> Interactions => _interactions;
-    public CapybaraStatsDto Stats => _stats;
 }

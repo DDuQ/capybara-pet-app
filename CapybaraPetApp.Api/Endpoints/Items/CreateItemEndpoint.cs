@@ -16,8 +16,8 @@ public static class CreateItemEndpoint
                 CreateItemRequest createItemRequest,
                 ICommandHandler<CreateItemCommand, ErrorOr<Item>> commandHandler) =>
             {
-                var command = new CreateItemCommand(createItemRequest.Name, createItemRequest.Quantity,
-                    new ItemDetail(createItemRequest.ItemType));
+                var command = new CreateItemCommand(createItemRequest.Name,
+                    new ItemDetail(createItemRequest.ItemType, createItemRequest.BonusEffect));
 
                 var result = await commandHandler.Handle(command);
 

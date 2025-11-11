@@ -2,10 +2,10 @@
 
 public class UserDto
 {
-    public IReadOnlyCollection<CapybaraDto> Capybaras;
-    public IReadOnlyCollection<InteractionDto> Interactions;
-    public IReadOnlyCollection<ItemDto> Items;
-    public IReadOnlyCollection<UserAchievementDto> UserAchievements;
+    public IList<CapybaraDto>? Capybaras { get; set; }
+    public IList<ItemDto>? Items { get; set; }
+    public IList<AchievementDto>? Achievements { get; set; }
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
+    public Guid Id { get; set; }
 }

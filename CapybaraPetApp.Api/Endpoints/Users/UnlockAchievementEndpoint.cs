@@ -1,3 +1,4 @@
+using CapybaraPetApp.Api.Endpoints.Users.Requests;
 using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Users.Commands.AssignUserAchievement;
 using ErrorOr;
@@ -11,11 +12,11 @@ public static class UnlockAchievementEndpoint
     public static IEndpointRouteBuilder MapUnlockAchievement(this IEndpointRouteBuilder app)
     {
         app.MapPost(APIEndpoints.User.UnlockAchievement, async (
-                Guid userId,
-                Guid achievementId,
+                Guid id,
+                UnlockAchievementRequest request,
                 ICommandHandler<UnlockUserAchievementCommand, ErrorOr<Success>> commandHandler) =>
             {
-                var command = new UnlockUserAchievementCommand(userId, achievementId);
+                var command = new UnlockUserAchievementCommand(id, request.AchievementId);
 
                 var assignUserAchievementResult = await commandHandler.Handle(command);
 

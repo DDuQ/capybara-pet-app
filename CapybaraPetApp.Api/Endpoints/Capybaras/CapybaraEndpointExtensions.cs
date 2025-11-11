@@ -5,7 +5,7 @@ public static class CapybaraEndpointExtensions
     public static IEndpointRouteBuilder MapCapybaraEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapCreateCapybara();
-        app.MapGetCapybaras();
+        app.MapGetCapybara();
         return app;
     }
 }

@@ -1,5 +1,5 @@
 using CapybaraPetApp.Application.Abstractions.CQRS;
-using CapybaraPetApp.Application.Users.Queries.GetCapybaras;
+using CapybaraPetApp.Application.Capybaras.Queries;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using ErrorOr;
 
@@ -9,13 +9,13 @@ public static class GetCapybaraEndpoint
 {
     public const string Name = "GetCapybara";
 
-    public static IEndpointRouteBuilder MapGetCapybaras(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapGetCapybara(this IEndpointRouteBuilder app)
     {
         app.MapGet(APIEndpoints.Capybara.Get, async (
                 Guid id,
-                IQueryHandler<GetCapybarasQuery, ErrorOr<List<Capybara>>> queryHandler) =>
+                IQueryHandler<GetCapybaraQuery, ErrorOr<Capybara>> queryHandler) =>
             {
-                var query = new GetCapybarasQuery(id);
+                var query = new GetCapybaraQuery(id);
 
                 var getCapybaraResult = await queryHandler.Handle(query);
 

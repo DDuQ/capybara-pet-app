@@ -10,7 +10,7 @@ public class ItemRepository(CapybaraPetAppDbContext dbContext) : Repository<Item
 
     public async Task<bool> ExistsByNameAsync(string name)
     {
-        return await _items.AnyAsync(item => string.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase));
+        return await _items.AnyAsync(item => item.Name == name);
     }
 
     public async Task<List<Item>> GetAllAsync(Guid userId)

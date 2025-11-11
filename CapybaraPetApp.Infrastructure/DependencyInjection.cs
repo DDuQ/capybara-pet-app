@@ -22,7 +22,7 @@ public static class DependencyInjection
     {
         var sqlServerDbSettings = configuration.GetSection(SQLServerDbSettings.Section).Get<SQLServerDbSettings>();
         services.Configure<SQLServerDbSettings>(configuration.GetSection(SQLServerDbSettings.Section));
-
+        services.AddSingleton<IDbConnectionFactory>(_ => new DbConnectionFactory(sqlServerDbSettings!.ConnectionString));
         services.AddDbContext<CapybaraPetAppDbContext>(options =>
             options.UseSqlServer(sqlServerDbSettings!.ConnectionString));
 

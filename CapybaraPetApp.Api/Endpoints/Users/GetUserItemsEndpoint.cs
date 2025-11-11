@@ -12,9 +12,9 @@ public static class GetUserItemsEndpoint
     public static IEndpointRouteBuilder MapGetItems(this IEndpointRouteBuilder app)
     {
         app.MapGet(APIEndpoints.User.GetItems,
-                async (Guid userId, IQueryHandler<GetUserItemsQuery, ErrorOr<List<InventoryItemDto>>> queryHandler) =>
+                async (Guid id, IQueryHandler<GetUserItemsQuery, ErrorOr<List<InventoryItemDto>>> queryHandler) =>
                 {
-                    var query = new GetUserItemsQuery(userId);
+                    var query = new GetUserItemsQuery(id);
 
                     var result = await queryHandler.Handle(query);
 

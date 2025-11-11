@@ -14,7 +14,7 @@ public class Repository<T>(CapybaraPetAppDbContext dbContext) : IRepository<T>
         await _dbSet.AddAsync(entity);
     }
 
-    public virtual async Task<T?> GetByIdAsync(Guid id)
+    public async Task<T?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FirstOrDefaultAsync(entity => entity.Id == id);
     }
