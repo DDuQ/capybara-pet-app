@@ -7,7 +7,6 @@ public static class APIEndpoints
     public static class Achievements
     {
         private const string Base = $"{BaseUrl}/achievements";
-
         public const string Create = Base;
         public const string Get = $"{Base}/{{id:guid}}";
     }
@@ -22,7 +21,8 @@ public static class APIEndpoints
     public static class User
     {
         private const string Base = $"{BaseUrl}/user";
-        public const string Create = Base;
+        public const string Register = $"{Base}";
+        public const string Login = $"{Base}/login";
         public const string Get = $"{Base}/{{id:guid}}";
         public const string GetCapybaras = $"{Base}/{{id:guid}}/capybaras";
         public const string AdoptCapybara = $"{Base}/{{id:guid}}/capybaras";
@@ -37,5 +37,11 @@ public static class APIEndpoints
         private const string Base = $"{BaseUrl}/items";
         public const string Create = Base;
         public const string Get = $"{Base}/{{id:guid}}";
+    }
+
+    public static class RefreshToken
+    {
+        private const string Base = $"{BaseUrl}/refresh-token";
+        public const string Refresh = Base;
     }
 }

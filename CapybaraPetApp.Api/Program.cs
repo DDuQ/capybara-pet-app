@@ -2,15 +2,16 @@ using CapybaraPetApp.Api.Endpoints;
 using CapybaraPetApp.Api.Extensions;
 using CapybaraPetApp.Application;
 using CapybaraPetApp.Infrastructure;
+using CapybaraPetApp.Infrastructure.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGenWithAuth(builder.Configuration);
+builder.Services.AddOpenApi();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -33,20 +34,19 @@ builder.Services
         tracing
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation();
-
         tracing.AddOtlpExporter();
     });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
     app.ApplyMigrations();
 }
 

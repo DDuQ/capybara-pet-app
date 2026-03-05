@@ -5,7 +5,9 @@ namespace CapybaraPetApp.Application.Abstractions.Repositories;
 
 public interface IUserRepository : IRepository<User>
 {
-    Task<bool> ExistsByEmail(string email);
+    Task<bool> ExistsByEmailAsync(string email);
     Task<UserDto?> GetAllRelatedDataByIdAsync(Guid id);
+    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByUsernameAsync(string username);
     Task<List<User>> GetAllAsync();
 }

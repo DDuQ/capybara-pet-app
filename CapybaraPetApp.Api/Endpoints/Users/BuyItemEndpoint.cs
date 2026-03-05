@@ -18,9 +18,10 @@ public static class BuyItemEndpoint
 
                     var result = await commandHandler.Handle(command);
 
-                    return result.IsError
-                        ? EndpointsExtensions.Problem(result.Errors)
-                        : Results.NoContent();
+                    return result.Match(
+                        _ => Results.NoContent(),
+                        EndpointsExtensions.Problem
+                    );
                 })
             .WithName(Name)
             .RequireAuthorization();

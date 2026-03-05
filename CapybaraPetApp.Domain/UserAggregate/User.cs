@@ -14,7 +14,6 @@ public class User : AggregateRoot
     public readonly List<UserAchievement> _userAchievements = [];
     public readonly List<AdoptionHistory> _userCapybaras = [];
     public readonly List<UserItem> _userItems = [];
-    internal string PasswordHash = null!; //TODO: Implement password hashing and validation.
 
     public User(string username, string email, Guid? id)
         : base(id ?? Guid.NewGuid())
@@ -25,6 +24,7 @@ public class User : AggregateRoot
 
     private User() {} 
 
+    public string PasswordHash { get; set; } = null!;
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public IReadOnlyCollection<UserAchievement> UserAchievements => _userAchievements.ToList();
@@ -87,7 +87,7 @@ public class User : AggregateRoot
 
 public static class UserExtensions
 {
-    public static User AddHashedPassword(this User user, string hashedPassword)
+    public static User SetHashedPassword(this User user, string hashedPassword)
     {
         user.PasswordHash = hashedPassword;
         return user;

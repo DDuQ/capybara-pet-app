@@ -10,45 +10,55 @@ namespace CapybaraPetApp.Infrastructure.Persistence.Repositories;
 public class UserRepository(CapybaraPetAppDbContext dbContext, IDbConnectionFactory dbConnectionFactory) : Repository<User>(dbContext), IUserRepository
 {
     private readonly DbSet<User> _users = dbContext.User;
+    const string userQuery = """
+                         SELECT Id, Username, Email
+                         FROM [User]
+                         WHERE Id = @UserId;
+                         """;
+    
+    const string achievementsQuery = """
+                                     SELECT a.Title, a.Description, a.Points, ua.UnlockedAt
+                                     FROM User_Achievement ua
+                                     JOIN Achievement a ON a.Id = ua.AchievementId
+                                     WHERE ua.UserId = @UserId; 
+                                     """;
+    const string capybarasQuery = """
+                                  SELECT c.Name, 
+                                         c.Stats_Happiness AS Happiness,
+                                         c.Stats_Health AS Health,
+                                         c.Stats_Energy AS Energy
+                                  FROM User_Capybara uc
+                                  JOIN Capybara c ON c.Id = uc.CapybaraId
+                                  WHERE uc.UserId = @UserId;
+                                  """;
+    const string itemsQuery = """
+                              SELECT i.Name, 
+                                     ui.Quantity AS Amount, 
+                                     i.ItemDetail_ItemType AS ItemType, 
+                                     i.ItemDetail_BonusEffect AS BonusEffect 
+                              FROM User_Item ui
+                              JOIN Item i ON i.Id = ui.ItemId
+                              WHERE ui.UserId = @UserId;
+                              """;
 
-    public async Task<bool> ExistsByEmail(string email)
+    public async Task<bool> ExistsByEmailAsync(string email)
     {
         return await _users.AnyAsync(x => x.Email == email);
     }
+    
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        return await _users.FirstOrDefaultAsync(x => x.Email == email);
+    }
 
+    public async Task<User?> GetByUsernameAsync(string username)
+    {
+        return await _users.FirstOrDefaultAsync(x => x.Username == username);
+    }
+    
     public async Task<UserDto?> GetAllRelatedDataByIdAsync(Guid id)
     {
         using var dbConnection = await dbConnectionFactory.CreateConnection();
-        const string userQuery = """
-                             SELECT Id, Username, Email
-                             FROM [User]
-                             WHERE Id = @UserId;
-                             """;
-        
-        const string achievementsQuery = """
-                                         SELECT a.Title, a.Description, a.Points, ua.UnlockedAt
-                                         FROM User_Achievement ua
-                                         JOIN Achievement a ON a.Id = ua.AchievementId
-                                         WHERE ua.UserId = @UserId; 
-                                         """;
-        const string capybarasQuery = """
-                                      SELECT c.Name, 
-                                             c.Stats_Happiness AS Happiness,
-                                             c.Stats_Health AS Health,
-                                             c.Stats_Energy AS Energy
-                                      FROM User_Capybara uc
-                                      JOIN Capybara c ON c.Id = uc.CapybaraId
-                                      WHERE uc.UserId = @UserId;
-                                      """;
-        const string itemsQuery = """
-                                  SELECT i.Name, 
-                                         ui.Quantity AS Amount, 
-                                         i.ItemDetail_ItemType AS ItemType, 
-                                         i.ItemDetail_BonusEffect AS BonusEffect 
-                                  FROM User_Item ui
-                                  JOIN Item i ON i.Id = ui.ItemId
-                                  WHERE ui.UserId = @UserId;
-                                  """;
         
         var userResult = await dbConnection.QueryFirstOrDefaultAsync<UserDto>(userQuery, new { UserId = id });
         

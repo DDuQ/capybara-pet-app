@@ -1,5 +1,8 @@
+using Azure.Storage.Blobs;
 using CapybaraPetApp.Application.Abstractions;
+using CapybaraPetApp.Application.Abstractions.Clients;
 using CapybaraPetApp.Application.Abstractions.Repositories;
+using CapybaraPetApp.Infrastructure.Clients;
 using CapybaraPetApp.Infrastructure.Common;
 using CapybaraPetApp.Infrastructure.Persistence;
 using CapybaraPetApp.Infrastructure.Persistence.Repositories;
@@ -20,18 +23,21 @@ public static class DependencyInjection
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
-        var sqlServerDbSettings = configuration.GetSection(SQLServerDbSettings.Section).Get<SQLServerDbSettings>();
-        services.Configure<SQLServerDbSettings>(configuration.GetSection(SQLServerDbSettings.Section));
-        services.AddSingleton<IDbConnectionFactory>(_ => new DbConnectionFactory(sqlServerDbSettings!.ConnectionString));
+        var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>();
+        services.AddSingleton<IDbConnectionFactory>(_ => new DbConnectionFactory(connectionStrings!.SQLServerDb));
         services.AddDbContext<CapybaraPetAppDbContext>(options =>
-            options.UseSqlServer(sqlServerDbSettings!.ConnectionString));
+            options.UseSqlServer(connectionStrings!.SQLServerDb));
 
         services.AddScoped<ICapybaraRepository, CapybaraRepository>();
         services.AddScoped<IAchievementRepository, AchievementRepository>();
         services.AddScoped<IItemRepository, ItemRepository>();
         services.AddScoped<IUserItemRepository, UserItemRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAuthTokenRepository, AuthTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IAzureBlobClient, AzureBlobClient>();
+
+        services.AddScoped(_ => new BlobServiceClient(connectionStrings!.CapybuddyStorage));
 
         return services;
     }

@@ -8,4 +8,5 @@ public class UserDto
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public Guid Id { get; set; }
+    public string ProfilePictureUrl { get; set; } = null!;
 }

@@ -18,9 +18,10 @@ public static class GetCapybarasEndpoint
 
                 var getCapybarasResult = await queryHandler.Handle(query);
 
-                return getCapybarasResult.IsError
-                    ? EndpointsExtensions.Problem(getCapybarasResult.Errors)
-                    : TypedResults.Ok(getCapybarasResult.Value);
+                return getCapybarasResult.Match(
+                    value => TypedResults.Ok(value),
+                    errors => EndpointsExtensions.Problem(errors)
+                );
             })
             .WithName(Name);
 

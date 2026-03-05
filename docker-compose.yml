@@ -1,6 +1,5 @@
 volumes:
   sql-data:
-  identity-data:
 
 services:
   api:
@@ -27,19 +26,6 @@ services:
       - sql-data:/var/opt/mssql
     ports:
       - "1433:1433"
-  
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    container_name: Keycloak
-    command: start-dev
-    environment:
-      - KC_HEALTH_ENABLED=true
-      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
-    volumes:
-      - identity-data:/opt/keycloak/data
-    ports:
-      - "18080:8080"
 
   jaeger:
     image: jaegertracing/all-in-one:latest

@@ -1,6 +1,7 @@
 using CapybaraPetApp.Api.Endpoints.Achievements;
 using CapybaraPetApp.Api.Endpoints.Capybaras;
 using CapybaraPetApp.Api.Endpoints.Items;
+using CapybaraPetApp.Api.Endpoints.RefreshToken;
 using CapybaraPetApp.Api.Endpoints.Users;
 using ErrorOr;
 
@@ -14,6 +15,7 @@ public static class EndpointsExtensions
         app.MapCapybaraEndpoints();
         app.MapItemEndpoints();
         app.MapAchievementEndpoints();
+        app.MapRefreshTokenEndpoint();
         return app;
     }
 

@@ -2,9 +2,10 @@ using CapybaraPetApp.Application.Abstractions;
 using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Abstractions.Repositories;
 using CapybaraPetApp.Domain.Common.EventualConsistency;
-using CapybaraPetApp.Domain.Common.Mappings;
+using CapybaraPetApp.Domain.Common.JoinTables.Interaction.Strategies;
 using CapybaraPetApp.Domain.ItemAggregate.Events;
 using ErrorOr;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CapybaraPetApp.Application.Users.Events;
 
@@ -12,6 +13,7 @@ public class ApplyItemEffectToCapybaraEventHandler(
     IUserRepository userRepository,
     IItemRepository itemRepository,
     ICapybaraRepository capybaraRepository,
+    IServiceProvider serviceProvider,
     IUnitOfWork unitOfWork)
     : IDomainEventHandler<ApplyItemEffectToCapybaraEvent>
 {
@@ -32,20 +34,16 @@ public class ApplyItemEffectToCapybaraEventHandler(
 
         ValidateItemUsage(itemUsageResult);
 
-        var interactionTypeResult = ItemInteractionMapping.TryGetInteractionStrategy(item.ItemDetail.ItemType);
+        var interactionTypeResult = serviceProvider.GetRequiredKeyedService<IInteractionStrategy>(item.ItemDetail.ItemType);
 
-        if (interactionTypeResult.IsError)
-            throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.InvalidInteractionType,
-                interactionTypeResult.Errors);
-
-        var interactionDetailResult = interactionTypeResult.Value.Validate(domainEvent.Quantity);
+        var interactionDetailResult = interactionTypeResult.Validate(domainEvent.Quantity);
 
         if (interactionDetailResult.IsError)
             throw new EventualConsistencyException(ApplyItemEffectToCapybaraEvent.InvalidInteractionDetail,
                 interactionDetailResult.Errors);
 
         user.InteractWithCapybara(domainEvent.CapybaraId);
-        capybara.ReactToInteraction(interactionTypeResult.Value, domainEvent.Quantity);
+        capybara.ReactToInteraction(interactionTypeResult, domainEvent.Quantity);
 
         capybaraRepository.UpdateAsync(capybara);
         itemRepository.UpdateAsync(item);

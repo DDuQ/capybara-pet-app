@@ -22,6 +22,22 @@ namespace CapybaraPetApp.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CapybaraPetApp.Application.Auth.Utils.AuthToken", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "RefreshToken");
+
+                    b.ToTable("AuthToken");
+                });
+
             modelBuilder.Entity("CapybaraPetApp.Domain.AchievementAggregate.Achievement", b =>
                 {
                     b.Property<Guid>("Id")
@@ -165,6 +181,10 @@ namespace CapybaraPetApp.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
                         .IsRequired()

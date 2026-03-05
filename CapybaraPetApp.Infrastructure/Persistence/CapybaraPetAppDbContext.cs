@@ -1,4 +1,5 @@
 using System.Reflection;
+using CapybaraPetApp.Application.Auth.Utils;
 using CapybaraPetApp.Domain.AchievementAggregate;
 using CapybaraPetApp.Domain.CapybaraAggregate;
 using CapybaraPetApp.Domain.Common;
@@ -7,6 +8,7 @@ using CapybaraPetApp.Domain.Common.JoinTables.Interaction;
 using CapybaraPetApp.Domain.ItemAggregate;
 using CapybaraPetApp.Domain.UserAggregate;
 using CapybaraPetApp.Infrastructure.Middleware;
+using CapybaraPetApp.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,7 @@ public class CapybaraPetAppDbContext : DbContext
     public DbSet<Item> Item => Set<Item>();
     public DbSet<InteractionHistory> InteractionHistory => Set<InteractionHistory>();
     public DbSet<Achievement> Achievement => Set<Achievement>();
+    public DbSet<AuthToken> AuthToken => Set<AuthToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

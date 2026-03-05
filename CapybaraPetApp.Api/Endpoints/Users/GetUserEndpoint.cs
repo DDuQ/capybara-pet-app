@@ -1,7 +1,6 @@
 using CapybaraPetApp.Application.Abstractions.CQRS;
 using CapybaraPetApp.Application.Abstractions.Dtos;
 using CapybaraPetApp.Application.Users.Queries.GetUser;
-using CapybaraPetApp.Domain.UserAggregate;
 using ErrorOr;
 
 namespace CapybaraPetApp.Api.Endpoints.Users;
